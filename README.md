@@ -4,11 +4,15 @@
 
 - `index.html`：頁面內容（活動資訊、議程、分科互動交流、交通地點）
 - `assets/css/style.css`：樣式與動畫（響應式，支援手機／電腦）
-- `assets/js/main.js`：倒數計時、分科分頁、加入行事曆
+- `assets/js/main.js`：倒數計時、分科分頁、加入行事曆、報名表送出
 
-## 設定報名連結
+## 報名表
 
-在 `assets/js/main.js` 最上方填入 `REGISTER_URL`（例如 Google 表單網址），頁面就會自動出現「立即報名」按鈕。
+報名表在頁面中的「報名表」區塊，資料透過 Google Apps Script 寫入 Google 試算表。
+
+- 後端程式：`gas/Code.gs`
+- 設定步驟：`gas/README.md`
+- 部署後把網址填到 `assets/js/main.js` 最上方的 `GAS_URL`
 
 ## 發佈
 

@@ -54,7 +54,7 @@
     <a href="#agenda">議程</a>
     <a href="#exchange">分科交流</a>
     <a href="#map">交通地點</a>
-    <a href="#join" class="menu-cta">我要參加</a>
+    <a href="#register" class="menu-cta">我要報名</a>
   </nav>
 </header>
 
@@ -124,8 +124,8 @@
         <p class="cd-done" id="cdDone" hidden>說明會已圓滿結束，感謝大家熱情參與！</p>
 
         <div class="hero-btns">
-          <a class="btn btn-primary" href="#agenda">看議程 <span aria-hidden="true">→</span></a>
-          <a class="btn btn-ghost" href="#join">加入行事曆</a>
+          <a class="btn btn-primary" href="#register">立即報名 <span aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="#agenda">看議程</a>
         </div>
       </div>
 
@@ -358,6 +358,115 @@
     </div>
   </section>
 
+  <!-- ============ REGISTER FORM ============ -->
+  <section class="section register-sec" id="register">
+    <div class="sec-head reveal">
+      <span class="sec-tag">REGISTRATION</span>
+      <h2>報名表</h2>
+      <p class="sec-sub">奇美醫院 116 學年度 PGY 招募說明會｜標示 <b class="req">＊</b> 為必填</p>
+    </div>
+
+    <form class="reg-form reveal" id="regForm" novalidate>
+      <fieldset class="reg-group">
+        <legend><span class="lg-num">一</span>基本資料</legend>
+
+        <div class="field">
+          <label for="f-name">1. 姓名<b class="req">＊</b></label>
+          <input id="f-name" name="name" type="text" autocomplete="name" maxlength="50" required>
+          <p class="err" data-for="name">請填寫姓名</p>
+        </div>
+
+        <div class="field">
+          <label for="f-email">2. 電子郵件（E-mail）<b class="req">＊</b></label>
+          <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required>
+          <p class="err" data-for="email">請填寫正確的電子郵件</p>
+        </div>
+
+        <div class="field">
+          <label for="f-school">3. 就讀學校<b class="req">＊</b></label>
+          <div class="select-wrap">
+            <select id="f-school" name="school" required>
+              <option value="">請選擇學校</option>
+              <option>國立臺灣大學</option>
+              <option>國立陽明交通大學</option>
+              <option>國立成功大學</option>
+              <option>臺北醫學大學</option>
+              <option>長庚大學</option>
+              <option>中國醫藥大學</option>
+              <option>高雄醫學大學</option>
+              <option>中山醫學大學</option>
+              <option>輔仁大學</option>
+              <option>慈濟大學</option>
+              <option>馬偕醫學院</option>
+              <option>國防醫學院</option>
+              <option>國立清華大學</option>
+              <option>國立中興大學</option>
+              <option>國立中山大學</option>
+              <option value="國外醫學校">國外醫學校</option>
+            </select>
+          </div>
+          <div class="other" data-show-when="school=國外醫學校" hidden>
+            <input name="schoolOther" type="text" maxlength="100" placeholder="請填寫學校名稱" aria-label="國外醫學校名稱">
+          </div>
+          <p class="err" data-for="school">請選擇就讀學校（國外醫學校請填寫校名）</p>
+        </div>
+
+        <div class="field">
+          <span class="label" id="lb-program">4. 學制<b class="req">＊</b></span>
+          <div class="chips-input" role="radiogroup" aria-labelledby="lb-program">
+            <label class="pick"><input type="radio" name="program" value="七年制醫學系" required><span>七年制醫學系</span></label>
+            <label class="pick"><input type="radio" name="program" value="六年制醫學系"><span>六年制醫學系</span></label>
+            <label class="pick"><input type="radio" name="program" value="中西醫雙主修"><span>中西醫雙主修</span></label>
+            <label class="pick"><input type="radio" name="program" value="學士後醫學系"><span>學士後醫學系</span></label>
+          </div>
+          <p class="err" data-for="program">請選擇學制</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="reg-group">
+        <legend><span class="lg-num">二</span>活動資訊</legend>
+
+        <div class="field">
+          <span class="label" id="lb-source">5. 從何處得知本次招募說明會？</span>
+          <div class="chips-input" role="radiogroup" aria-labelledby="lb-source">
+            <label class="pick"><input type="radio" name="source" value="學校公告"><span>學校公告</span></label>
+            <label class="pick"><input type="radio" name="source" value="同學推薦"><span>同學推薦</span></label>
+            <label class="pick"><input type="radio" name="source" value="學長姐推薦"><span>學長姐推薦</span></label>
+            <label class="pick"><input type="radio" name="source" value="奇美醫院官方網站／社群"><span>奇美醫院官方網站／社群</span></label>
+            <label class="pick"><input type="radio" name="source" value="其他"><span>其他</span></label>
+          </div>
+          <div class="other" data-show-when="source=學長姐推薦" hidden>
+            <input name="referrer" type="text" maxlength="50" placeholder="請填寫推薦人姓名" aria-label="推薦人姓名">
+          </div>
+          <div class="other" data-show-when="source=其他" hidden>
+            <input name="sourceOther" type="text" maxlength="100" placeholder="請填寫得知管道" aria-label="其他得知管道">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-interest">6. 關於奇美醫院，您是否有特別想進一步了解的部分？</label>
+          <p class="hint">例如：PGY 訓練課程內容、各科部訓練特色、教學資源、福利制度、工作環境、住院醫師生活等。</p>
+          <textarea id="f-interest" name="interest" rows="4" maxlength="1000"></textarea>
+        </div>
+      </fieldset>
+
+      <!-- honeypot：真人看不到，機器人填了就丟掉 -->
+      <div class="hp" aria-hidden="true"><label>Website <input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="reg-actions">
+        <button class="btn btn-primary btn-lg" type="submit" id="regSubmit"><span class="btn-txt">送出報名</span><span class="spinner" aria-hidden="true"></span></button>
+        <p class="reg-msg" id="regMsg" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <div class="reg-done" id="regDone" hidden tabindex="-1">
+      <div class="done-icon"><svg viewBox="0 0 64 64"><use href="#i-heart"/></svg></div>
+      <h3>報名成功！</h3>
+      <p>謝謝 <b id="doneName"></b>，我們 11/29 奇美見！</p>
+      <button class="btn btn-ghost" type="button" id="regAgain">再填一份</button>
+    </div>
+  </section>
+
   <!-- ============ JOIN / CTA ============ -->
   <section class="section join-sec" id="join">
     <div class="join reveal">
@@ -369,7 +478,7 @@
       <div class="join-btns">
         <a class="btn btn-light" id="gcal" target="_blank" rel="noopener" href="#">＋ Google 行事曆</a>
         <button class="btn btn-outline" id="ics" type="button">下載 .ics（Apple／Outlook）</button>
-        <a class="btn btn-yellow" id="register" href="#" hidden target="_blank" rel="noopener">立即報名</a>
+        <a class="btn btn-yellow" href="#register">還沒報名？前往報名</a>
       </div>
     </div>
   </section>
