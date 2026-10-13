@@ -4,7 +4,7 @@
   /* ===== 設定 =====
    * GAS_URL：Google Apps Script 部署成「網頁應用程式」後取得的網址（結尾為 /exec）。
    * 設定方式請見 gas/README.md。 */
-  var GAS_URL = '';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
 
   var EVENT = {
     title: '奇美醫院116學年度西醫PGY醫師招募說明會',
