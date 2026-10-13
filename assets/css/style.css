@@ -117,6 +117,14 @@ main { overflow-x: clip; }
   padding: clamp(130px, 16vw, 170px) clamp(16px, 4vw, 48px) clamp(120px, 14vw, 150px);
 }
 
+.poster::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: url("../img/building-sky-1920.webp") center 30% / cover no-repeat;
+  opacity: .14;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .35), #000 45%, #000 75%, rgba(0, 0, 0, .2));
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, .35), #000 45%, #000 75%, rgba(0, 0, 0, .2));
+}
+@media (max-width: 960px) { .poster::before { background-image: url("../img/building-sky-960.webp"); background-position: 62% 30%; } }
 .deco { position: absolute; pointer-events: none; }
 .deco .b-navy { fill: var(--navy); }
 .deco .b-orange { fill: var(--orange); }
@@ -371,7 +379,7 @@ main { overflow-x: clip; }
 
 /* ---------- Map ---------- */
 .map-wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; align-items: stretch; }
-.map-card { background: linear-gradient(160deg, rgba(23, 43, 106, .95) 30%, rgba(33, 60, 143, .55)), url("../img/building-front-960.webp") center 40% / cover no-repeat var(--navy); color: #fff; border-radius: var(--radius); padding: 30px; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.map-card { background: var(--navy); color: #fff; border-radius: var(--radius); padding: 30px; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .map-card h3 { font-size: clamp(1.3rem, 2.6vw, 1.6rem); font-weight: 900; }
 .map-card p { margin: 0 0 8px; opacity: .9; }
 .map-pin { width: 64px; height: 64px; border-radius: 50%; background: #fff; display: grid; place-items: center; color: var(--ink); }
@@ -381,18 +389,6 @@ main { overflow-x: clip; }
 @media (max-width: 860px) { .map-wrap { grid-template-columns: 1fr; } }
 
 /* ---------- Join ---------- */
-.join-sec { max-width: none; padding-block: clamp(80px, 12vw, 160px); isolation: isolate; }
-.join-sec::before {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .25), rgba(255, 255, 255, 0) 30%, rgba(23, 43, 106, .25)),
-    url("../img/building-sky-1920.webp") 60% 30% / cover no-repeat #3E7BD6;
-}
-.join-sec .join { max-width: 640px; margin-left: max(0px, calc((100% - 1100px) / 2)); }
-@media (max-width: 960px) {
-  .join-sec::before { background-image: linear-gradient(180deg, rgba(255, 255, 255, .25), rgba(255, 255, 255, 0) 30%, rgba(23, 43, 106, .25)), url("../img/building-sky-960.webp"); background-position: 62% 30%; }
-  .join-sec .join { margin: 0 auto; }
-  .join-sec { padding-block: 300px 60px; }
-}
 .join {
   position: relative; text-align: center; color: #fff; overflow: hidden;
   background: var(--red); border-radius: 40px; padding: clamp(48px, 8vw, 80px) clamp(20px, 5vw, 60px);
