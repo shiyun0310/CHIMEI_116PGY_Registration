@@ -25,9 +25,12 @@ var PROGRAMS = ['七年制醫學系', '六年制醫學系', '中西醫雙主修'
 var SOURCES = ['學校公告', '同學推薦', '學長姐推薦', '奇美醫院官方網站／社群', '其他'];
 
 function doPost(e) {
+  var p0 = (e && e.parameter) || {};
+  if (p0.action === 'list') return listRegistrations_(p0.key);
+
   var lock = LockService.getScriptLock();
   try {
-    var p = (e && e.parameter) || {};
+    var p = p0;
     var f = {
       name: clean_(p.name, 50),
       email: clean_(p.email, 120).toLowerCase(),
@@ -90,6 +93,26 @@ function doPost(e) {
 // 直接用瀏覽器開啟部署網址時，用來確認服務正常
 function doGet() {
   return json_({ ok: true, service: 'PGY116 registration' });
+}
+
+// ===== 報名狀況儀表板 =====
+// 密碼存在「專案設定 → 指令碼屬性」的 DASHBOARD_KEY，不寫在程式碼裡。
+function listRegistrations_(key) {
+  var expected = PropertiesService.getScriptProperties().getProperty('DASHBOARD_KEY');
+  if (!expected) return json_({ ok: false, error: '尚未設定儀表板密碼（DASHBOARD_KEY）' });
+  if (!key || String(key) !== expected) {
+    Utilities.sleep(1000); // 減緩暴力猜測
+    return json_({ ok: false, error: '密碼錯誤' });
+  }
+  var sheet = getSheet_();
+  var last = sheet.getLastRow();
+  var rows = last > 1 ? sheet.getRange(2, 1, last - 1, HEADERS.length).getValues() : [];
+  var data = rows.filter(function (r) { return r[1] !== ''; }).map(function (r) {
+    var t = r[0] instanceof Date ? r[0].toISOString() : String(r[0]);
+    return { time: t, name: r[1], email: r[2], school: r[3], program: r[4],
+             source: r[5], referrer: r[6], interest: r[7] };
+  });
+  return json_({ ok: true, updated: new Date().toISOString(), rows: data });
 }
 
 function getSheet_() {
