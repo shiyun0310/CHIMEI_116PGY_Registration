@@ -18,7 +18,21 @@
   var nav = document.getElementById('nav');
   var toggle = document.querySelector('.nav-toggle');
   var menu = document.getElementById('menu');
-  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 20); }
+  var toTop = document.getElementById('toTop');
+  function onScroll() {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+    if (!toTop.classList.contains('launch')) toTop.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
+  }
+  toTop.addEventListener('click', function (e) {
+    e.preventDefault();
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    if (!reduce) {
+      toTop.classList.add('launch');
+      setTimeout(function () { toTop.classList.remove('launch', 'show'); }, 700);
+    }
+    document.querySelector('.brand').focus({ preventScroll: true });
+  });
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
   toggle.addEventListener('click', function () {
