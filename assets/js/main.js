@@ -2,8 +2,9 @@
   'use strict';
 
   /* ===== 設定 =====
-   * 報名表單網址：填入後頁面會自動顯示「立即報名」按鈕（例如 Google 表單連結）。 */
-  var REGISTER_URL = '';
+   * GAS_URL：Google Apps Script 部署成「網頁應用程式」後取得的網址（結尾為 /exec）。
+   * 設定方式請見 gas/README.md。 */
+  var GAS_URL = '';
 
   var EVENT = {
     title: '奇美醫院116學年度西醫PGY醫師招募說明會',
@@ -135,10 +136,126 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   });
 
-  /* ===== Register button ===== */
-  if (REGISTER_URL) {
-    var reg = document.getElementById('register');
-    reg.href = REGISTER_URL;
-    reg.hidden = false;
+  /* ===== Registration form ===== */
+  var form = document.getElementById('regForm');
+  var submitBtn = document.getElementById('regSubmit');
+  var msg = document.getElementById('regMsg');
+  var done = document.getElementById('regDone');
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // 依選項顯示「請填寫」欄位
+  var conditionals = form.querySelectorAll('[data-show-when]');
+  function syncConditionals() {
+    conditionals.forEach(function (box) {
+      var rule = box.getAttribute('data-show-when').split('=');
+      var field = form.elements[rule[0]];
+      var on = field && field.value === rule[1];
+      box.hidden = !on;
+      var input = box.querySelector('input');
+      if (!on) input.value = '';
+    });
   }
+  form.addEventListener('change', function (e) {
+    syncConditionals();
+    var f = e.target.closest('.field');
+    if (f && f.classList.contains('invalid')) validate(f);
+  });
+  syncConditionals();
+
+  function val(name) { return (form.elements[name].value || '').trim(); }
+  function setInvalid(name, bad) {
+    var err = form.querySelector('.err[data-for="' + name + '"]');
+    err.closest('.field').classList.toggle('invalid', bad);
+    return !bad;
+  }
+  function validate(only) {
+    var checks = {
+      name: function () { return !!val('name'); },
+      email: function () { return EMAIL_RE.test(val('email')); },
+      school: function () { return !!val('school') && (val('school') !== '國外醫學校' || !!val('schoolOther')); },
+      program: function () { return !!val('program'); }
+    };
+    var ok = true, first = null;
+    Object.keys(checks).forEach(function (k) {
+      var err = form.querySelector('.err[data-for="' + k + '"]');
+      if (only && err.closest('.field') !== only) return;
+      var good = setInvalid(k, !checks[k]());
+      if (!good && !first) first = err.closest('.field');
+      ok = ok && good;
+    });
+    return { ok: ok, first: first };
+  }
+  form.addEventListener('input', function (e) {
+    var f = e.target.closest('.field');
+    if (f && f.classList.contains('invalid')) validate(f);
+  });
+
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    submitBtn.classList.toggle('loading', on);
+    submitBtn.querySelector('.btn-txt').textContent = on ? '送出中…' : '送出報名';
+  }
+
+  function confetti() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var colors = ['#213C8F', '#FFA319', '#F2541B', '#FFC83D'];
+    for (var i = 0; i < 70; i++) {
+      var c = document.createElement('span');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.borderRadius = i % 3 ? '2px' : '50%';
+      c.style.animationDuration = 2 + Math.random() * 2 + 's';
+      c.style.animationDelay = Math.random() * .6 + 's';
+      document.body.appendChild(c);
+      setTimeout(function (el) { el.remove(); }, 5000, c);
+    }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg.textContent = ''; msg.className = 'reg-msg';
+    var v = validate();
+    if (!v.ok) {
+      v.first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var focusEl = v.first.querySelector('input, select');
+      if (focusEl) setTimeout(function () { focusEl.focus({ preventScroll: true }); }, 300);
+      return;
+    }
+    if (val('website')) return; // honeypot
+    if (!GAS_URL) {
+      msg.textContent = '報名系統尚未開放，請稍後再試。';
+      msg.className = 'reg-msg error';
+      return;
+    }
+
+    var data = new URLSearchParams();
+    ['name', 'email', 'school', 'schoolOther', 'program', 'source', 'referrer', 'sourceOther', 'interest']
+      .forEach(function (k) { data.append(k, val(k)); });
+
+    setLoading(true);
+    fetch(GAS_URL, { method: 'POST', body: data })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error(res && res.error || '送出失敗');
+        document.getElementById('doneName').textContent = val('name');
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+        confetti();
+      })
+      .catch(function (err) {
+        msg.textContent = (err && err.message && err.message !== 'Failed to fetch' ? err.message : '網路連線異常') + '，請稍後再試一次。';
+        msg.className = 'reg-msg error';
+      })
+      .then(function () { setLoading(false); });
+  });
+
+  document.getElementById('regAgain').addEventListener('click', function () {
+    form.reset();
+    syncConditionals();
+    done.hidden = true;
+    form.hidden = false;
+    form.elements.name.focus();
+  });
 })();
