@@ -368,6 +368,13 @@ main { overflow-x: clip; }
 .doc:nth-child(3) { animation-delay: .16s; }
 .doc small { display: block; color: var(--muted); font-weight: 700; font-size: .82rem; }
 .doc b { font-size: 1.25rem; font-weight: 900; }
+.doc-link { text-decoration: none; color: inherit; position: relative; transition: transform .15s, box-shadow .15s; }
+.doc-link:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+.doc-link .ext { margin-left: auto; align-self: flex-start; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--yellow); border: 2px solid var(--ink); font-weight: 900; font-size: .9rem; }
+.doc-link:focus-visible, .spk-link:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
+.spk-link { color: inherit; text-decoration: none; border-bottom: 2px dashed var(--red); }
+.spk-link:hover { color: var(--red); }
+.spk-link .ext { color: var(--red); font-weight: 900; }
 .av {
   flex: none; width: 56px; height: 56px; display: grid; place-items: center; font-weight: 900; font-size: 1.4rem;
   color: #fff; background: var(--navy); border-radius: 46% 54% 42% 58% / 52% 44% 56% 48%; border: 3px solid var(--ink);
