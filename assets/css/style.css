@@ -556,3 +556,4 @@ main { overflow-x: clip; }
   .hero-title span { opacity: 1; transform: none; }
   .reveal { opacity: 1; transform: none; }
 }
+@media (max-width: 400px) { .brand { font-size: .92rem; gap: 8px; padding-right: 12px; } .brand-logo { width: 34px; height: 34px; } }
