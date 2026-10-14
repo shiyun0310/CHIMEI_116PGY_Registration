@@ -160,6 +160,16 @@ main { overflow-x: clip; }
 .hero-title { display: flex; flex-direction: column; align-items: center; font-weight: 900; letter-spacing: .02em; }
 .hero-title span { display: block; opacity: 0; transform: translateY(24px) scale(.96); animation: rise .8s cubic-bezier(.2, .9, .3, 1.3) forwards; }
 .hero-title .t1 { font-size: clamp(1.4rem, 4vw, 2.2rem); color: var(--navy); animation-delay: .1s; }
+/* 大字「奇美」：藍字＋黑框，疊黃、橘兩層陰影（貼紙風） */
+.hero-title .qm {
+  display: flex; justify-content: center; gap: .02em;
+  font-size: clamp(5.2rem, 23vw, 10.5rem); line-height: 1.05; letter-spacing: -.04em;
+  color: var(--navy); -webkit-text-stroke: .045em var(--ink); paint-order: stroke fill;
+  text-shadow: .06em .06em 0 var(--yellow), .12em .12em 0 var(--orange);
+  margin: -.05em 0 .22em;
+}
+.hero-title .qm-c { display: inline-block; opacity: 1; animation: none; transform: rotate(-6deg); }
+.hero-title .qm-c + .qm-c { transform: rotate(5deg) translateY(.06em); }
 .hero-title .t2 { font-size: clamp(1.5rem, 4.4vw, 2.4rem); animation-delay: .25s; }
 .hero-title .t2 em { font-style: normal; font-family: var(--font-en); color: var(--red); font-size: 1.35em; margin-right: .1em; }
 .hero-title .t3 { font-size: clamp(2.1rem, 7vw, 4.4rem); animation-delay: .4s; }
