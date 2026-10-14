@@ -54,8 +54,7 @@ main { overflow-x: clip; }
 }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900; font-size: 1.05rem; background: #fff; padding: 4px 16px 4px 4px; border-radius: 999px; box-shadow: var(--shadow); }
 .nav.scrolled .brand { box-shadow: none; }
-.brand-logo { width: 38px; height: 38px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: var(--shadow); }
-.brand-logo svg { width: 26px; height: 26px; animation: beat 1.2s ease-in-out infinite; }
+.brand-emblem { display: block; width: auto; height: 46px; margin: -2px 0 -2px 10px; }
 .brand-txt b { font-family: var(--font-en); color: var(--red); }
 
 .menu { display: flex; gap: 6px; align-items: center; }
@@ -600,4 +599,4 @@ main { overflow-x: clip; }
   .hero-title span { opacity: 1; transform: none; }
   .reveal { opacity: 1; transform: none; }
 }
-@media (max-width: 400px) { .brand { font-size: .92rem; gap: 8px; padding-right: 12px; } .brand-logo { width: 34px; height: 34px; } }
+@media (max-width: 400px) { .brand { font-size: .92rem; gap: 8px; padding-right: 12px; } .brand-emblem { height: 40px; margin-left: 8px; } }
