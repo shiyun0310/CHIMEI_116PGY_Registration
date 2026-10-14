@@ -217,6 +217,17 @@ main { overflow-x: clip; }
 .cd small { font-weight: 700; color: var(--muted); }
 .cd b.tick { animation: pop .35s ease; }
 .cd-done { font-weight: 700; color: var(--navy); }
+.deadline { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; padding: 8px 18px 8px 12px; border-radius: 18px; background: var(--yellow); color: var(--ink); text-decoration: none; border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transform: rotate(-2deg); animation: dlWiggle 4s ease-in-out infinite 2s; transition: transform .2s, box-shadow .2s; }
+.deadline:hover { transform: rotate(0) translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); animation-play-state: paused; }
+.deadline:focus-visible { outline: 3px dashed var(--red); outline-offset: 4px; }
+.dl-clock { font-size: 1.8rem; line-height: 1; display: inline-block; animation: ring 2s ease-in-out infinite; transform-origin: 50% 60%; }
+.dl-run { font-size: 1.5rem; line-height: 1; display: inline-block; transform: scaleX(-1); animation: dash 1.2s ease-in-out infinite; }
+.dl-txt { font-weight: 900; font-size: clamp(1.05rem, 3vw, 1.25rem); text-align: left; line-height: 1.25; }
+.dl-txt b { color: var(--red); }
+.dl-txt small { display: block; font-size: .72em; font-weight: 700; color: var(--navy); }
+@keyframes ring { 0%, 50%, 100% { transform: rotate(0); } 5%, 15%, 25%, 35% { transform: rotate(-16deg); } 10%, 20%, 30%, 40% { transform: rotate(16deg); } }
+@keyframes dash { 0%, 100% { transform: scaleX(-1) translateX(0); } 50% { transform: scaleX(-1) translateX(-5px); } }
+@keyframes dlWiggle { 0%, 88%, 100% { transform: rotate(-2deg); } 91% { transform: rotate(2deg) scale(1.04); } 94% { transform: rotate(-4deg); } 97% { transform: rotate(1deg); } }
 .hero-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
 
 .mascot { position: absolute; right: clamp(16px, 5vw, 60px); bottom: clamp(16px, 4vw, 40px); width: clamp(90px, 13vw, 150px); z-index: 3; animation: bob 4s ease-in-out infinite; }
