@@ -173,7 +173,7 @@ main { overflow-x: clip; }
 .hero-title .qm-wrap { position: relative; animation-delay: .1s; }
 /* 「116學年度」對話框，放在「美」的右上角 */
 .hero-title .bubble {
-  position: absolute; z-index: 2; left: calc(100% - .9em); top: .2em;
+  position: absolute; z-index: 2; left: calc(100% + .5em); top: -.3em;
   font-size: clamp(1rem, 2.6vw, 1.6rem); line-height: 1.2; white-space: nowrap; width: max-content;
   background: #fff; color: var(--ink); border: 3px solid var(--ink); border-radius: 18px;
   padding: .35em .7em; box-shadow: 4px 4px 0 var(--ink);
@@ -185,7 +185,10 @@ main { overflow-x: clip; }
 .hero-title .bubble em { font-style: normal; font-family: var(--font-en); color: var(--red); font-size: 1.3em; margin-right: .08em; }
 @keyframes bubblePop { from { opacity: 0; transform: rotate(8deg) scale(.3); } to { opacity: 1; transform: rotate(8deg) scale(1); } }
 @media (max-width: 560px) {
-  .hero-title .bubble { left: calc(100% - 2.6em); top: -.6em; border-width: 2px; border-radius: 14px; box-shadow: 3px 3px 0 var(--ink); }
+  .hero-title .qm-wrap { margin-top: 2.5rem; }
+  .hero-title .bubble { left: auto; right: -.4em; top: -2.85em; border-width: 2px; border-radius: 14px; box-shadow: 3px 3px 0 var(--ink); }
+  .hero-title .bubble::before { left: auto; right: 1.4em; transform: scaleX(-1); }
+  .hero-title .bubble::after { left: auto; right: calc(1.4em + 3px); transform: scaleX(-1); }
 }
 .hero-title .t3 { font-size: clamp(2.1rem, 7vw, 4.4rem); animation-delay: .4s; }
 .hero-title .t3 b { font-family: var(--font-en); color: #fff; background: var(--navy); padding: 0 .25em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); }
