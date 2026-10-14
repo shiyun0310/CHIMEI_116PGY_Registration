@@ -170,8 +170,23 @@ main { overflow-x: clip; }
 .hero-title .qm-c { display: inline-block; position: relative; opacity: 1; animation: none; transform: rotate(-6deg); }
 .hero-title .qm-c::after { content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; color: var(--orange); -webkit-text-stroke: .08em var(--orange); paint-order: stroke fill; transform: translate(.08em, .08em); }
 .hero-title .qm-c + .qm-c { transform: rotate(5deg) translateY(.06em); }
-.hero-title .t2 { font-size: clamp(1.5rem, 4.4vw, 2.4rem); animation-delay: .25s; }
-.hero-title .t2 em { font-style: normal; font-family: var(--font-en); color: var(--red); font-size: 1.35em; margin-right: .1em; }
+.hero-title .qm-wrap { position: relative; animation-delay: .1s; }
+/* 「116學年度」對話框，放在「美」的右上角 */
+.hero-title .bubble {
+  position: absolute; z-index: 2; left: calc(100% - .9em); top: .2em;
+  font-size: clamp(1rem, 2.6vw, 1.6rem); line-height: 1.2; white-space: nowrap; width: max-content;
+  background: #fff; color: var(--ink); border: 3px solid var(--ink); border-radius: 18px;
+  padding: .35em .7em; box-shadow: 4px 4px 0 var(--ink);
+  transform-origin: 0 100%; opacity: 0; animation: bubblePop .6s cubic-bezier(.2, .9, .3, 1.5) .55s forwards;
+}
+.hero-title .bubble::before, .hero-title .bubble::after { content: ""; position: absolute; left: .9em; width: 0; height: 0; border-style: solid; }
+.hero-title .bubble::before { bottom: -18px; border-width: 18px 16px 0 0; border-color: var(--ink) transparent transparent transparent; }
+.hero-title .bubble::after { bottom: -11px; left: calc(.9em + 3px); border-width: 12px 10px 0 0; border-color: #fff transparent transparent transparent; }
+.hero-title .bubble em { font-style: normal; font-family: var(--font-en); color: var(--red); font-size: 1.3em; margin-right: .08em; }
+@keyframes bubblePop { from { opacity: 0; transform: rotate(8deg) scale(.3); } to { opacity: 1; transform: rotate(8deg) scale(1); } }
+@media (max-width: 560px) {
+  .hero-title .bubble { left: calc(100% - 2.6em); top: -.6em; border-width: 2px; border-radius: 14px; box-shadow: 3px 3px 0 var(--ink); }
+}
 .hero-title .t3 { font-size: clamp(2.1rem, 7vw, 4.4rem); animation-delay: .4s; }
 .hero-title .t3 b { font-family: var(--font-en); color: #fff; background: var(--navy); padding: 0 .25em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); }
 .hero-title .t4 {
