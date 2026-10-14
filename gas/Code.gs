@@ -8,7 +8,7 @@
 
 // ===== 設定 =====
 var SHEET_NAME = '報名資料';
-var SEND_CONFIRMATION = true;   // 報名成功後寄確認信給報名者
+var SEND_CONFIRMATION = false;  // 設為 true 才會在報名成功後寄確認信給報名者（目前不寄）
 var NOTIFY_EMAIL = '';          // 有新報名時通知承辦人（留空則不通知）
 
 var EVENT_INFO = '日期：115年11月29日（星期日）\n' +
