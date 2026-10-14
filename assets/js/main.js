@@ -14,6 +14,10 @@
     details: '內科、外科、婦產科、兒科、急診訓練特色分享、Y2學長分享與分科互動交流。'
   };
 
+  // 報名截止：11/13（五）當天 23:59 前都可報名。網址加上 ?preview=closed 可預覽截止後的畫面
+  var REG_DEADLINE = new Date('2026-11-14T00:00:00+08:00');
+  function regClosed() { return Date.now() >= REG_DEADLINE || /[?&]preview=closed\b/.test(location.search); }
+
   /* ===== 開啟網頁時一律從最上方開始 ===== */
   // 不讓瀏覽器記住上次捲動位置，也不讓網址上的 #錨點 把頁面帶到中間
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -248,8 +252,23 @@
     }
   }
 
+  // 報名截止後關閉表單，改顯示截止訊息
+  function closeRegistration() {
+    form.hidden = true;
+    done.hidden = true;
+    document.getElementById('regClosed').hidden = false;
+    var dl = document.querySelector('.deadline');
+    dl.classList.add('closed');
+    document.getElementById('dlTxt').innerHTML = '已報名截止<small>如需報名請來電或MAIL詢問</small>';
+    document.querySelectorAll('[data-closed-text]').forEach(function (el) { el.textContent = el.getAttribute('data-closed-text'); });
+    document.querySelectorAll('[data-hide-when-closed]').forEach(function (el) { el.hidden = true; });
+  }
+  if (regClosed()) closeRegistration();
+  else setTimeout(function () { if (regClosed()) closeRegistration(); }, Math.min(REG_DEADLINE - Date.now() + 1000, 2147483647));
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (regClosed()) { closeRegistration(); return; }
     msg.textContent = ''; msg.className = 'reg-msg';
     var v = validate();
     if (!v.ok) {
@@ -273,6 +292,7 @@
     fetch(GAS_URL, { method: 'POST', body: data })
       .then(function (r) { return r.json(); })
       .then(function (res) {
+        if (res && res.closed) { closeRegistration(); return; }
         if (!res || !res.ok) throw new Error(res && res.error || '送出失敗');
         document.getElementById('doneName').textContent = val('name');
         form.hidden = true;
