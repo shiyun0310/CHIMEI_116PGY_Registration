@@ -163,7 +163,7 @@ main { overflow-x: clip; }
 /* 大字「奇美」：藍字＋白色框線，後方疊橘色（貼紙風） */
 .hero-title .qm {
   display: flex; justify-content: center; gap: .02em;
-  font-size: clamp(5.2rem, 23vw, 10.5rem); line-height: 1.05; letter-spacing: -.04em;
+  font-size: clamp(6.6rem, 30vw, 14rem); line-height: 1.05; letter-spacing: -.04em;
   color: var(--navy); -webkit-text-stroke: .08em #fff; paint-order: stroke fill;
   margin: -.05em 0 .22em;
 }
