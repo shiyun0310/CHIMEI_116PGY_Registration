@@ -511,6 +511,8 @@ main { overflow-x: clip; }
 .done-icon svg { width: 60px; height: 60px; animation: beat 1.2s ease-in-out infinite; }
 .reg-done h3 { font-size: clamp(1.8rem, 5vw, 2.4rem); font-weight: 900; }
 .reg-done p { font-size: 1.1rem; margin: 10px 0 22px; }
+.reg-done p.done-note { font-size: 1rem; color: var(--muted); margin-top: -12px; }
+.done-note a { color: var(--red); font-weight: 700; }
 .confetti { position: fixed; top: -20px; width: 10px; height: 14px; z-index: 100; pointer-events: none; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 @media (max-width: 560px) { .pick span { padding: 6px 14px 6px 10px; } .btn-lg { width: 100%; } }
