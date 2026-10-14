@@ -25,6 +25,7 @@
 | 設定 | 說明 |
 | --- | --- |
 | `SEND_CONFIRMATION` | 預設 `false`（不寄信）；改為 `true` 時，報名成功會寄確認信給報名者 |
+| `REG_DEADLINE` | 報名截止時間（預設 115/11/14 00:00，即 11/13 當天都可報名）；之後送出的報名一律擋下。網站 `assets/js/main.js` 的 `REG_DEADLINE` 要設成同一時間 |
 | `NOTIFY_EMAIL` | 填入承辦人信箱，每有新報名就寄通知；留空則不寄 |
 | `SHEET_NAME` | 資料寫入的工作表名稱 |
 

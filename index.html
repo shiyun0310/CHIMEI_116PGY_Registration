@@ -54,7 +54,7 @@
     <a href="#agenda">議程</a>
     <a href="#exchange">分科交流</a>
     <a href="#map">交通地點</a>
-    <a href="#register" class="menu-cta">我要報名</a>
+    <a href="#register" class="menu-cta" data-closed-text="報名資訊">我要報名</a>
   </nav>
 </header>
 
@@ -127,12 +127,12 @@
 
         <a class="deadline" href="#register">
           <span class="dl-clock" aria-hidden="true">⏰</span>
-          <span class="dl-txt">報名截止 <b>11/13（五）</b><small>手刀報名，別等到最後一秒！</small></span>
+          <span class="dl-txt" id="dlTxt">報名截止 <b>11/13（五）</b><small>手刀報名，別等到最後一秒！</small></span>
           <span class="dl-run" aria-hidden="true">🏃</span>
         </a>
 
         <div class="hero-btns">
-          <a class="btn btn-primary" href="#register">立即報名 <span aria-hidden="true">→</span></a>
+          <a class="btn btn-primary" href="#register" data-closed-text="報名已截止">立即報名 <span aria-hidden="true">→</span></a>
           <a class="btn btn-ghost" href="#agenda">看議程</a>
         </div>
       </div>
@@ -372,7 +372,7 @@
     <div class="sec-head reveal">
       <span class="sec-tag">REGISTRATION</span>
       <h2>報名表</h2>
-      <p class="sec-sub">若取消報名請來電或MAIL告知｜標示 <b class="req">＊</b> 為必填</p>
+      <p class="sec-sub">若取消報名請來電或MAIL告知<span data-hide-when-closed>｜標示 <b class="req">＊</b> 為必填</span></p>
     </div>
 
     <form class="reg-form reveal" id="regForm" novalidate>
@@ -469,6 +469,12 @@
       </div>
     </form>
 
+    <div class="reg-done reg-closed" id="regClosed" hidden tabindex="-1">
+      <div class="done-icon"><svg viewBox="0 0 64 64"><use href="#i-clock"/></svg></div>
+      <h3>已報名截止</h3>
+      <p>如需報名請<a href="tel:+88662812811,57439">來電</a>或<a href="mailto:cmhm4240@chimei.org.tw">MAIL</a>詢問</p>
+    </div>
+
     <div class="reg-done" id="regDone" hidden tabindex="-1">
       <div class="done-icon"><svg viewBox="0 0 64 64"><use href="#i-heart"/></svg></div>
       <h3>報名成功！</h3>
@@ -489,7 +495,7 @@
       <div class="join-btns">
         <a class="btn btn-light" id="gcal" target="_blank" rel="noopener" href="#">＋ Google 行事曆</a>
         <button class="btn btn-outline" id="ics" type="button">下載 .ics（Apple／Outlook）</button>
-        <a class="btn btn-yellow" href="#register">還沒報名？前往報名</a>
+        <a class="btn btn-yellow" href="#register" data-hide-when-closed>還沒報名？前往報名</a>
       </div>
     </div>
   </section>

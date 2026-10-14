@@ -9,6 +9,7 @@
 // ===== 設定 =====
 var SHEET_NAME = '報名資料';
 var SEND_CONFIRMATION = false;  // 設為 true 才會在報名成功後寄確認信給報名者（目前不寄）
+var REG_DEADLINE = new Date('2026-11-14T00:00:00+08:00'); // 報名截止：11/13（五）23:59 前
 var NOTIFY_EMAIL = '';          // 有新報名時通知承辦人（留空則不通知）
 
 var EVENT_INFO = '日期：115年11月29日（星期日）\n' +
@@ -45,6 +46,7 @@ function doPost(e) {
 
     // ---- 驗證 ----
     if (clean_(p.website, 10)) return json_({ ok: true }); // honeypot
+    if (new Date() >= REG_DEADLINE) return json_({ ok: false, closed: true, error: '已報名截止，如需報名請來電或MAIL詢問' });
     if (!f.name) return json_({ ok: false, error: '請填寫姓名' });
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) return json_({ ok: false, error: '電子郵件格式不正確' });
     if (SCHOOLS.indexOf(f.school) < 0) return json_({ ok: false, error: '請選擇就讀學校' });

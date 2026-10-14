@@ -523,7 +523,12 @@ main { overflow-x: clip; }
 .reg-done h3 { font-size: clamp(1.8rem, 5vw, 2.4rem); font-weight: 900; }
 .reg-done p { font-size: 1.1rem; margin: 10px 0 22px; }
 .reg-done p.done-note { font-size: 1rem; color: var(--muted); margin-top: -12px; }
-.done-note a { color: var(--red); font-weight: 700; }
+.done-note a, .reg-closed p a { color: var(--red); font-weight: 700; }
+.reg-closed .done-icon svg { animation: none; }
+.reg-closed p { margin-bottom: 0; }
+.deadline.closed { background: #fff; transform: rotate(-2deg); animation: none; }
+.deadline.closed .dl-clock, .deadline.closed .dl-run { display: none; }
+.deadline.closed .dl-txt { text-align: center; }
 .confetti { position: fixed; top: -20px; width: 10px; height: 14px; z-index: 100; pointer-events: none; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 @media (max-width: 560px) { .pick span { padding: 6px 14px 6px 10px; } .btn-lg { width: 100%; } }
