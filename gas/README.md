@@ -24,7 +24,7 @@
 
 | 設定 | 說明 |
 | --- | --- |
-| `SEND_CONFIRMATION` | `true` 時，報名成功會寄確認信給報名者 |
+| `SEND_CONFIRMATION` | 預設 `false`（不寄信）；改為 `true` 時，報名成功會寄確認信給報名者 |
 | `NOTIFY_EMAIL` | 填入承辦人信箱，每有新報名就寄通知；留空則不寄 |
 | `SHEET_NAME` | 資料寫入的工作表名稱 |
 
