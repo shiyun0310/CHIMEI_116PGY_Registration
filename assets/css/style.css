@@ -191,7 +191,8 @@ main { overflow-x: clip; }
   .hero-title .bubble::after { left: auto; right: calc(1.4em + 3px); transform: scaleX(-1); }
 }
 .hero-title .t3 { font-size: clamp(2.1rem, 7vw, 4.4rem); animation-delay: .4s; }
-.hero-title .t3 b { font-family: var(--font-en); color: #fff; background: var(--navy); padding: 0 .25em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); }
+.hero-title .t3 b { font-family: var(--font-en); color: #fff; background: var(--navy); padding: 0 .25em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); transform-origin: 50% 60%; animation: pgySway 2.6s ease-in-out 1s infinite; }
+@keyframes pgySway { 0%, 100% { transform: rotate(-4deg); } 25% { transform: rotate(-7deg); } 75% { transform: rotate(-1deg); } }
 .hero-title .t4 {
   font-size: clamp(2.3rem, 8vw, 5rem); animation-delay: .55s;
   background: linear-gradient(transparent 62%, var(--yellow) 62%, var(--yellow) 92%, transparent 92%);
