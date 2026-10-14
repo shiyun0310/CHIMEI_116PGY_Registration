@@ -55,6 +55,7 @@ main { overflow-x: clip; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900; font-size: 1.05rem; background: #fff; padding: 4px 16px 4px 4px; border-radius: 999px; box-shadow: var(--shadow); }
 .nav.scrolled .brand { box-shadow: none; }
 .brand-emblem { display: block; width: auto; height: 46px; margin: -2px 0 -2px 10px; }
+.brand-txt { color: var(--navy); }
 .brand-txt b { font-family: var(--font-en); color: var(--red); }
 
 .menu { display: flex; gap: 6px; align-items: center; }
