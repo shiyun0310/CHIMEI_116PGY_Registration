@@ -14,6 +14,28 @@
     details: '內科、外科、婦產科、兒科、急診訓練特色分享、Y2學長分享與分科互動交流。'
   };
 
+  /* ===== 開啟網頁時一律從最上方開始 ===== */
+  // 不讓瀏覽器記住上次捲動位置，也不讓網址上的 #錨點 把頁面帶到中間
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  window.scrollTo(0, 0);
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) window.scrollTo(0, 0); });
+
+  // 頁內連結（選單、按鈕）平滑捲動，但不把 #錨點 寫進網址
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var target = id === 'top' ? document.body : document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (id === 'top') window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    else target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+  });
+
   /* ===== Nav ===== */
   var nav = document.getElementById('nav');
   var toggle = document.querySelector('.nav-toggle');
