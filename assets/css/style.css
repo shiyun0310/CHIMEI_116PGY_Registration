@@ -302,8 +302,29 @@ main { overflow-x: clip; }
 .ic-icon svg { width: 46px; height: 46px; }
 .ic-icon.bounce svg { animation: hop 2.4s ease-in-out infinite; }
 .ic-icon.tick .hand { transform-origin: 32px 34px; animation: spin 4s linear infinite; }
+.ic-icon.shake svg { animation: wobble 2.6s ease-in-out infinite; }
+.ic-yellow { background: var(--yellow); color: var(--ink); }
 
-@media (max-width: 860px) { .info-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
+/* 活動亮點：沿用 info-card，5 張卡片 3+2 置中排列 */
+.hl-head { margin-top: clamp(56px, 8vw, 90px); }
+.hl-grid { display: flex; flex-wrap: wrap; justify-content: center; }
+.hl-grid > .info-card { flex: 0 1 calc((100% - 2 * clamp(16px, 3vw, 28px)) / 3); }
+.info-card .hl-desc { font-size: clamp(1rem, 1.8vw, 1.1rem); margin-top: 8px; opacity: .92; }
+
+@media (max-width: 860px) {
+  .info-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; gap: 14px; }
+  .hl-grid { flex-direction: column; flex-wrap: nowrap; }
+  /* 手機：圖示放左邊、文字在右，卡片變矮 */
+  .info-card { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; padding: 16px 18px; border-radius: 20px; box-shadow: 5px 5px 0 var(--ink); }
+  .info-card > :not(.ic-icon) { grid-column: 2; }
+  .info-card .ic-icon { grid-row: 1 / span 3; align-self: center; width: 50px; height: 50px; border-radius: 15px; }
+  .info-card .ic-icon svg { width: 32px; height: 32px; }
+  .info-card h3 { font-size: .8rem; letter-spacing: .2em; margin: 0 0 2px; }
+  .info-card .big { font-size: 1.2rem; }
+  .info-card .big2 { font-size: .95rem; margin-top: 2px; }
+  .info-card .hl-desc { font-size: .88rem; margin-top: 3px; }
+  .info-card::before { width: 110px; height: 110px; right: -40px; bottom: -50px; }
+}
 
 /* marquee */
 .marquee { margin: clamp(48px, 7vw, 72px) calc(50% - 50vw - 20px) 0; background: var(--navy); transform: rotate(-2deg); overflow: hidden; border-block: 4px solid var(--ink); }
