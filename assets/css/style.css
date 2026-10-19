@@ -302,8 +302,16 @@ main { overflow-x: clip; }
 .ic-icon svg { width: 46px; height: 46px; }
 .ic-icon.bounce svg { animation: hop 2.4s ease-in-out infinite; }
 .ic-icon.tick .hand { transform-origin: 32px 34px; animation: spin 4s linear infinite; }
+.ic-icon.shake svg { animation: wobble 2.6s ease-in-out infinite; }
+.ic-yellow { background: var(--yellow); color: var(--ink); }
 
-@media (max-width: 860px) { .info-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
+/* 活動亮點：沿用 info-card，5 張卡片 3+2 置中排列 */
+.hl-head { margin-top: clamp(56px, 8vw, 90px); }
+.hl-grid { display: flex; flex-wrap: wrap; justify-content: center; }
+.hl-grid > .info-card { flex: 0 1 calc((100% - 2 * clamp(16px, 3vw, 28px)) / 3); }
+.info-card .hl-desc { font-size: clamp(1rem, 1.8vw, 1.1rem); margin-top: 8px; opacity: .92; }
+
+@media (max-width: 860px) { .info-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } .hl-grid { flex-direction: column; flex-wrap: nowrap; } }
 
 /* marquee */
 .marquee { margin: clamp(48px, 7vw, 72px) calc(50% - 50vw - 20px) 0; background: var(--navy); transform: rotate(-2deg); overflow: hidden; border-block: 4px solid var(--ink); }
