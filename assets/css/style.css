@@ -76,7 +76,7 @@ main { overflow-x: clip; }
 .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .nav-toggle { display: block; }
   .menu {
     position: absolute; top: calc(100% + 6px); right: var(--gutter); left: var(--gutter);
@@ -139,6 +139,18 @@ main { overflow-x: clip; }
 .d-bl { width: clamp(170px, 28vw, 320px); bottom: -30px; left: -10px; animation: floatB 10s ease-in-out infinite; }
 .d-br { width: clamp(170px, 28vw, 320px); bottom: -20px; right: -10px; animation: floatA 12s ease-in-out infinite; }
 .deco .blob { transform-box: fill-box; transform-origin: center; animation: morph 8s ease-in-out infinite; }
+
+/* top-left slogan tape */
+.hero-tape { position: absolute; z-index: 1; top: clamp(250px, 26vw, 330px); left: -10%; width: 80%; margin: 0; background: var(--navy); border-block: 4px solid var(--ink); box-shadow: 0 6px 0 var(--ink); overflow: hidden; transform: rotate(-30deg); transform-origin: 0 50%; }
+.hero-tape .marquee-track { padding: 10px 0; animation-duration: 18s; }
+.hero-tape .marquee-track span { font-size: clamp(1.05rem, 2.2vw, 1.45rem); }
+.hero-tape .marquee-track b { font-family: var(--font-en); color: var(--yellow); }
+@media (max-width: 960px) {
+  .hero-tape { top: calc(80px + 13vw); left: -20px; width: calc(300px + 20vw); border-block-width: 3px; box-shadow: 0 4px 0 var(--ink); }
+  .hero-tape .marquee-track { gap: 14px; padding: 5px 0; }
+  .hero-tape .marquee-track span { font-size: .9rem; }
+  .hero-tape .marquee-track svg { width: 18px; height: 18px; }
+}
 
 .floaters .fl { position: absolute; width: clamp(30px, 4.5vw, 54px); height: clamp(30px, 4.5vw, 54px); color: var(--navy); animation: bob 5s ease-in-out infinite; }
 .f1 { top: 20%; left: 18%; animation-delay: -1s !important; }
@@ -244,7 +256,7 @@ main { overflow-x: clip; }
 .scroll-hint { position: absolute; left: 50%; bottom: 22px; margin-left: -15px; z-index: 3; width: 30px; height: 48px; border: 3px solid var(--navy); border-radius: 20px; }
 .scroll-hint span { position: absolute; left: 50%; top: 8px; width: 6px; height: 10px; margin-left: -3px; background: var(--red); border-radius: 3px; animation: scroll 1.6s ease-in-out infinite; }
 
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .poster { padding: 140px 16px 170px; }
   .d-tl { top: -30px; left: -40px; }
   .d-tr { top: -20px; right: -40px; }
@@ -367,7 +379,7 @@ main { overflow-x: clip; }
 .coffee .steam { animation: steam 2s ease-in-out infinite; }
 .drive { animation: drive 1.2s ease-in-out infinite; }
 
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .timeline::before { left: 18px; }
   .tl-item, .tl-item:nth-child(even) { grid-template-columns: 1fr; gap: 10px; padding-left: 48px; }
   .tl-item time, .tl-item:nth-child(even) time { grid-column: 1; grid-row: 1; justify-self: start; font-size: .98rem; }
