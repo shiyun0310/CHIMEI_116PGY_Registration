@@ -176,10 +176,11 @@ main { overflow-x: clip; }
 .hero-title .qm {
   display: flex; justify-content: center; gap: .02em;
   font-size: clamp(6.6rem, 30vw, 14rem); line-height: 1.05; letter-spacing: -.04em;
+  font-family: "Huninn", var(--font);
   color: var(--navy); -webkit-text-stroke: .08em #fff; paint-order: stroke fill;
   margin: -.05em 0 .22em;
 }
-.hero-title .qm-c { display: inline-block; position: relative; opacity: 1; animation: none; transform: rotate(-6deg); }
+.hero-title .qm-c { display: inline-block; position: relative; opacity: 1; animation: none; transform: rotate(-6deg); -webkit-text-stroke-width: .1em; }
 .hero-title .qm-c::after { content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; color: var(--orange); -webkit-text-stroke: .08em var(--orange); paint-order: stroke fill; transform: translate(.08em, .08em); }
 .hero-title .qm-c + .qm-c { transform: rotate(5deg) translateY(.06em); }
 .hero-title .qm-wrap { position: relative; animation-delay: .1s; }
