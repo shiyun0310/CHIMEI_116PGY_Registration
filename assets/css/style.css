@@ -202,6 +202,21 @@ main { overflow-x: clip; }
 .ecg { width: min(360px, 80%); margin: 10px auto 6px; }
 .ecg path { fill: none; stroke: var(--red); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 560; stroke-dashoffset: 560; animation: ecg 3s linear infinite; }
 
+.motto { position: relative; display: flex; flex-direction: column; align-items: center; width: fit-content; max-width: 100%; margin: 6px auto 20px; opacity: 0; animation: mottoIn .8s cubic-bezier(.2, .9, .3, 1.5) .8s forwards; }
+.mo-tag { position: relative; z-index: 1; margin-bottom: -12px; padding: 4px 18px; border-radius: 999px; background: var(--red); color: #fff; font-weight: 900; font-size: clamp(1rem, 3vw, 1.25rem); letter-spacing: .12em; border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); transform: rotate(-6deg); animation: tagWag 3s ease-in-out 1.8s infinite; }
+.mo-main { display: inline-flex; align-items: center; gap: .3em; padding: 16px 24px 12px; border-radius: 24px; background: var(--yellow); color: var(--navy); font-weight: 900; font-size: clamp(1.4rem, 5.4vw, 2.2rem); line-height: 1.2; white-space: nowrap; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); animation: slBob 3.6s ease-in-out 1.8s infinite; }
+.mo-360 { position: relative; flex: none; display: grid; place-items: center; width: 2.4em; height: 2.4em; border-radius: 50%; background: var(--navy); border: 3px solid var(--ink); }
+.mo-360 i { position: absolute; inset: 4px; border-radius: 50%; border: 3px dashed var(--yellow); animation: spin 6s linear infinite; }
+.mo-360 b { position: relative; font-family: var(--font-en); font-size: .62em; color: var(--yellow); }
+.mo-wave span { display: inline-block; animation: hop 1.8s ease-in-out infinite; animation-delay: calc(var(--i) * .15s + 1.8s); }
+.mo-wave span:nth-child(odd) { color: var(--red); }
+.mo-spark { position: absolute; font-size: clamp(1.2rem, 3.5vw, 1.6rem); line-height: 1; animation: twinkle 2s ease-in-out infinite; }
+.mo-spark.s1 { top: -6px; right: -14px; }
+.mo-spark.s2 { bottom: -10px; left: -16px; animation-delay: 1s; }
+@keyframes mottoIn { from { opacity: 0; transform: scale(.4) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes tagWag { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(-2deg) translateY(-2px); } }
+@media (max-width: 380px) { .mo-main { padding: 14px 16px 10px; } .mo-spark.s2 { display: none; } }
+
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 12px 0 20px; }
 .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px 8px 10px; border-radius: 999px; font-weight: 700; font-size: clamp(.88rem, 2.2vw, 1rem); color: #fff; }
 .chip svg { width: 26px; height: 26px; color: var(--ink); background: #fff; border-radius: 50%; padding: 3px; }
@@ -632,6 +647,7 @@ main { overflow-x: clip; }
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   html { scroll-behavior: auto; }
   .hero-title span { opacity: 1; transform: none; }
+  .motto { opacity: 1; }
   .reveal { opacity: 1; transform: none; }
 }
 @media (max-width: 400px) { .brand { font-size: .92rem; gap: 8px; padding-right: 12px; } .brand-emblem { height: 40px; margin-left: 8px; } }
