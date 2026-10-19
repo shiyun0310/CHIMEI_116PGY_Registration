@@ -282,6 +282,7 @@ main { overflow-x: clip; }
 .sec-sub { margin: 24px 0 0; color: var(--muted); font-weight: 500; }
 
 /* ---------- Info cards ---------- */
+.info-sec::before { content: ""; position: absolute; inset: 0 calc(50% - 50vw); background: #EEF2FA; z-index: -2; }
 .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 3vw, 28px); }
 .info-card {
   position: relative; border-radius: var(--radius); padding: 30px 26px 28px; color: #fff; overflow: hidden;
@@ -305,7 +306,6 @@ main { overflow-x: clip; }
 .ic-yellow { background: var(--yellow); color: var(--ink); }
 
 /* 活動亮點：沿用 info-card，5 張卡片 3+2 置中排列 */
-.highlights-sec::before { content: ""; position: absolute; inset: 0 calc(50% - 50vw); background: #EEF2FA; z-index: -2; }
 .hl-grid { display: flex; flex-wrap: wrap; justify-content: center; }
 .hl-grid > .info-card { flex: 0 1 calc((100% - 2 * clamp(16px, 3vw, 28px)) / 3); }
 .info-card .hl-desc { font-size: clamp(1rem, 1.8vw, 1.1rem); margin-top: 8px; opacity: .92; }
