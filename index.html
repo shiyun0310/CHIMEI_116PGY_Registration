@@ -512,7 +512,25 @@
         </div>
 
         <div class="field">
-          <label for="f-interest">6. 關於奇美醫院，您是否有特別想進一步了解的部分？</label>
+          <span class="label" id="lb-reason">6. 您參與本次說明會的原因為何？（可複選）</span>
+          <div class="chips-input" role="group" aria-labelledby="lb-reason">
+            <label class="pick"><input type="checkbox" name="reason" value="了解奇美醫院 PGY 訓練制度"><span>了解奇美醫院 PGY 訓練制度</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="正在比較各醫院 PGY 訓練，蒐集資訊"><span>正在比較各醫院 PGY 訓練，蒐集資訊</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="已將奇美列入考慮，想進一步確認"><span>已將奇美列入考慮，想進一步確認</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="對特定專科有興趣，想了解該科訓練特色"><span>對特定專科有興趣，想了解該科訓練特色</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="想聽學長姐的實際經驗分享"><span>想聽學長姐的實際經驗分享</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="學長姐或同學推薦參加"><span>學長姐或同學推薦參加</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="地緣因素（家鄉或就學地點在南部）"><span>地緣因素（家鄉或就學地點在南部）</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="現場抽獎與紀念品吸引"><span>現場抽獎與紀念品吸引</span></label>
+            <label class="pick"><input type="checkbox" name="reason" value="其他"><span>其他</span></label>
+          </div>
+          <div class="other" data-show-when="reason=其他" hidden>
+            <input name="reasonOther" type="text" maxlength="100" placeholder="請填寫參與原因" aria-label="其他參與原因">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-interest">7. 關於奇美醫院，您是否有特別想進一步了解的部分？</label>
           <p class="hint">例如：PGY 訓練課程內容、各科部訓練特色、教學資源、福利制度、工作環境、住院醫師生活等。</p>
           <textarea id="f-interest" name="interest" rows="4" maxlength="1000"></textarea>
         </div>

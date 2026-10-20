@@ -17,13 +17,14 @@ var EVENT_INFO = '日期：115年11月29日（星期日）\n' +
                  '地點：奇美醫院第五醫療大樓5樓國際會議廳';
 
 var HEADERS = ['報名時間', '姓名', '電子郵件', '就讀學校', '學制',
-               '得知管道', '推薦人姓名', '想進一步了解的部分'];
+               '得知管道', '推薦人姓名', '想進一步了解的部分', '參與原因'];
 
 var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學',
                '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '輔仁大學', '慈濟大學',
                '馬偕醫學院', '國防醫學院', '國立清華大學', '國立中興大學', '國立中山大學', '義守大學', '國外醫學校'];
 var PROGRAMS = ['七年制醫學系', '六年制醫學系', '中西醫雙主修', '學士後醫學系'];
 var SOURCES = ['學校公告', '同學推薦', '學長姐推薦', '奇美醫院官方網站／社群', '其他'];
+var REASONS = ['了解奇美醫院 PGY 訓練制度', '正在比較各醫院 PGY 訓練，蒐集資訊', '已將奇美列入考慮，想進一步確認', '對特定專科有興趣，想了解該科訓練特色', '想聽學長姐的實際經驗分享', '學長姐或同學推薦參加', '地緣因素（家鄉或就學地點在南部）', '現場抽獎與紀念品吸引', '其他'];
 
 function doPost(e) {
   var p0 = (e && e.parameter) || {};
@@ -41,6 +42,7 @@ function doPost(e) {
       source: clean_(p.source, 30),
       referrer: clean_(p.referrer, 50),
       sourceOther: clean_(p.sourceOther, 100),
+      reasonOther: clean_(p.reasonOther, 100),
       interest: clean_(p.interest, 1000)
     };
 
@@ -57,10 +59,15 @@ function doPost(e) {
     var school = f.school === '國外醫學校' ? '國外醫學校：' + f.schoolOther : f.school;
     var source = f.source === '其他' && f.sourceOther ? '其他：' + f.sourceOther : f.source;
     var referrer = f.source === '學長姐推薦' ? f.referrer : '';
+    // 可複選：e.parameters 才拿得到同名的多個值；依題目順序排列、去除不在選項內的值
+    var picked = ((e && e.parameters && e.parameters.reason) || []).map(function (v) { return clean_(v, 50); });
+    var reason = REASONS.filter(function (r) { return picked.indexOf(r) >= 0; }).map(function (r) {
+      return r === '其他' && f.reasonOther ? '其他：' + f.reasonOther : r;
+    }).join('、');
 
     lock.waitLock(10000);
     var sheet = getSheet_();
-    sheet.appendRow([new Date(), f.name, f.email, school, f.program, source, referrer, f.interest]
+    sheet.appendRow([new Date(), f.name, f.email, school, f.program, source, referrer, f.interest, reason]
       .map(function (v, i) { return i === 0 ? v : safe_(v); }));
     lock.releaseLock();
 
@@ -79,6 +86,7 @@ function doPost(e) {
         MailApp.sendEmail(NOTIFY_EMAIL, '【PGY說明會】新報名：' + f.name,
           ['姓名：' + f.name, 'E-mail：' + f.email, '學校：' + school, '學制：' + f.program,
            '得知管道：' + source + (referrer ? '（推薦人：' + referrer + '）' : ''),
+           '參與原因：' + reason,
            '想了解：' + f.interest].join('\n'));
       } catch (mailErr2) { console.error(mailErr2); }
     }
@@ -112,7 +120,7 @@ function listRegistrations_(key) {
   var data = rows.filter(function (r) { return r[1] !== ''; }).map(function (r) {
     var t = r[0] instanceof Date ? r[0].toISOString() : String(r[0]);
     return { time: t, name: r[1], email: r[2], school: r[3], program: r[4],
-             source: r[5], referrer: r[6], interest: r[7] };
+             source: r[5], referrer: r[6], interest: r[7], reason: r[8] };
   });
   return json_({ ok: true, updated: new Date().toISOString(), rows: data });
 }
@@ -125,6 +133,9 @@ function getSheet_() {
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold').setBackground('#FFC83D');
     sheet.setFrozenRows(1);
     sheet.getRange('A:A').setNumberFormat('yyyy/mm/dd hh:mm:ss');
+  } else if (sheet.getLastColumn() < HEADERS.length) {
+    // 舊工作表新增欄位時補上標題（新欄位一律加在最後，不影響既有資料）
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold').setBackground('#FFC83D');
   }
   return sheet;
 }

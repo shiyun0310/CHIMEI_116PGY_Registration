@@ -189,7 +189,8 @@
     conditionals.forEach(function (box) {
       var rule = box.getAttribute('data-show-when').split('=');
       var field = form.elements[rule[0]];
-      var on = field && field.value === rule[1];
+      var on = field && (field.tagName === 'SELECT' ? field.value === rule[1]
+        : !!form.querySelector('input[name="' + rule[0] + '"][value="' + rule[1] + '"]:checked'));
       box.hidden = !on;
       var input = box.querySelector('input');
       if (!on) input.value = '';
@@ -203,6 +204,9 @@
   syncConditionals();
 
   function val(name) { return (form.elements[name].value || '').trim(); }
+  function checked(name) {
+    return Array.prototype.map.call(form.querySelectorAll('input[name="' + name + '"]:checked'), function (el) { return el.value; });
+  }
   function setInvalid(name, bad) {
     var err = form.querySelector('.err[data-for="' + name + '"]');
     err.closest('.field').classList.toggle('invalid', bad);
@@ -285,8 +289,9 @@
     }
 
     var data = new URLSearchParams();
-    ['name', 'email', 'school', 'schoolOther', 'program', 'source', 'referrer', 'sourceOther', 'interest']
+    ['name', 'email', 'school', 'schoolOther', 'program', 'source', 'referrer', 'sourceOther', 'reasonOther', 'interest']
       .forEach(function (k) { data.append(k, val(k)); });
+    checked('reason').forEach(function (v) { data.append('reason', v); });
 
     setLoading(true);
     fetch(GAS_URL, { method: 'POST', body: data })

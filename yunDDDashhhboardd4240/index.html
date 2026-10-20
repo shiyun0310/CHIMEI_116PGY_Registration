@@ -183,6 +183,12 @@
         </div>
       </section>
 
+      <section class="card" style="margin-bottom: 16px">
+        <h2>參與原因</h2>
+        <p class="sub">可複選｜占比為勾選人數 ÷ 總報名人數（未填答另計）</p>
+        <ul class="hbars" id="byReason"></ul>
+      </section>
+
       <section class="card">
         <div class="tbl-head">
           <div><h2>報名名單</h2><span class="count" id="count"></span></div>
@@ -190,7 +196,7 @@
         </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>#</th><th>報名時間</th><th>姓名</th><th>E-mail</th><th>就讀學校</th><th>學制</th><th>得知管道</th><th>推薦人</th><th>想進一步了解</th></tr></thead>
+            <thead><tr><th>#</th><th>報名時間</th><th>姓名</th><th>E-mail</th><th>就讀學校</th><th>學制</th><th>得知管道</th><th>推薦人</th><th>參與原因</th><th>想進一步了解</th></tr></thead>
             <tbody id="tbody"></tbody>
           </table>
         </div>
@@ -207,6 +213,7 @@
   var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學', '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '輔仁大學', '慈濟大學', '馬偕醫學院', '國防醫學院', '國立清華大學', '國立中興大學', '國立中山大學', '義守大學', '國外醫學校'];
   var PROGRAMS = ['七年制醫學系', '六年制醫學系', '中西醫雙主修', '學士後醫學系'];
   var SOURCES = ['學校公告', '同學推薦', '學長姐推薦', '奇美醫院官方網站／社群', '其他'];
+  var REASONS = ['了解奇美醫院 PGY 訓練制度', '正在比較各醫院 PGY 訓練，蒐集資訊', '已將奇美列入考慮，想進一步確認', '對特定專科有興趣，想了解該科訓練特色', '想聽學長姐的實際經驗分享', '學長姐或同學推薦參加', '地緣因素（家鄉或就學地點在南部）', '現場抽獎與紀念品吸引', '其他'];
 
   var $ = function (id) { return document.getElementById(id); };
   var rows = [];
@@ -297,13 +304,16 @@
     renderBars('byProgram', PROGRAMS, function (r) { return r.program; }, false);
     renderBars('bySchool', SCHOOLS, function (r) { return /^國外醫學校/.test(r.school) ? '國外醫學校' : r.school; }, true);
     renderBars('bySource', SOURCES, function (r) { return /^其他/.test(r.source) ? '其他' : (r.source || '（未填答）'); }, false, '（未填答）');
+    renderBars('byReason', REASONS, function (r) {
+      return r.reason ? String(r.reason).split('、').map(function (x) { return /^其他/.test(x) ? '其他' : x; }) : '（未填答）';
+    }, false, '（未填答）');
     renderTable();
   }
 
   function renderBars(id, cats, pick, sortByCount, extra) {
     var counts = {}; cats.forEach(function (c) { counts[c] = 0; });
     if (extra) counts[extra] = 0;
-    rows.forEach(function (r) { var k = pick(r); if (k in counts) counts[k]++; else counts[k] = (counts[k] || 0) + 1; });
+    rows.forEach(function (r) { [].concat(pick(r)).forEach(function (k) { if (k in counts) counts[k]++; else counts[k] = (counts[k] || 0) + 1; }); });
     var list = Object.keys(counts).map(function (k) { return { k: k, n: counts[k] }; });
     if (extra && !counts[extra]) list = list.filter(function (x) { return x.k !== extra; });
     if (sortByCount) list.sort(function (a, b) { return b.n - a.n; });
@@ -392,19 +402,19 @@
     var q = $('q').value.trim().toLowerCase();
     var list = rows.filter(function (r) {
       if (!q) return true;
-      return [r.name, r.email, r.school, r.program, r.source, r.referrer, r.interest].join(' ').toLowerCase().indexOf(q) >= 0;
+      return [r.name, r.email, r.school, r.program, r.source, r.referrer, r.reason, r.interest].join(' ').toLowerCase().indexOf(q) >= 0;
     });
     $('count').textContent = q ? '符合 ' + list.length + ' / ' + rows.length + ' 筆' : '共 ' + rows.length + ' 筆（新到舊）';
     var tb = $('tbody'); tb.textContent = '';
     if (!list.length) {
       var tr0 = document.createElement('tr'), td0 = document.createElement('td');
-      td0.colSpan = 9; td0.className = 'empty'; td0.textContent = rows.length ? '找不到符合的資料' : '目前還沒有報名資料';
+      td0.colSpan = 10; td0.className = 'empty'; td0.textContent = rows.length ? '找不到符合的資料' : '目前還沒有報名資料';
       tr0.appendChild(td0); tb.appendChild(tr0); return;
     }
     list.forEach(function (r) {
       var tr = document.createElement('tr');
       var idx = rows.length - rows.indexOf(r);
-      [[idx, 'num'], [timeFmt.format(r.date), 'time'], [r.name, 'nw'], [r.email, 'mail'], [r.school], [r.program, 'nw'], [r.source], [r.referrer, 'nw'], [r.interest, 'long']]
+      [[idx, 'num'], [timeFmt.format(r.date), 'time'], [r.name, 'nw'], [r.email, 'mail'], [r.school], [r.program, 'nw'], [r.source], [r.referrer, 'nw'], [r.reason, 'long'], [r.interest, 'long']]
         .forEach(function (c) { var td = document.createElement('td'); td.textContent = c[0] == null ? '' : c[0]; if (c[1]) td.className = c[1]; tr.appendChild(td); });
       tb.appendChild(tr);
     });
@@ -478,12 +488,12 @@
   }
 
   $('xlsx').addEventListener('click', function () {
-    var head = ['序號', '報名時間', '姓名', '電子郵件', '就讀學校', '學制', '得知管道', '推薦人姓名', '想進一步了解的部分'];
+    var head = ['序號', '報名時間', '姓名', '電子郵件', '就讀學校', '學制', '得知管道', '推薦人姓名', '參與原因', '想進一步了解的部分'];
     var fullFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
     var data = rows.slice().reverse().map(function (r, i) {
-      return [i + 1, fullFmt.format(r.date), r.name, r.email, r.school, r.program, r.source, r.referrer, r.interest];
+      return [i + 1, fullFmt.format(r.date), r.name, r.email, r.school, r.program, r.source, r.referrer, r.reason, r.interest];
     });
-    var blob = buildXlsx(head, data, [7, 21, 12, 30, 24, 15, 24, 12, 50]);
+    var blob = buildXlsx(head, data, [7, 21, 12, 30, 24, 15, 24, 12, 50, 50]);
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'PGY116_registrations_' + dayKey(new Date()) + '.xlsx';
