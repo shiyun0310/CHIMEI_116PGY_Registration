@@ -203,6 +203,16 @@
   });
   syncConditionals();
 
+  // 「其他」填寫欄常駐顯示：有填字就自動勾選，取消勾選就清空
+  var reasonOtherBox = document.getElementById('f-reason-other');
+  form.elements.reasonOther.addEventListener('input', function () {
+    if (this.value.trim()) reasonOtherBox.checked = true;
+  });
+  reasonOtherBox.addEventListener('change', function () {
+    if (!this.checked) form.elements.reasonOther.value = '';
+    else form.elements.reasonOther.focus();
+  });
+
   function val(name) { return (form.elements[name].value || '').trim(); }
   function checked(name) {
     return Array.prototype.map.call(form.querySelectorAll('input[name="' + name + '"]:checked'), function (el) { return el.value; });

@@ -542,6 +542,8 @@ main { overflow-x: clip; }
 }
 .pick span::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--ink); background: #fff; flex: none; transition: background .2s; }
 .pick input[type="checkbox"] + span::before { border-radius: 4px; }
+.pick-other { display: flex; align-items: center; gap: 10px; flex: 1 1 280px; }
+.reg-form .pick-other input[type="text"] { flex: 1; min-width: 0; min-height: 44px; padding: 8px 14px; }
 .pick:hover span { transform: translateY(-2px); }
 .pick input:checked + span { background: var(--navy); color: #fff; box-shadow: 3px 3px 0 var(--ink); }
 .pick input:checked + span::before { background: var(--yellow); }
