@@ -210,7 +210,9 @@
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
   var EVENT_START = new Date('2026-11-29T13:00:00+08:00');
   var KEY_STORE = 'pgy116-dash-key';
-  var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學', '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '輔仁大學', '慈濟大學', '馬偕醫學院', '國防醫學院', '國立清華大學', '國立中興大學', '國立中山大學', '義守大學', '國外醫學校'];
+  var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學', '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '天主教輔仁大學', '慈濟大學', '馬偕醫學大學', '國防醫學大學', '國立清華大學', '國立中興大學', '國立中山大學', '義守大學', '國外醫學校'];
+  // 更名前已報名的舊校名，統計時併入新校名
+  var SCHOOL_RENAMES = { '輔仁大學': '天主教輔仁大學', '馬偕醫學院': '馬偕醫學大學', '國防醫學院': '國防醫學大學' };
   var PROGRAMS = ['七年制醫學系', '六年制醫學系', '中西醫雙主修', '學士後醫學系'];
   var SOURCES = ['學校公告', '同學推薦', '學長姐推薦', '奇美醫院官方網站／社群', '其他'];
   var REASONS = ['了解奇美醫院 PGY 訓練制度', '正在比較各醫院 PGY 訓練，蒐集資訊', '已將奇美列入考慮，想進一步確認', '對特定專科有興趣，想了解該科訓練特色', '想聽學長姐的實際經驗分享', '學長姐或同學推薦參加', '地緣因素（家鄉或就學地點在南部）', '現場抽獎與紀念品吸引', '其他'];
@@ -302,7 +304,7 @@
 
     renderDaily(today);
     renderBars('byProgram', PROGRAMS, function (r) { return r.program; }, false);
-    renderBars('bySchool', SCHOOLS, function (r) { return /^國外醫學校/.test(r.school) ? '國外醫學校' : r.school; }, true);
+    renderBars('bySchool', SCHOOLS, function (r) { return /^國外醫學校/.test(r.school) ? '國外醫學校' : (SCHOOL_RENAMES[r.school] || r.school); }, true);
     renderBars('bySource', SOURCES, function (r) { return /^其他/.test(r.source) ? '其他' : (r.source || '（未填答）'); }, false, '（未填答）');
     renderBars('byReason', REASONS, function (r) {
       return r.reason ? String(r.reason).split('、').map(function (x) { return /^其他/.test(x) ? '其他' : x; }) : '（未填答）';
