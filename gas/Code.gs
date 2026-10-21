@@ -29,6 +29,7 @@ var REASONS = ['了解奇美醫院 PGY 訓練制度', '正在比較各醫院 PGY
 function doPost(e) {
   var p0 = (e && e.parameter) || {};
   if (p0.action === 'list') return listRegistrations_(p0.key);
+  if (p0.action === 'views') return pageViews_(p0.hit === '1');
 
   var lock = LockService.getScriptLock();
   try {
@@ -103,6 +104,24 @@ function doPost(e) {
 // 直接用瀏覽器開啟部署網址時，用來確認服務正常
 function doGet() {
   return json_({ ok: true, service: 'PGY116 registration' });
+}
+
+// ===== 網頁瀏覽人次 =====
+// 計數存在「指令碼屬性」的 VIEW_COUNT；hit=1 時加一（網站端每個分頁工作階段只送一次）
+function pageViews_(hit) {
+  var props = PropertiesService.getScriptProperties();
+  if (!hit) return json_({ ok: true, views: Number(props.getProperty('VIEW_COUNT')) || 0 });
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(5000);
+    var n = (Number(props.getProperty('VIEW_COUNT')) || 0) + 1;
+    props.setProperty('VIEW_COUNT', String(n));
+    return json_({ ok: true, views: n });
+  } catch (err) {
+    return json_({ ok: true, views: Number(props.getProperty('VIEW_COUNT')) || 0 });
+  } finally {
+    try { lock.releaseLock(); } catch (ignore) {}
+  }
 }
 
 // ===== 報名狀況儀表板 =====

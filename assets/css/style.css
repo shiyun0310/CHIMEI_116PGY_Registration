@@ -599,6 +599,23 @@ main { overflow-x: clip; }
 @keyframes launch { 40% { transform: translateY(6px) scale(.95); } 100% { transform: translateY(-120vh); opacity: 0; } }
 @media (max-width: 560px) { .to-top { width: 54px; height: 54px; } .to-top svg { width: 26px; height: 26px; } }
 
+/* ---------- 瀏覽人次 ---------- */
+.view-count {
+  position: fixed; z-index: 59; right: max(16px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 6px; padding: 5px 12px 5px 8px; border-radius: 999px;
+  background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
+  font-size: .78rem; font-weight: 700; line-height: 1.2; white-space: nowrap;
+  animation: vc-in .4s cubic-bezier(.2, .9, .3, 1.4);
+}
+.view-count[hidden] { display: none; }
+.view-count svg { width: 20px; height: 20px; flex: none; }
+.view-count b { font-family: var(--font-en); font-weight: 900; font-variant-numeric: tabular-nums; }
+@keyframes vc-in { from { opacity: 0; transform: translateY(12px); } }
+/* 有瀏覽人次時，TOP 按鈕往上移，避免重疊 */
+.view-count:not([hidden]) ~ .to-top { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 44px); }
+@media (max-width: 560px) { .view-count { font-size: .72rem; padding: 4px 10px 4px 6px; } .view-count svg { width: 18px; height: 18px; } }
+@media print { .view-count { display: none !important; } }
+
 /* ---------- Footer ---------- */
 .footer { position: relative; text-align: center; padding: 34px var(--gutter) 30px; background: var(--navy); color: #fff; border-top: 4px solid var(--ink); overflow: hidden; }
 .footer::before, .footer::after { content: ""; position: absolute; border-radius: 46% 54% 60% 40%; animation: morph 10s ease-in-out infinite; }
