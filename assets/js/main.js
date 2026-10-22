@@ -18,6 +18,26 @@
   var REG_DEADLINE = new Date('2026-11-14T00:00:00+08:00');
   function regClosed() { return Date.now() >= REG_DEADLINE || /[?&]preview=closed\b/.test(location.search); }
 
+  /* ===== 網頁瀏覽人次（右下角） =====
+   * 同一個分頁重新整理不重複計算；網址加上 ?nocount 可只看數字、不計入（方便承辦人自己檢查） */
+  (function () {
+    var box = document.getElementById('viewCount');
+    if (!GAS_URL || !box) return;
+    var counted = false;
+    try { counted = sessionStorage.getItem('pgy116_viewed') === '1'; } catch (e) {}
+    var hit = !counted && !/[?&]nocount\b/.test(location.search);
+    var body = new URLSearchParams({ action: 'views', hit: hit ? '1' : '0' });
+    fetch(GAS_URL, { method: 'POST', body: body })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok || typeof res.views !== 'number') return;
+        if (hit) { try { sessionStorage.setItem('pgy116_viewed', '1'); } catch (e) {} }
+        document.getElementById('viewNum').textContent = res.views.toLocaleString('zh-TW');
+        box.hidden = false;
+      })
+      .catch(function () {}); // 讀不到就不顯示，不影響頁面
+  })();
+
   /* ===== 開啟網頁時一律從最上方開始 ===== */
   // 不讓瀏覽器記住上次捲動位置，也不讓網址上的 #錨點 把頁面帶到中間
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
