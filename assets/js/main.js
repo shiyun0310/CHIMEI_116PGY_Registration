@@ -176,26 +176,6 @@
     '&location=' + encodeURIComponent(EVENT.location) +
     '&details=' + encodeURIComponent(EVENT.details);
 
-  document.getElementById('ics').addEventListener('click', function () {
-    var ics = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CHIMEI//PGY116//ZH-TW', 'CALSCALE:GREGORIAN',
-      'BEGIN:VEVENT',
-      'UID:pgy116-20261129@chimei',
-      'DTSTAMP:' + utc(new Date()),
-      'DTSTART:' + utc(EVENT.start),
-      'DTEND:' + utc(EVENT.end),
-      'SUMMARY:' + EVENT.title,
-      'LOCATION:' + EVENT.location.replace(/,/g, '\\,'),
-      'DESCRIPTION:' + EVENT.details.replace(/,/g, '\\,'),
-      'END:VEVENT', 'END:VCALENDAR'
-    ].join('\r\n');
-    var url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-    var a = document.createElement('a');
-    a.href = url; a.download = 'CHIMEI_PGY116.ics';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-  });
-
   /* ===== Registration form ===== */
   var form = document.getElementById('regForm');
   var submitBtn = document.getElementById('regSubmit');
