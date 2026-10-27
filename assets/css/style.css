@@ -104,7 +104,7 @@ main { overflow-x: clip; }
 .btn-primary { background: var(--red); color: #fff; }
 .btn-ghost { background: #fff; color: var(--ink); }
 .btn-light { background: #fff; color: var(--navy); }
-.btn-outline { background: transparent; color: #fff; border-color: #fff; box-shadow: 4px 4px 0 var(--ink); }
+.btn-navy { background: var(--navy); color: #fff; }
 .btn-yellow { background: var(--yellow); color: var(--ink); }
 .btn:focus-visible, .tab:focus-visible, .menu a:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
 
