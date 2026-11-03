@@ -154,7 +154,7 @@ function listRegistrations_(key) {
 }
 
 // ===== 現場報到 =====
-// lookup：輸入姓名或 Email（需完全相符），回傳符合的報名資料（Email 遮蔽）
+// lookup：輸入姓名（需與報名時一模一樣，只忽略前後空白），回傳符合的報名資料（Email 遮蔽）
 // checkin：以列號＋姓名確認後，在「報到時間」欄寫入時間；已報到者不會覆寫
 function checkinGate_(p) {
   var now = new Date();
@@ -169,7 +169,7 @@ function checkinGate_(p) {
 }
 
 function norm_(v) {
-  return String(v == null ? '' : v).replace(/\s+/g, '').toLowerCase();
+  return String(v == null ? '' : v).trim();
 }
 
 function maskEmail_(e) {
@@ -183,8 +183,8 @@ function checkinLookup_(p) {
   var gate = checkinGate_(p);
   if (gate === 'CODE') return json_({ ok: false, needCode: true, error: '報到代碼錯誤，請掃描現場 QR Code' });
   if (gate) return json_({ ok: false, error: gate });
-  var q = norm_(clean_(p.q, 120));
-  if (q.length < 2) return json_({ ok: false, error: '請輸入完整姓名或報名時填寫的 Email' });
+  var q = norm_(clean_(p.q, 50));
+  if (!q) return json_({ ok: false, error: '請輸入報名時填寫的姓名' });
 
   var sheet = getSheet_();
   var last = sheet.getLastRow();
@@ -192,7 +192,7 @@ function checkinLookup_(p) {
   var matches = [];
   rows.forEach(function (r, i) {
     if (r[1] === '') return;
-    if (norm_(r[1]) !== q && norm_(r[2]) !== q) return;
+    if (norm_(r[1]) !== q) return;
     matches.push({
       row: i + 2,
       name: String(r[1]),

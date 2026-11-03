@@ -88,8 +88,8 @@
     <!-- 1. 查詢 -->
     <form class="card" id="search">
       <h2>查詢報名資料</h2>
-      <p class="hint">請輸入報名時填寫的<b>姓名</b>或<b>電子郵件</b>。</p>
-      <label for="q">姓名或 Email</label>
+      <p class="hint">請輸入報名時填寫的<b>姓名</b>（需與報名時一模一樣）。</p>
+      <label for="q">姓名</label>
       <input type="text" id="q" autocomplete="name" enterkeyhint="search" placeholder="例如：王小明" required>
       <div id="codeBox" hidden>
         <label for="code">報到代碼</label>
@@ -168,7 +168,7 @@
     busy($('searchBtn'), true);
     post({ action: 'lookup', q: q }).then(function (res) {
       if (!res.rows.length) {
-        $('searchErr').textContent = '查無「' + q + '」的報名資料。請確認姓名（全名）或 Email 是否與報名時相同，或洽報到櫃台。';
+        $('searchErr').textContent = '查無「' + q + '」的報名資料。請確認姓名是否與報名時一模一樣（含全形／半形、英文大小寫），或洽報到櫃台。';
         return;
       }
       renderList(res.rows);
