@@ -126,6 +126,7 @@
       <button class="btn btn-navy" type="button" id="outBtn"><span class="spin" aria-hidden="true"></span>簽退</button>
       <p class="err" id="outErr" role="alert"></p>
       <p class="note" id="okNote">活動結束離場時，請回到此頁按「簽退」。</p>
+      <button class="btn btn-primary" type="button" id="home" hidden>返回簽到系統</button>
     </section>
 
     <p class="help">找不到報名資料？請直接洽報到櫃台工作人員。</p>
@@ -256,6 +257,7 @@
     $('outBtn').hidden = out || !info.row;
     $('outErr').textContent = '';
     $('okNote').hidden = out;
+    $('home').hidden = !out;
     $('done').classList.toggle('again', !out && !!info.already);
     $('done').classList.toggle('out', out);
     show('done');
@@ -263,6 +265,11 @@
 
   $('outBtn').addEventListener('click', function () { if (current) doCheckout(current, $('outBtn'), $('outErr')); });
 
+  $('home').addEventListener('click', function () {
+    set(localStorage, DONE_STORE, null); current = null;
+    $('q').value = ''; $('searchErr').textContent = '';
+    show('search'); $('q').focus();
+  });
   $('back').addEventListener('click', function () { show('search'); $('q').select(); });
 
   /* ---------- 開始：同一支手機已報到過就直接顯示結果 ---------- */
