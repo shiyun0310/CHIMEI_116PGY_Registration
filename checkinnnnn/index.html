@@ -80,6 +80,14 @@
     .ok .tm { font-family: var(--font-en); color: var(--ink-2); margin: 0 0 14px; }
     .ok .note { background: #FFF6E0; border-radius: 12px; padding: 10px 12px; font-size: .92rem; color: var(--ink-2); margin: 0 0 8px; }
 
+    .sync { margin: -6px 0 16px; font-size: .9rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .sync.pending { color: var(--muted); }
+    .sync.ok { color: var(--green); }
+    .sync.err { color: var(--red); }
+    .sync .spin { display: inline-block; width: 13px; height: 13px; border-color: var(--muted); border-right-color: transparent; }
+    .ok.fail .mark { background: var(--red); }
+    .queue { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 10;
+      background: var(--ink); color: #fff; border-radius: 999px; padding: 8px 16px; font-size: .85rem; box-shadow: 0 6px 18px rgba(0,0,0,.2); white-space: nowrap; }
     .help { margin-top: 18px; text-align: center; color: var(--muted); font-size: .9rem; }
   </style>
 </head>
@@ -124,10 +132,12 @@
         <dt>報到時間</dt><dd id="okIn"></dd>
         <dt id="okOutLabel">簽退時間</dt><dd id="okOut">—</dd>
       </dl>
+      <p class="sync" id="sync" role="status"></p>
       <button class="btn btn-primary" type="button" id="home">返回簽到系統</button>
     </section>
 
     <p class="help">找不到報名資料？請直接洽報到工作人員。</p>
+    <div class="queue" id="queue" role="status" hidden></div>
   </main>
 
 <script>
@@ -264,7 +274,8 @@
       // 簽到頁只負責報到（簽退在 /checkouttt/）
       b.appendChild(document.createTextNode(!r.checkin ? '確認報到' : '查看報到紀錄'));
       b.addEventListener('click', function () {
-        if (!r.checkin) return doCheckin(r, b);
+        if (!r.checkin) return doCheckin(r);
+        current = null;
         showDone({ row: r.row, name: r.name, time: r.checkin, checkout: r.checkout, already: true });
       });
       li.appendChild(b);
@@ -272,19 +283,88 @@
     });
   }
 
-  /* ---------- 報到 ---------- */
-  function doCheckin(r, btn) {
-    $('pickErr').textContent = '';
-    busy(btn, true);
-    post({ action: 'checkin', row: r.row, name: r.name }).then(function (res) {
-      showDone({ row: r.row, name: res.name, time: res.time, checkout: res.checkout || '', already: res.already });
-    }).catch(function (err) {
-      $('pickErr').textContent = err.message;
-    }).then(function () { busy(btn, false); });
+  /* ---------- 報到（按下立即顯示成功，背景寫入 GAS） ---------- */
+  // 待寫入的報到存在手機（localStorage），網路不穩會自動重試，重新整理或關掉再開也會繼續送出。
+  var QUEUE_STORE = 'pgy116-checkin-queue';
+  var RETRY_MS = [1500, 4000, 8000, 15000];
+  var current = null;   // 目前畫面顯示的那筆
+  var inflight = {};
+
+  function loadQueue() { try { return JSON.parse(get(localStorage, QUEUE_STORE) || '[]') || []; } catch (e) { return []; } }
+  function saveQueue(list) { set(localStorage, QUEUE_STORE, list.length ? JSON.stringify(list) : null); renderQueue(); }
+  function dropItem(id) { saveQueue(loadQueue().filter(function (x) { return x.id !== id; })); }
+  function renderQueue() {
+    var n = loadQueue().length;
+    $('queue').hidden = !n || !$('done').hidden;
+    $('queue').textContent = '有 ' + n + ' 筆報到資料同步中，請勿關閉網路…';
   }
+
+  function setSync(kind, text) {
+    var el = $('sync'); el.className = 'sync ' + kind; el.textContent = '';
+    if (kind === 'pending') { var sp = document.createElement('span'); sp.className = 'spin'; el.appendChild(sp); }
+    el.appendChild(document.createTextNode(text));
+  }
+
+  // 送出一筆：網路錯誤、系統忙碌 → 可重試；其他錯誤（資料不符、代碼錯誤）→ 不重試
+  function sendItem(item) {
+    return fetch(GAS_URL, { method: 'POST', body: new URLSearchParams({ action: 'checkin', row: item.row, name: item.name, code: code() }) })
+      .then(function (r) { return r.json(); }, function () { throw { retry: true, msg: '網路連線異常' }; })
+      .then(function (res) {
+        if (!res) throw { retry: true, msg: '系統忙碌中' };
+        if (res.needCode) { $('codeBox').hidden = false; set(sessionStorage, CODE_STORE, null); }
+        if (!res.ok) throw { retry: /忙碌/.test(res.error || ''), msg: res.error || '系統忙碌中' };
+        return res;
+      }, function (e) { throw e.retry != null ? e : { retry: true, msg: '系統忙碌中' }; });
+  }
+
+  function sync(item, attempt) {
+    if (inflight[item.id]) return;
+    inflight[item.id] = true;
+    var mine = function () { return current && current.id === item.id; };
+    if (mine()) setSync('pending', '資料同步中…');
+    sendItem(item).then(function (res) {
+      dropItem(item.id);
+      if (mine()) {
+        $('okStatus').textContent = res.already ? '您已完成報到' : '報到成功';
+        $('okIn').textContent = fmt(res.time);
+        $('done').classList.toggle('again', !!res.already);
+        setSync('ok', '✓ 已完成登記');
+      }
+    }).catch(function (e) {
+      if (e && e.retry) {
+        var wait = RETRY_MS[Math.min(attempt, RETRY_MS.length - 1)];
+        if (mine()) setSync(attempt >= 2 ? 'err' : 'pending', attempt >= 2 ? '網路不穩，正在自動重試…（如持續出現請洽工作人員）' : '資料同步中…');
+        setTimeout(function () { sync(item, attempt + 1); }, wait);
+      } else {
+        dropItem(item.id);
+        if (mine()) {
+          $('okStatus').textContent = '報到未完成';
+          $('done').classList.add('fail');
+          setSync('err', '⚠ ' + ((e && e.msg) || '報到失敗') + '，請洽工作人員');
+        }
+      }
+    }).then(function () { inflight[item.id] = false; });
+  }
+
+  function doCheckin(r) {
+    $('pickErr').textContent = '';
+    var item = { id: Date.now() + '-' + r.row, row: r.row, name: r.name, at: new Date().toISOString() };
+    var list = loadQueue().filter(function (x) { return x.row !== r.row; });
+    list.push(item); saveQueue(list);
+    current = item;
+    showDone({ row: r.row, name: r.name, time: item.at, checkout: '', already: false });
+    setSync('pending', '資料同步中…');
+    sync(item, 0);
+  }
+
+  // 頁面打開或網路恢復時，把還沒送出的報到補送
+  function flushQueue() { loadQueue().forEach(function (x) { sync(x, 0); }); }
+  window.addEventListener('online', flushQueue);
 
   function showDone(info) {
     var out = !!info.checkout;
+    $('done').classList.remove('fail');
+    $('sync').textContent = ''; $('sync').className = 'sync';
     $('okName').textContent = info.name;
     $('okStatus').textContent = out ? (info.out && !info.already ? '簽退成功，感謝您的參與！' : '您已完成簽退')
                                     : (info.already ? '您已完成報到' : '報到成功');
@@ -294,16 +374,20 @@
     $('done').classList.toggle('again', !out && !!info.already);
     $('done').classList.toggle('out', out);
     show('done');
+    renderQueue();
   }
 
   $('home').addEventListener('click', function () {
+    current = null;
     $('q').value = ''; $('searchErr').textContent = '';
-    show('search'); $('q').focus();
+    show('search'); renderQueue(); $('q').focus();
   });
   $('back').addEventListener('click', function () { show('search'); $('q').select(); });
 
   /* ---------- 開始 ---------- */
   show('search');
+  renderQueue();
+  flushQueue();
 })();
 </script>
 </body>
