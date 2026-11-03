@@ -5,7 +5,8 @@
 - `index.html`：頁面內容（活動資訊、議程、分科互動交流、交通地點）
 - `assets/css/style.css`：樣式與動畫（響應式，支援手機／電腦）
 - `assets/js/main.js`：倒數計時、分科分頁、加入行事曆、報名表送出
-- `checkinnnnn/`：說明會當天的現場報到頁面（設定見 `gas/README.md`）
+- `checkinnnnn/`：說明會當天的現場簽到頁面
+- `checkouttt/`：簽退＋滿意度調查頁面（設定見 `gas/README.md`）
 
 ## 報名表
 

@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#213C8F">
+  <title>簽退｜奇美醫院PGY醫師招募說明會</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4c15 0 28 9 28 26S47 60 30 60 4 48 4 32 17 4 32 4z' fill='%23213C8F'/%3E%3Cpath d='M18 33l10 10 18-20' stroke='%23FFB21C' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #213C8F; --navy-d: #172B6A; --orange: #FFA319; --red: #F2541B; --yellow: #FFC83D; --green: #1E9E5A;
+      --ink: #161616; --ink-2: #4A5060; --muted: #6B7180; --line: #E3E7EF;
+      --bg: #F4F6FA; --card: #FFFFFF; --soft: #F6F8FC;
+      --font: "Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --font-en: "Poppins", var(--font);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.55; min-height: 100vh; }
+    [hidden] { display: none !important; }
+    button, input { font: inherit; }
+
+    .top { background: var(--navy); color: #fff; border-bottom: 4px solid var(--ink); position: relative; overflow: hidden; }
+    .top::before { content: ""; position: absolute; width: 140px; height: 140px; right: -50px; top: -70px; border-radius: 46% 54% 60% 40%; background: var(--orange); }
+    .top::after { content: ""; position: absolute; width: 70px; height: 70px; right: 90px; bottom: -48px; border-radius: 58% 42% 40% 60%; background: var(--yellow); }
+    .top .in { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 22px 16px; }
+    .top h1 { margin: 0; font-size: clamp(1.1rem, 4.6vw, 1.45rem); font-weight: 900; line-height: 1.35; }
+    .top h1 small { display: block; font-family: var(--font-en); font-size: .6em; font-weight: 800; letter-spacing: .18em; color: var(--yellow); }
+    .top p { margin: 6px 0 0; font-size: .9rem; opacity: .9; }
+
+    main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
+    .card { background: var(--card); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 6px 6px 0 var(--navy); padding: 24px 20px; }
+    .card h2 { margin: 0 0 4px; font-size: 1.25rem; font-weight: 900; }
+    .card .hint { margin: 0 0 16px; color: var(--muted); font-size: .92rem; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; }
+    input[type=text] {
+      width: 100%; min-height: 52px; padding: 10px 14px; font-size: 18px; border: 2px solid var(--ink);
+      border-radius: 14px; background: var(--soft); margin-bottom: 14px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 8px 18px;
+      border-radius: 999px; border: 2px solid var(--ink); background: #fff; color: var(--ink); font-weight: 900; font-size: 1.05rem;
+      cursor: pointer; box-shadow: 3px 3px 0 var(--ink); transition: transform .12s, box-shadow .12s; width: 100%;
+    }
+    .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    .btn:focus-visible, input:focus-visible { outline: 3px dashed var(--red); outline-offset: 2px; }
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-navy { background: var(--navy); color: #fff; }
+    .btn-link { background: none; border: 0; box-shadow: none; color: var(--navy); text-decoration: underline; min-height: 44px; font-weight: 700; font-size: .95rem; }
+    .btn[disabled] { opacity: .6; cursor: progress; }
+    .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; display: none; animation: spin .8s linear infinite; }
+    .loading .spin { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .err { color: var(--red); font-weight: 700; min-height: 1.5em; margin: 12px 0 0; }
+
+    .list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 12px; }
+    .item { border: 2px solid var(--line); border-radius: 16px; padding: 14px 16px; background: var(--soft); }
+    .item .nm { font-size: 1.2rem; font-weight: 900; }
+    .item .meta { color: var(--ink-2); font-size: .9rem; margin: 2px 0 12px; word-break: break-all; }
+    .item .done { color: var(--green); font-weight: 700; margin: 0 0 10px; }
+
+    .ok { text-align: center; }
+    .ok .mark { width: 96px; height: 96px; margin: 4px auto 14px; border-radius: 50%; background: var(--green); display: grid; place-items: center; border: 3px solid var(--ink); }
+    .ok .mark svg { width: 54px; height: 54px; }
+    .ok.again .mark { background: var(--orange); }
+    .ok.out .mark { background: var(--navy); }
+    .ok .times { display: grid; grid-template-columns: auto auto; justify-content: center; gap: 2px 12px; margin: 6px 0 16px; font-size: 1rem; }
+    .ok .times dt { color: var(--muted); text-align: right; }
+    .ok .times dd { margin: 0; font-family: var(--font-en); font-weight: 800; text-align: left; }
+    .ok .err:empty { display: none; }
+    .ok .nm { font-size: 1.9rem; font-weight: 900; margin: 0; }
+    .ok .st { font-size: 1.15rem; font-weight: 900; margin: 4px 0 2px; }
+    .ok .tm { font-family: var(--font-en); color: var(--ink-2); margin: 0 0 14px; }
+    .ok .note { background: #FFF6E0; border-radius: 12px; padding: 10px 12px; font-size: .92rem; color: var(--ink-2); margin: 0 0 8px; }
+
+    /* 滿意度 */
+    .q { border: 0; margin: 0 0 18px; padding: 0; }
+    .q legend { font-weight: 700; margin-bottom: 8px; padding: 0; }
+    .req { color: var(--red); margin-left: 2px; }
+    .q legend .opt { color: var(--muted); font-weight: 500; font-size: .85em; margin-left: 4px; }
+    .scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .scale label { margin: 0; }
+    .scale input { position: absolute; opacity: 0; pointer-events: none; }
+    .scale span {
+      display: grid; place-items: center; min-height: 48px; border: 2px solid var(--line); border-radius: 12px;
+      background: var(--soft); font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; cursor: pointer;
+      transition: background .12s, border-color .12s, color .12s;
+    }
+    .scale input:checked + span { background: var(--navy); border-color: var(--ink); color: #fff; }
+    .scale input:focus-visible + span { outline: 3px dashed var(--red); outline-offset: 2px; }
+    .ends { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-top: 4px; }
+    .q.bad .scale span { border-color: var(--red); }
+    textarea { width: 100%; min-height: 96px; padding: 10px 14px; font: inherit; font-size: 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--soft); resize: vertical; }
+    textarea:focus-visible { outline: 3px dashed var(--red); outline-offset: 2px; }
+    .who { margin: -6px 0 16px; color: var(--ink-2); font-size: .92rem; }
+
+    .help { margin-top: 18px; text-align: center; color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="in">
+      <h1><small>CHECK-OUT</small>奇美醫院PGY醫師招募說明會</h1>
+      <p>115.11.29 (日)｜第五醫療大樓5樓國際會議廳</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. 查詢 -->
+    <form class="card" id="search">
+      <h2>填寫人<span class="req" aria-hidden="true">*</span></h2>
+      <p class="hint">輸入姓名後，系統會自動帶出您的資料。</p>
+      <label for="q">姓名</label>
+      <input type="text" id="q" autocomplete="name" enterkeyhint="search" placeholder="例如：王小明" required>
+      <div id="codeBox" hidden>
+        <label for="code">報到代碼</label>
+        <input type="text" id="code" autocomplete="off" placeholder="請掃描現場 QR Code 或向工作人員詢問">
+      </div>
+      <button class="btn btn-primary" type="submit" id="searchBtn"><span class="spin" aria-hidden="true"></span>查詢</button>
+      <p class="err" id="searchErr" role="alert"></p>
+    </form>
+
+    <!-- 2. 選擇 -->
+    <section class="card" id="pick" hidden>
+      <h2>請確認您的資料</h2>
+      <p class="hint" id="pickHint">找到以下報名資料，確認是本人後按「確認報到」。</p>
+      <ul class="list" id="list"></ul>
+      <p class="err" id="pickErr" role="alert"></p>
+      <button class="btn-link btn" type="button" id="back">不是我，重新查詢</button>
+    </section>
+
+    <!-- 3. 滿意度調查 -->
+    <form class="card" id="survey" hidden novalidate>
+      <h2>滿意度調查</h2>
+      <p class="who" id="who"></p>
+      <div id="qs"></div>
+      <p class="err" id="surveyErr" role="alert"></p>
+      <button class="btn btn-primary" type="submit" id="submitBtn"><span class="spin" aria-hidden="true"></span>送出並簽退</button>
+      <button class="btn-link btn" type="button" id="back2">不是我，重新查詢</button>
+    </form>
+
+    <!-- 4. 完成 -->
+    <section class="card ok" id="done" hidden>
+      <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <p class="nm" id="okName"></p>
+      <p class="st" id="okStatus">報到成功</p>
+      <dl class="times">
+        <dt>報到時間</dt><dd id="okIn"></dd>
+        <dt id="okOutLabel">簽退時間</dt><dd id="okOut">—</dd>
+      </dl>
+      <button class="btn btn-primary" type="button" id="home">返回簽退系統</button>
+    </section>
+
+    <p class="help">找不到報名資料？請直接洽報到工作人員。</p>
+  </main>
+
+<script>
+(function () {
+  'use strict';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
+  var CODE_STORE = 'pgy116-checkin-code';
+  // 滿意度題目：scale = 1～5 分（必填）；text = 詳答（選填）
+  // 要改題目時，gas/Code.gs 的 SURVEY 也要一起改，題數與順序需相同。
+  var SURVEY = [
+    { type: 'scale', q: '整體而言，您對本次說明會的滿意度', lo: '非常不滿意', hi: '非常滿意' },
+    { type: 'scale', q: '說明會讓我清楚了解奇美醫院 PGY 訓練制度與課程安排', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '分科互動交流時間，有助於我了解各科的訓練特色', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '學長姐的經驗分享內容實用、具參考價值', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '講者說明清楚，提問與交流時間充足', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '活動時間安排、場地與報到流程', lo: '非常不滿意', hi: '非常滿意' },
+    { type: 'scale', q: '參加後，您選擇奇美醫院作為 PGY 訓練醫院的意願', lo: '非常低', hi: '非常高' },
+    { type: 'text', q: '本次說明會中，您印象最深刻或最有收穫的部分是？', ph: '例如：某一科的介紹、學長姐的分享…' },
+    { type: 'text', q: '在考慮奇美醫院作為 PGY 訓練醫院時，您最在意或還有疑慮的是什麼？', ph: '例如：值班與工時、薪資福利、離家距離…' },
+    { type: 'text', q: '對本次活動或奇美醫院 PGY 訓練，您有什麼建議？', ph: '想對我們說的話…' }
+  ];
+  // 舊版曾把報到結果存在手機裡；現在每次打開都從查詢畫面開始，順手清掉
+  try { localStorage.removeItem('pgy116-checkin-done'); } catch (e) {}
+
+  var $ = function (id) { return document.getElementById(id); };
+  var timeFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+  function fmt(t) { var d = new Date(t); return isNaN(d) ? String(t || '') : timeFmt.format(d); }
+  function get(store, k) { try { return store.getItem(k); } catch (e) { return null; } }
+  function set(store, k, v) { try { v == null ? store.removeItem(k) : store.setItem(k, v); } catch (e) {} }
+
+  // 現場 QR Code 網址帶 ?c=代碼：存起來後從網址列移除
+  var params = new URLSearchParams(location.search);
+  if (params.get('c')) {
+    set(sessionStorage, CODE_STORE, params.get('c'));
+    params.delete('c');
+    history.replaceState(null, '', location.pathname + (params.toString() ? '?' + params : '') + location.hash);
+  }
+  function code() { return $('code').value.trim() || get(sessionStorage, CODE_STORE) || ''; }
+
+  function post(data) {
+    data.code = code();
+    return fetch(GAS_URL, { method: 'POST', body: new URLSearchParams(data) })
+      .then(function (r) { return r.json(); })
+      .catch(function () { throw new Error('網路連線異常，請再試一次'); })
+      .then(function (res) {
+        if (!res) throw new Error('系統忙碌中，請再試一次');
+        if (res.needCode) { $('codeBox').hidden = false; set(sessionStorage, CODE_STORE, null); }
+        if (!res.ok) throw new Error(res.error || '系統忙碌中，請再試一次');
+        if ($('code').value.trim()) set(sessionStorage, CODE_STORE, $('code').value.trim());
+        return res;
+      });
+  }
+  function busy(btn, on) { btn.disabled = on; btn.classList.toggle('loading', on); }
+  function show(id) { ['search', 'pick', 'survey', 'done'].forEach(function (s) { $(s).hidden = s !== id; }); window.scrollTo(0, 0); }
+
+  /* ---------- 查詢 ---------- */
+  $('search').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var q = $('q').value.trim();
+    if (!q) return;
+    $('searchErr').textContent = '';
+    busy($('searchBtn'), true);
+    post({ action: 'lookup', q: q }).then(function (res) {
+      if (!res.rows.length) {
+        $('searchErr').textContent = '查無「' + q + '」的報名資料。請確認姓名是否與報名時一模一樣（含全形／半形、英文大小寫），或洽工作人員。';
+        return;
+      }
+      renderList(res.rows);
+      show('pick');
+    }).catch(function (err) {
+      $('searchErr').textContent = err.message;
+    }).then(function () { busy($('searchBtn'), false); });
+  });
+
+  function renderList(rows) {
+    $('pickErr').textContent = '';
+    $('pickHint').textContent = rows.length > 1
+      ? '找到 ' + rows.length + ' 筆同名資料，請依學校與 Email 選擇您本人。'
+      : '找到以下報名資料，確認是本人後按下方按鈕。';
+    var ul = $('list'); ul.textContent = '';
+    rows.forEach(function (r) {
+      var li = document.createElement('li'); li.className = 'item';
+      var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = r.name;
+      var meta = document.createElement('div'); meta.className = 'meta';
+      meta.textContent = [r.school, r.program, r.email].filter(Boolean).join('｜');
+      li.appendChild(nm); li.appendChild(meta);
+      if (r.checkin) {
+        var d = document.createElement('p'); d.className = 'done';
+        d.textContent = '✓ 報到 ' + fmt(r.checkin) + (r.checkout ? '｜簽退 ' + fmt(r.checkout) : '');
+        li.appendChild(d);
+      }
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn ' + (r.checkin ? 'btn-navy' : 'btn-primary');
+      b.innerHTML = '<span class="spin" aria-hidden="true"></span>';
+      if (!r.checkin) {
+        var w = document.createElement('p'); w.className = 'done'; w.style.color = 'var(--red)';
+        w.textContent = '尚未報到，無法簽退，請洽工作人員。';
+        li.appendChild(w); ul.appendChild(li); return;
+      }
+      // 已報到 → 填滿意度並簽退；已簽退 → 查看紀錄
+      b.appendChild(document.createTextNode(!r.checkout ? '填寫滿意度並簽退' : '查看簽退紀錄'));
+      b.addEventListener('click', function () {
+        if (!r.checkout) return openSurvey(r);
+        showDone({ row: r.row, name: r.name, time: r.checkin, checkout: r.checkout, already: true });
+      });
+      li.appendChild(b);
+      ul.appendChild(li);
+    });
+  }
+
+  /* ---------- 滿意度調查 ---------- */
+  (function buildSurvey() {
+    var box = $('qs');
+    SURVEY.forEach(function (item, i) {
+      var fs = document.createElement('fieldset'); fs.className = 'q'; fs.id = 'q' + (i + 1);
+      var lg = document.createElement('legend'); lg.textContent = (i + 1) + '. ' + item.q;
+      var req = document.createElement('span');
+      req.className = item.type === 'text' ? 'opt' : 'req';
+      req.textContent = item.type === 'text' ? '（選填）' : '*';
+      lg.appendChild(req);
+      fs.appendChild(lg);
+      if (item.type === 'text') {
+        var ta = document.createElement('textarea'); ta.name = 'q' + (i + 1); ta.maxLength = 500;
+        ta.placeholder = item.ph || ''; ta.setAttribute('aria-label', item.q);
+        fs.appendChild(ta); box.appendChild(fs); return;
+      }
+      var sc = document.createElement('div'); sc.className = 'scale';
+      for (var v = 1; v <= 5; v++) {
+        var lb = document.createElement('label');
+        var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'q' + (i + 1); inp.value = v;
+        inp.setAttribute('aria-label', v + ' 分' + (v === 1 ? '（' + item.lo + '）' : v === 5 ? '（' + item.hi + '）' : ''));
+        inp.addEventListener('change', function () { fs.classList.remove('bad'); if (!document.querySelector('.q.bad')) $('surveyErr').textContent = ''; });
+        var sp = document.createElement('span'); sp.textContent = v;
+        lb.appendChild(inp); lb.appendChild(sp); sc.appendChild(lb);
+      }
+      fs.appendChild(sc);
+      var ends = document.createElement('div'); ends.className = 'ends';
+      var a = document.createElement('span'); a.textContent = item.lo;
+      var b = document.createElement('span'); b.textContent = item.hi;
+      ends.appendChild(a); ends.appendChild(b); fs.appendChild(ends);
+      box.appendChild(fs);
+    });
+  })();
+
+  var target = null;
+  function openSurvey(r) {
+    target = r;
+    $('survey').reset();
+    [].forEach.call(document.querySelectorAll('.q.bad'), function (el) { el.classList.remove('bad'); });
+    $('who').textContent = r.name + '｜' + [r.school, r.program].filter(Boolean).join('｜');
+    $('surveyErr').textContent = '';
+    show('survey');
+  }
+
+  $('survey').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!target) return;
+    var data = { action: 'checkout', row: target.row, name: target.name, survey: '1' };
+    var missing = null;
+    SURVEY.forEach(function (item, i) {
+      if (item.type === 'text') { data['q' + (i + 1)] = document.querySelector('textarea[name="q' + (i + 1) + '"]').value.trim(); return; }
+      var c = document.querySelector('input[name="q' + (i + 1) + '"]:checked');
+      if (c) data['q' + (i + 1)] = c.value;
+      else { $('q' + (i + 1)).classList.add('bad'); if (!missing) missing = $('q' + (i + 1)); }
+    });
+    if (missing) {
+      $('surveyErr').textContent = '還有必填題目沒有填答（標示紅框）';
+      missing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    $('surveyErr').textContent = '';
+    busy($('submitBtn'), true);
+    post(data).then(function (res) {
+      showDone({ row: target.row, name: res.name, time: res.time, checkout: res.checkout, already: res.already, out: true });
+    }).catch(function (err) {
+      $('surveyErr').textContent = err.message;
+    }).then(function () { busy($('submitBtn'), false); });
+  });
+  $('back2').addEventListener('click', function () { show('search'); $('q').select(); });
+
+  function showDone(info) {
+    var out = !!info.checkout;
+    $('okName').textContent = info.name;
+    $('okStatus').textContent = out ? (info.out && !info.already ? '簽退成功，感謝您的參與！' : '您已完成簽退')
+                                    : (info.already ? '您已完成報到' : '報到成功');
+    $('okIn').textContent = fmt(info.time);
+    $('okOut').textContent = out ? fmt(info.checkout) : '';
+    $('okOut').hidden = $('okOutLabel').hidden = !out;
+    $('done').classList.toggle('again', !out && !!info.already);
+    $('done').classList.toggle('out', out);
+    show('done');
+  }
+
+  $('home').addEventListener('click', function () {
+    $('q').value = ''; $('searchErr').textContent = '';
+    show('search'); $('q').focus();
+  });
+  $('back').addEventListener('click', function () { show('search'); $('q').select(); });
+
+  /* ---------- 開始 ---------- */
+  show('search');
+})();
+</script>
+</body>
+</html>
