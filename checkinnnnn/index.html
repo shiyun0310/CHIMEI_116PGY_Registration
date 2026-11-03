@@ -68,6 +68,12 @@
     .ok .mark { width: 96px; height: 96px; margin: 4px auto 14px; border-radius: 50%; background: var(--green); display: grid; place-items: center; border: 3px solid var(--ink); }
     .ok .mark svg { width: 54px; height: 54px; }
     .ok.again .mark { background: var(--orange); }
+    .ok.out .mark { background: var(--navy); }
+    .ok .times { display: grid; grid-template-columns: auto auto; justify-content: center; gap: 2px 12px; margin: 6px 0 16px; font-size: 1rem; }
+    .ok .times dt { color: var(--muted); text-align: right; }
+    .ok .times dd { margin: 0; font-family: var(--font-en); font-weight: 800; text-align: left; }
+    .ok #outBtn { margin-bottom: 12px; }
+    .ok .err:empty { display: none; }
     .ok .nm { font-size: 1.9rem; font-weight: 900; margin: 0; }
     .ok .st { font-size: 1.15rem; font-weight: 900; margin: 4px 0 2px; }
     .ok .tm { font-family: var(--font-en); color: var(--ink-2); margin: 0 0 14px; }
@@ -113,9 +119,14 @@
       <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <p class="nm" id="okName"></p>
       <p class="st" id="okStatus">報到成功</p>
-      <p class="tm" id="okTime"></p>
-      <p class="note">請向報到櫃台工作人員出示此畫面。</p>
-      <button class="btn-link btn" type="button" id="next">幫其他人報到</button>
+      <dl class="times">
+        <dt>報到時間</dt><dd id="okIn"></dd>
+        <dt>簽退時間</dt><dd id="okOut">—</dd>
+      </dl>
+      <button class="btn btn-navy" type="button" id="outBtn"><span class="spin" aria-hidden="true"></span>簽退</button>
+      <p class="err" id="outErr" role="alert"></p>
+      <p class="note" id="okNote">請向報到櫃台工作人員出示此畫面。活動結束離場時，請回到此頁按「簽退」。</p>
+      <button class="btn-link btn" type="button" id="next">幫其他人報到／簽退</button>
     </section>
 
     <p class="help">找不到報名資料？請直接洽報到櫃台工作人員。</p>
@@ -182,7 +193,7 @@
     $('pickErr').textContent = '';
     $('pickHint').textContent = rows.length > 1
       ? '找到 ' + rows.length + ' 筆同名資料，請依學校與 Email 選擇您本人。'
-      : '找到以下報名資料，確認是本人後按「確認報到」。';
+      : '找到以下報名資料，確認是本人後按下方按鈕。';
     var ul = $('list'); ul.textContent = '';
     rows.forEach(function (r) {
       var li = document.createElement('li'); li.className = 'item';
@@ -191,14 +202,19 @@
       meta.textContent = [r.school, r.program, r.email].filter(Boolean).join('｜');
       li.appendChild(nm); li.appendChild(meta);
       if (r.checkin) {
-        var d = document.createElement('p'); d.className = 'done'; d.textContent = '✓ 已於 ' + fmt(r.checkin) + ' 完成報到';
+        var d = document.createElement('p'); d.className = 'done';
+        d.textContent = '✓ 報到 ' + fmt(r.checkin) + (r.checkout ? '｜簽退 ' + fmt(r.checkout) : '');
         li.appendChild(d);
       }
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'btn ' + (r.checkin ? 'btn-navy' : 'btn-primary');
       b.innerHTML = '<span class="spin" aria-hidden="true"></span>';
-      b.appendChild(document.createTextNode(r.checkin ? '顯示報到畫面' : '確認報到'));
-      b.addEventListener('click', function () { doCheckin(r, b); });
+      b.appendChild(document.createTextNode(!r.checkin ? '確認報到' : r.checkout ? '查看報到／簽退紀錄' : '簽退'));
+      b.addEventListener('click', function () {
+        if (!r.checkin) return doCheckin(r, b);
+        if (r.checkout) return showDone(save({ row: r.row, name: r.name, time: r.checkin, checkout: r.checkout, already: true }));
+        doCheckout({ row: r.row, name: r.name, time: r.checkin }, b, $('pickErr'));
+      });
       li.appendChild(b);
       ul.appendChild(li);
     });
@@ -209,21 +225,44 @@
     $('pickErr').textContent = '';
     busy(btn, true);
     post({ action: 'checkin', row: r.row, name: r.name }).then(function (res) {
-      var info = { name: res.name, time: res.time, already: res.already };
-      set(localStorage, DONE_STORE, JSON.stringify(info));
-      showDone(info);
+      showDone(save({ row: r.row, name: res.name, time: res.time, checkout: res.checkout || '', already: res.already }));
     }).catch(function (err) {
       $('pickErr').textContent = err.message;
     }).then(function () { busy(btn, false); });
   }
 
+  /* ---------- 簽退 ---------- */
+  function doCheckout(info, btn, errEl) {
+    if (!window.confirm(info.name + '，確定要簽退嗎？')) return;
+    errEl.textContent = '';
+    busy(btn, true);
+    post({ action: 'checkout', row: info.row, name: info.name }).then(function (res) {
+      showDone(save({ row: info.row, name: res.name, time: res.time, checkout: res.checkout, already: res.already, out: true }));
+    }).catch(function (err) {
+      errEl.textContent = err.message;
+    }).then(function () { busy(btn, false); });
+  }
+
+  var current = null;
+  function save(info) { current = info; set(localStorage, DONE_STORE, JSON.stringify(info)); return info; }
+
   function showDone(info) {
+    current = info;
+    var out = !!info.checkout;
     $('okName').textContent = info.name;
-    $('okStatus').textContent = info.already ? '您已完成報到' : '報到成功';
-    $('okTime').textContent = '報到時間 ' + fmt(info.time);
-    $('done').classList.toggle('again', !!info.already);
+    $('okStatus').textContent = out ? (info.out && !info.already ? '簽退成功，感謝您的參與！' : '您已完成簽退')
+                                    : (info.already ? '您已完成報到' : '報到成功');
+    $('okIn').textContent = fmt(info.time);
+    $('okOut').textContent = out ? fmt(info.checkout) : '—';
+    $('outBtn').hidden = out || !info.row;
+    $('outErr').textContent = '';
+    $('okNote').textContent = out ? '請向工作人員出示此畫面。' : '請向報到櫃台工作人員出示此畫面。活動結束離場時，請回到此頁按「簽退」。';
+    $('done').classList.toggle('again', !out && !!info.already);
+    $('done').classList.toggle('out', out);
     show('done');
   }
+
+  $('outBtn').addEventListener('click', function () { if (current) doCheckout(current, $('outBtn'), $('outErr')); });
 
   $('back').addEventListener('click', function () { show('search'); $('q').select(); });
   $('next').addEventListener('click', function () {
