@@ -412,6 +412,10 @@
       .catch(function (e) { console.warn('CSV 讀取失敗，改用 GAS 查詢', e); });
   }
   loadCsv();
+  // 預熱 GAS：頁面打開就先喚醒一次（之後每 4 分鐘一次），按「報到／簽退」時就不用等冷啟動
+  function warmGas() { try { fetch(GAS_URL, { method: 'GET', mode: 'no-cors', cache: 'no-store' }).catch(function () {}); } catch (e) {} }
+  warmGas();
+  setInterval(function () { if (!document.hidden) warmGas(); }, 240000);
   setInterval(function () { if (!document.hidden) loadCsv(); }, 60000);
 
   function showRows(rows, q) {
