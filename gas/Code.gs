@@ -27,19 +27,20 @@ var CHECKIN_SHEET_NAME = '報到系統';
 var CHECKIN_HEADERS = ['姓名', '電子郵件', '就讀學校', '學制', '報到時間', '簽退時間'];
 // 簽退時填寫的滿意度調查寫到「滿意度調查」工作表（第三頁）
 // 題數與順序需與網站 checkouttt/index.html 的 SURVEY 相同
-// scale：1～5 分（必填）；text：詳答（選填）
+// 每題必填。scale：1～5 分；text：詳答；choice：單選（opts 為選項）
 var SURVEY_SHEET_NAME = '滿意度調查';
 var SURVEY = [
-  { h: '1. 整體滿意度', t: 'scale' },
-  { h: '2. 了解PGY訓練制度與課程', t: 'scale' },
-  { h: '3. 分科互動交流有幫助', t: 'scale' },
-  { h: '4. 學長姐經驗分享具參考價值', t: 'scale' },
-  { h: '5. 講者說明與交流時間', t: 'scale' },
-  { h: '6. 時間安排、場地與報到流程', t: 'scale' },
-  { h: '7. 選擇奇美PGY意願', t: 'scale' },
+  { h: '1. 了解PGY訓練制度與課程', t: 'scale' },
+  { h: '2. 分科互動交流有幫助', t: 'scale' },
+  { h: '3. 學長姐經驗分享具參考價值', t: 'scale' },
+  { h: '4. 講者說明與交流時間', t: 'scale' },
+  { h: '5. 時間安排、場地與報到流程', t: 'scale' },
+  { h: '6. 選擇奇美PGY意願', t: 'scale' },
+  { h: '7. 整體滿意度', t: 'scale' },
   { h: '8. 印象最深刻／最有收穫的部分', t: 'text' },
   { h: '9. 最在意或疑慮的事', t: 'text' },
-  { h: '10. 其他建議', t: 'text' }
+  { h: '10. 其他建議', t: 'text' },
+  { h: '11. 參加116/1/24甄試意願', t: 'choice', opts: ['願意參與', '不參與'] }
 ];
 var SURVEY_HEADERS = ['填答時間', '姓名', '電子郵件', '就讀學校', '學制']
   .concat(SURVEY.map(function (x) { return x.h; }));
@@ -271,14 +272,18 @@ function checkoutConfirm_(p) {
     if (!name || norm_(r[1]) !== name) return json_({ ok: false, error: '資料已變動，請重新查詢' });
     if (!filled_(r[9])) return json_({ ok: false, error: '尚未報到，無法簽退' });
     var already = filled_(r[10]);
-    // 滿意度：評分題需為 1～5 分，詳答題選填（已簽退者不再寫入）
+    // 滿意度：每題必填。評分題需為 1～5 分、單選題需為選項之一、詳答需有內容（已簽退者不再寫入）
     var answers = SURVEY.map(function (x, i) {
       var v = p['q' + (i + 1)];
-      return x.t === 'scale' ? parseInt(v, 10) : safe_(clean_(v, 500));
+      if (x.t === 'scale') return parseInt(v, 10);
+      if (x.t === 'choice') return x.opts.indexOf(clean_(v, 50)) >= 0 ? clean_(v, 50) : '';
+      return safe_(clean_(v, 500));
     });
-    var incomplete = SURVEY.some(function (x, i) { return x.t === 'scale' && !(answers[i] >= 1 && answers[i] <= 5); });
+    var incomplete = SURVEY.some(function (x, i) {
+      return x.t === 'scale' ? !(answers[i] >= 1 && answers[i] <= 5) : !answers[i];
+    });
     if (!already && incomplete) {
-      return json_({ ok: false, error: '請完成滿意度調查所有必填題目' });
+      return json_({ ok: false, error: '請完成滿意度調查所有題目' });
     }
     var t = already ? r[10] : new Date();
     if (!already) {
