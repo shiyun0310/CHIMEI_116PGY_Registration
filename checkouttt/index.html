@@ -89,7 +89,7 @@
     .q:last-child { margin-bottom: 0; }
     .q legend { float: left; width: 100%; font-weight: 700; margin-bottom: 10px; padding: 0; line-height: 1.5; }
     .q legend .n { font-family: var(--font-en); color: var(--navy); margin-right: 4px; }
-    .q legend .req { color: var(--red); margin-left: 2px; }
+    .q legend .req { color: var(--red); margin-left: 4px; font-size: .85em; font-weight: 700; }
     .q.bad { border-color: var(--red); background: var(--red-soft); }
     .scale { clear: both; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
     .scale label { margin: 0; }
@@ -151,7 +151,7 @@
         <ul class="chips">
           <li><b>1</b>輸入姓名</li>
           <li><b>2</b>滿意度 7 題</li>
-          <li><b>3</b>心得與建議（選填）</li>
+          <li><b>3</b>心得與建議 3 題</li>
           <li><b>4</b>甄試參加意願</li>
         </ul>
       </div>
@@ -187,7 +187,7 @@
       <section class="sec" id="sec3">
         <div class="sec-h">
           <div class="num">3</div>
-          <div><h3>心得與建議<span class="tag opt">選填</span></h3><p>想說的都可以寫，沒有也沒關係。</p></div>
+          <div><h3>心得與建議<span class="tag">必填</span></h3><p>請簡單寫下您的想法，一兩句話就可以。</p></div>
         </div>
         <div id="textQs"></div>
       </section>
@@ -229,7 +229,7 @@
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
   var CODE_STORE = 'pgy116-checkin-code';
 
-  // 滿意度題目：scale = 1～5 分（必填）；text = 詳答（選填）
+  // 滿意度題目（每題必填）：scale = 1～5 分；text = 詳答；choice = 單選
   // 要改題目時，gas/Code.gs 的 SURVEY 也要一起改，題數與順序需相同。
   var AGREE = ['非常不同意', '不同意', '普通', '同意', '非常同意'];
   var SATIS = ['非常不滿意', '不滿意', '普通', '滿意', '非常滿意'];
@@ -285,10 +285,11 @@
     var lg = el('legend');
     lg.appendChild(el('span', 'n', n + '.'));
     lg.appendChild(document.createTextNode(item.q));
-    if (item.type !== 'text') lg.appendChild(el('span', 'req', '*'));
+    lg.appendChild(el('span', 'req', '（必填）'));
     fs.appendChild(lg);
     if (item.type === 'text') {
       var ta = el('textarea'); ta.name = 'q' + n; ta.maxLength = 500; ta.placeholder = item.ph || '';
+      ta.addEventListener('input', onAnswer);
       ta.setAttribute('aria-label', item.q);
       fs.appendChild(ta);
       $('textQs').appendChild(fs);
@@ -319,19 +320,23 @@
     fs.appendChild(sc);
     $('scaleQs').appendChild(fs);
   });
-  var REQ_N = SURVEY.filter(function (x) { return x.type !== 'text'; }).length;
+  var REQ_N = SURVEY.length; // 每題都必填
 
-  function answered() {
-    return SURVEY.filter(function (x, i) { return x.type !== 'text' && document.querySelector('input[name="q' + (i + 1) + '"]:checked'); }).length;
+  function isAnswered(x, i) {
+    var n = i + 1;
+    if (x.type === 'text') return !!document.querySelector('textarea[name="q' + n + '"]').value.trim();
+    return !!document.querySelector('input[name="q' + n + '"]:checked');
   }
+  function answered() { return SURVEY.filter(isAnswered).length; }
   function onAnswer(e) {
-    e.target.closest('.q').classList.remove('bad');
+    var fs = e.target.closest('.q');
+    if (isAnswered(SURVEY[+fs.id.slice(1) - 1], +fs.id.slice(1) - 1)) fs.classList.remove('bad');
     if (!document.querySelector('.q.bad') && person) $('err').textContent = '';
     updateProgress();
   }
   function updateProgress() {
     var n = answered();
-    $('progress').textContent = (person ? '填寫人：' + person.name + '｜' : '尚未輸入填寫人｜') + '必填已完成 ' + n + ' / ' + REQ_N + ' 題';
+    $('progress').textContent = (person ? '填寫人：' + person.name + '｜' : '尚未輸入填寫人｜') + '已完成 ' + n + ' / ' + REQ_N + ' 題';
   }
 
   /* ---------- 1. 填寫人：輸入姓名自動查詢 ---------- */
@@ -436,13 +441,12 @@
     var missing = null;
     SURVEY.forEach(function (item, i) {
       var n = i + 1;
-      if (item.type === 'text') { data['q' + n] = document.querySelector('textarea[name="q' + n + '"]').value.trim(); return; }
-      var c = document.querySelector('input[name="q' + n + '"]:checked');
-      if (c) data['q' + n] = c.value;
-      else { $('q' + n).classList.add('bad'); if (!missing) missing = $('q' + n); }
+      if (item.type === 'text') data['q' + n] = document.querySelector('textarea[name="q' + n + '"]').value.trim();
+      else { var c = document.querySelector('input[name="q' + n + '"]:checked'); if (c) data['q' + n] = c.value; }
+      if (!isAnswered(item, i)) { $('q' + n).classList.add('bad'); if (!missing) missing = $('q' + n); }
     });
     if (missing) {
-      $('err').textContent = '還有 ' + (REQ_N - answered()) + ' 題必填沒有填答（標示紅框）';
+      $('err').textContent = '還有 ' + (REQ_N - answered()) + ' 題沒有填答（標示紅框）';
       missing.scrollIntoView({ block: 'center' });
       return;
     }
