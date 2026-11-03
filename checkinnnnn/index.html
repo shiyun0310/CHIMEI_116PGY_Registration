@@ -72,7 +72,6 @@
     .ok .times { display: grid; grid-template-columns: auto auto; justify-content: center; gap: 2px 12px; margin: 6px 0 16px; font-size: 1rem; }
     .ok .times dt { color: var(--muted); text-align: right; }
     .ok .times dd { margin: 0; font-family: var(--font-en); font-weight: 800; text-align: left; }
-    .ok #outBtn { margin-bottom: 12px; }
     .ok .err:empty { display: none; }
     .ok .nm { font-size: 1.9rem; font-weight: 900; margin: 0; }
     .ok .st { font-size: 1.15rem; font-weight: 900; margin: 4px 0 2px; }
@@ -121,12 +120,9 @@
       <p class="st" id="okStatus">報到成功</p>
       <dl class="times">
         <dt>報到時間</dt><dd id="okIn"></dd>
-        <dt>簽退時間</dt><dd id="okOut">—</dd>
+        <dt id="okOutLabel">簽退時間</dt><dd id="okOut">—</dd>
       </dl>
-      <button class="btn btn-navy" type="button" id="outBtn"><span class="spin" aria-hidden="true"></span>簽退</button>
-      <p class="err" id="outErr" role="alert"></p>
-      <p class="note" id="okNote">活動結束離場時，請回到此頁按「簽退」。</p>
-      <button class="btn btn-primary" type="button" id="home" hidden>返回簽到系統</button>
+      <button class="btn btn-primary" type="button" id="home">返回簽到系統</button>
     </section>
 
     <p class="help">找不到報名資料？請直接洽報到櫃台工作人員。</p>
@@ -137,7 +133,8 @@
   'use strict';
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
   var CODE_STORE = 'pgy116-checkin-code';
-  var DONE_STORE = 'pgy116-checkin-done';
+  // 舊版曾把報到結果存在手機裡；現在每次打開都從查詢畫面開始，順手清掉
+  try { localStorage.removeItem('pgy116-checkin-done'); } catch (e) {}
 
   var $ = function (id) { return document.getElementById(id); };
   var timeFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -209,11 +206,12 @@
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'btn ' + (r.checkin ? 'btn-navy' : 'btn-primary');
       b.innerHTML = '<span class="spin" aria-hidden="true"></span>';
-      b.appendChild(document.createTextNode(!r.checkin ? '確認報到' : r.checkout ? '查看報到／簽退紀錄' : '簽退'));
+      // 同一個網址：未報到 → 報到；已報到 → 簽退；已簽退 → 查看紀錄
+      b.appendChild(document.createTextNode(!r.checkin ? '確認報到' : !r.checkout ? '確認簽退' : '查看報到／簽退紀錄'));
       b.addEventListener('click', function () {
         if (!r.checkin) return doCheckin(r, b);
-        if (r.checkout) return showDone(save({ row: r.row, name: r.name, time: r.checkin, checkout: r.checkout, already: true }));
-        doCheckout({ row: r.row, name: r.name, time: r.checkin }, b, $('pickErr'));
+        if (!r.checkout) return doCheckout({ row: r.row, name: r.name, time: r.checkin }, b, $('pickErr'));
+        showDone({ row: r.row, name: r.name, time: r.checkin, checkout: r.checkout, already: true });
       });
       li.appendChild(b);
       ul.appendChild(li);
@@ -225,7 +223,7 @@
     $('pickErr').textContent = '';
     busy(btn, true);
     post({ action: 'checkin', row: r.row, name: r.name }).then(function (res) {
-      showDone(save({ row: r.row, name: res.name, time: res.time, checkout: res.checkout || '', already: res.already }));
+      showDone({ row: r.row, name: res.name, time: res.time, checkout: res.checkout || '', already: res.already });
     }).catch(function (err) {
       $('pickErr').textContent = err.message;
     }).then(function () { busy(btn, false); });
@@ -237,45 +235,33 @@
     errEl.textContent = '';
     busy(btn, true);
     post({ action: 'checkout', row: info.row, name: info.name }).then(function (res) {
-      showDone(save({ row: info.row, name: res.name, time: res.time, checkout: res.checkout, already: res.already, out: true }));
+      showDone({ row: info.row, name: res.name, time: res.time, checkout: res.checkout, already: res.already, out: true });
     }).catch(function (err) {
       errEl.textContent = err.message;
     }).then(function () { busy(btn, false); });
   }
 
-  var current = null;
-  function save(info) { current = info; set(localStorage, DONE_STORE, JSON.stringify(info)); return info; }
-
   function showDone(info) {
-    current = info;
     var out = !!info.checkout;
     $('okName').textContent = info.name;
     $('okStatus').textContent = out ? (info.out && !info.already ? '簽退成功，感謝您的參與！' : '您已完成簽退')
                                     : (info.already ? '您已完成報到' : '報到成功');
     $('okIn').textContent = fmt(info.time);
-    $('okOut').textContent = out ? fmt(info.checkout) : '—';
-    $('outBtn').hidden = out || !info.row;
-    $('outErr').textContent = '';
-    $('okNote').hidden = out;
-    $('home').hidden = !out;
+    $('okOut').textContent = out ? fmt(info.checkout) : '';
+    $('okOut').hidden = $('okOutLabel').hidden = !out;
     $('done').classList.toggle('again', !out && !!info.already);
     $('done').classList.toggle('out', out);
     show('done');
   }
 
-  $('outBtn').addEventListener('click', function () { if (current) doCheckout(current, $('outBtn'), $('outErr')); });
-
   $('home').addEventListener('click', function () {
-    set(localStorage, DONE_STORE, null); current = null;
     $('q').value = ''; $('searchErr').textContent = '';
     show('search'); $('q').focus();
   });
   $('back').addEventListener('click', function () { show('search'); $('q').select(); });
 
-  /* ---------- 開始：同一支手機已報到過就直接顯示結果 ---------- */
-  var saved = null;
-  try { saved = JSON.parse(get(localStorage, DONE_STORE) || 'null'); } catch (e) {}
-  if (saved && saved.name) showDone(saved); else show('search');
+  /* ---------- 開始 ---------- */
+  show('search');
 })();
 </script>
 </body>
