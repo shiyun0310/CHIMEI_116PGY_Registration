@@ -44,6 +44,9 @@ var SURVEY = [
 ];
 var SURVEY_HEADERS = ['填答時間', '姓名', '電子郵件', '就讀學校', '學制']
   .concat(SURVEY.map(function (x) { return x.h; }));
+// 簽退頁快速查詢用：「查詢名單」工作表以公式即時對應「報名資料」（Email 已遮蔽），
+// 再用「檔案 → 共用 → 發布到網路」只發布這一張為 CSV。執行一次 setupLookupSheet 即可建立。
+var LOOKUP_SHEET_NAME = '查詢名單';
 
 var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學',
                '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '天主教輔仁大學', '慈濟大學',
@@ -384,9 +387,31 @@ function json_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
+// 「查詢名單」工作表：只放簽退頁查詢需要的欄位（Email 遮蔽），由公式自動同步「報名資料」
+// 欄位：row（報名資料列號）、name、email、school、program、checkin、checkout
+function setupLookupSheet() {
+  getSheet_();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(LOOKUP_SHEET_NAME) || ss.insertSheet(LOOKUP_SHEET_NAME, ss.getSheets().length);
+  sheet.clear();
+  var src = "'" + SHEET_NAME + "'!";
+  var t = function (c) {
+    return 'IF(' + src + c + '2:' + c + '="","",TEXT(' + src + c + '2:' + c + ',"yyyy-mm-dd")&"T"&TEXT(' + src + c + '2:' + c + ',"hh:mm:ss")&"+08:00")';
+  };
+  sheet.getRange('A1').setFormula(
+    '={"row","name","email","school","program","checkin","checkout";' +
+    'ARRAYFORMULA(FILTER({ROW(' + src + 'B2:B),TRIM(' + src + 'B2:B),' +
+    'REGEXREPLACE(' + src + 'C2:C&"","^([^@]{1,2})[^@]*@","$1***@"),' +
+    src + 'D2:D,' + src + 'E2:E,' + t('J') + ',' + t('K') + '},' + src + 'B2:B<>""))}');
+  sheet.getRange(1, 1, 1, 7).setFontWeight('bold').setBackground('#FFC83D');
+  sheet.setFrozenRows(1);
+  return sheet;
+}
+
 // 第一次部署前可手動執行一次，完成授權並建立工作表
 function setup() {
   getSheet_();
   getCheckinSheet_();
   getSurveySheet_();
+  setupLookupSheet();
 }

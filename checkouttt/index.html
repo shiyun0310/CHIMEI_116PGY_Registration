@@ -228,6 +228,9 @@
   'use strict';
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
   var CODE_STORE = 'pgy116-checkin-code';
+  // Google Sheets「檔案 → 共用 → 發布到網路」→ 選「查詢名單」工作表、格式 CSV，把網址貼在這裡。
+  // 留空則全部改用 GAS 查詢（功能不受影響，只是較慢）。設定方式見 gas/README.md。
+  var CSV_URL = '';
 
   // 滿意度題目（每題必填）：scale = 1～5 分；text = 詳答；choice = 單選
   // 要改題目時，gas/Code.gs 的 SURVEY 也要一起改，題數與順序需相同。
@@ -366,6 +369,89 @@
     updateProgress();
   }
 
+  /* ---------- 快速查詢：Google Sheets「發布到網路」的 CSV ---------- */
+  // CSV 由「查詢名單」工作表發布（Email 已遮蔽），約有數分鐘延遲：
+  // CSV 顯示「已報到、未簽退」→ 立即帶出；查不到或狀態可能過時 → 再向 GAS 即時確認。
+  var csvIndex = null; // 姓名 → [報名資料]
+  function parseCsv(text) {
+    var out = [], row = [], cell = '', q = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+        else cell += c;
+      } else if (c === '"') q = true;
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(cell); out.push(row); row = []; cell = '';
+      } else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); out.push(row); }
+    return out;
+  }
+  function loadCsv() {
+    if (!CSV_URL) return;
+    fetch(CSV_URL + (CSV_URL.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function (text) {
+        var rows = parseCsv(text);
+        var head = (rows.shift() || []).map(function (h) { return h.trim(); });
+        var col = function (k) { return head.indexOf(k); };
+        if (col('row') < 0 || col('name') < 0) throw new Error('CSV 欄位不符');
+        var idx = {};
+        rows.forEach(function (c) {
+          var r = { row: +c[col('row')], name: (c[col('name')] || '').trim(), email: c[col('email')] || '',
+                    school: c[col('school')] || '', program: c[col('program')] || '',
+                    checkin: c[col('checkin')] || '', checkout: c[col('checkout')] || '' };
+          if (!r.row || !r.name) return;
+          (idx[r.name] = idx[r.name] || []).push(r);
+        });
+        csvIndex = idx;
+      })
+      .catch(function (e) { console.warn('CSV 讀取失敗，改用 GAS 查詢', e); });
+  }
+  loadCsv();
+  setInterval(function () { if (!document.hidden) loadCsv(); }, 60000);
+
+  function showRows(rows, q) {
+    if (!rows.length) {
+      return setFound('warn', function (box) {
+        box.appendChild(el('p', 'ttl', '查無「' + q + '」的報名資料'));
+        box.appendChild(el('p', 'msg', '請確認姓名是否與報名時一模一樣（含全形／半形、英文大小寫），或洽工作人員。'));
+      });
+    }
+    var ok = rows.filter(function (r) { return r.checkin && !r.checkout; });
+    if (rows.length === 1 && ok.length === 1) return choose(ok[0]);
+    if (!ok.length) {
+      var r0 = rows[0];
+      return setFound('warn', function (box) {
+        if (r0.checkout) {
+          box.appendChild(el('p', 'ttl', '您已完成簽退'));
+          box.appendChild(el('p', 'msg', '簽退時間 ' + fmt(r0.checkout) + '，感謝您的參與！'));
+        } else {
+          box.appendChild(el('p', 'ttl', '尚未報到，無法簽退'));
+          box.appendChild(el('p', 'msg', '請洽工作人員協助。'));
+        }
+      });
+    }
+    // 同名多筆：讓本人選擇
+    setFound('', function (box) {
+      box.appendChild(el('p', 'ttl', '找到 ' + rows.length + ' 筆同名資料，請選擇您本人'));
+      var ul = el('ul', 'pickone');
+      rows.forEach(function (r) {
+        var li = el('li'), b = el('button'); b.type = 'button';
+        b.appendChild(el('b', null, r.name));
+        b.appendChild(el('span', null, [r.school, r.program, r.email].filter(Boolean).join('｜') +
+          (r.checkout ? '｜已簽退' : r.checkin ? '' : '｜尚未報到')));
+        b.disabled = !r.checkin || !!r.checkout;
+        b.addEventListener('click', function () { choose(r); });
+        li.appendChild(b); ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    });
+  }
+
   function lookup(force) {
     var q = $('q').value.trim();
     if (!q) { person = null; lastQ = ''; setFound(); updateProgress(); return; }
@@ -373,45 +459,19 @@
     lastQ = q;
     var my = ++seq;
     person = null; updateProgress();
+
+    // 1) CSV 快速路徑：同名資料全部都「已報到」才直接用（簽退狀態以 GAS 送出時為準）
+    var hit = csvIndex && csvIndex[q];
+    if (hit && hit.every(function (r) { return r.checkin; })) {
+      $('qSpin').classList.remove('on');
+      return showRows(hit, q);
+    }
+
+    // 2) GAS 即時查詢（CSV 未設定、讀取失敗、查不到、或顯示尚未報到時）
     $('qSpin').classList.add('on');
     post({ action: 'lookup', q: q }).then(function (res) {
       if (my !== seq) return;
-      var rows = res.rows;
-      if (!rows.length) {
-        return setFound('warn', function (box) {
-          box.appendChild(el('p', 'ttl', '查無「' + q + '」的報名資料'));
-          box.appendChild(el('p', 'msg', '請確認姓名是否與報名時一模一樣（含全形／半形、英文大小寫），或洽工作人員。'));
-        });
-      }
-      var ok = rows.filter(function (r) { return r.checkin && !r.checkout; });
-      if (rows.length === 1 && ok.length === 1) return choose(ok[0]);
-      if (!ok.length) {
-        var r0 = rows[0];
-        return setFound('warn', function (box) {
-          if (r0.checkout) {
-            box.appendChild(el('p', 'ttl', '您已完成簽退'));
-            box.appendChild(el('p', 'msg', '簽退時間 ' + fmt(r0.checkout) + '，感謝您的參與！'));
-          } else {
-            box.appendChild(el('p', 'ttl', '尚未報到，無法簽退'));
-            box.appendChild(el('p', 'msg', '請洽工作人員協助。'));
-          }
-        });
-      }
-      // 同名多筆：讓本人選擇
-      setFound('', function (box) {
-        box.appendChild(el('p', 'ttl', '找到 ' + rows.length + ' 筆同名資料，請選擇您本人'));
-        var ul = el('ul', 'pickone');
-        rows.forEach(function (r) {
-          var li = el('li'), b = el('button'); b.type = 'button';
-          b.appendChild(el('b', null, r.name));
-          b.appendChild(el('span', null, [r.school, r.program, r.email].filter(Boolean).join('｜') +
-            (r.checkout ? '｜已簽退' : r.checkin ? '' : '｜尚未報到')));
-          b.disabled = !r.checkin || !!r.checkout;
-          b.addEventListener('click', function () { choose(r); });
-          li.appendChild(b); ul.appendChild(li);
-        });
-        box.appendChild(ul);
-      });
+      showRows(res.rows, q);
     }).catch(function (err) {
       if (my !== seq) return;
       lastQ = '';
@@ -421,7 +481,7 @@
 
   $('q').addEventListener('input', function () {
     clearTimeout(timer);
-    timer = setTimeout(lookup, 800);
+    timer = setTimeout(lookup, csvIndex ? 250 : 800);
   });
   $('q').addEventListener('blur', function () { clearTimeout(timer); lookup(); });
   $('q').addEventListener('keydown', function (e) {
