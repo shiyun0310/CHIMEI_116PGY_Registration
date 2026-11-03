@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#213C8F">
-  <title>報到／簽退｜奇美醫院PGY醫師招募說明會</title>
+  <title>報到｜奇美醫院PGY醫師招募說明會</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4c15 0 28 9 28 26S47 60 30 60 4 48 4 32 17 4 32 4z' fill='%23213C8F'/%3E%3Cpath d='M18 33l10 10 18-20' stroke='%23FFB21C' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,7 +84,7 @@
 <body>
   <header class="top">
     <div class="in">
-      <h1><small>CHECK-IN / OUT</small>奇美醫院PGY醫師招募說明會</h1>
+      <h1><small>CHECK-IN</small>奇美醫院PGY醫師招募說明會</h1>
       <p>115.11.29 (日)｜第五醫療大樓5樓國際會議廳</p>
     </div>
   </header>
@@ -206,11 +206,10 @@
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'btn ' + (r.checkin ? 'btn-navy' : 'btn-primary');
       b.innerHTML = '<span class="spin" aria-hidden="true"></span>';
-      // 同一個網址：未報到 → 報到；已報到 → 簽退；已簽退 → 查看紀錄
-      b.appendChild(document.createTextNode(!r.checkin ? '確認報到' : !r.checkout ? '確認簽退' : '查看報到／簽退紀錄'));
+      // 簽到頁只負責報到（簽退在 /checkouttt/）
+      b.appendChild(document.createTextNode(!r.checkin ? '確認報到' : '查看報到紀錄'));
       b.addEventListener('click', function () {
         if (!r.checkin) return doCheckin(r, b);
-        if (!r.checkout) return doCheckout({ row: r.row, name: r.name, time: r.checkin }, b, $('pickErr'));
         showDone({ row: r.row, name: r.name, time: r.checkin, checkout: r.checkout, already: true });
       });
       li.appendChild(b);
@@ -226,18 +225,6 @@
       showDone({ row: r.row, name: res.name, time: res.time, checkout: res.checkout || '', already: res.already });
     }).catch(function (err) {
       $('pickErr').textContent = err.message;
-    }).then(function () { busy(btn, false); });
-  }
-
-  /* ---------- 簽退 ---------- */
-  function doCheckout(info, btn, errEl) {
-    if (!window.confirm(info.name + '，確定要簽退嗎？')) return;
-    errEl.textContent = '';
-    busy(btn, true);
-    post({ action: 'checkout', row: info.row, name: info.name }).then(function (res) {
-      showDone({ row: info.row, name: res.name, time: res.time, checkout: res.checkout, already: res.already, out: true });
-    }).catch(function (err) {
-      errEl.textContent = err.message;
     }).then(function () { busy(btn, false); });
   }
 
