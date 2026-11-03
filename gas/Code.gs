@@ -12,12 +12,18 @@ var SEND_CONFIRMATION = false;  // 設為 true 才會在報名成功後寄確認
 var REG_DEADLINE = new Date('2026-11-14T00:00:00+08:00'); // 報名截止：11/13（五）23:59 前
 var NOTIFY_EMAIL = '';          // 有新報名時通知承辦人（留空則不通知）
 
+// 現場報到：只有這段時間內可以查詢／報到（測試時可暫時把 CHECKIN_OPEN 改早）
+var CHECKIN_OPEN = new Date('2026-11-29T00:00:00+08:00');
+var CHECKIN_CLOSE = new Date('2026-11-30T00:00:00+08:00');
+// 報到代碼（可選）：在「指令碼屬性」新增 CHECKIN_CODE，現場 QR Code 網址帶 ?c=代碼；未設定則不檢查
+
 var EVENT_INFO = '日期：115年11月29日（星期日）\n' +
                  '時間：13:30 ~ 17:00（13:00 開始報到）\n' +
                  '地點：奇美醫院第五醫療大樓5樓國際會議廳';
 
 var HEADERS = ['報名時間', '姓名', '電子郵件', '就讀學校', '學制',
-               '得知管道', '推薦人姓名', '想進一步了解的部分', '參與原因'];
+               '得知管道', '推薦人姓名', '想進一步了解的部分', '參與原因', '報到時間'];
+var CHECKIN_COL = 10; // 「報到時間」在第 J 欄
 
 var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學',
                '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '天主教輔仁大學', '慈濟大學',
@@ -30,6 +36,8 @@ function doPost(e) {
   var p0 = (e && e.parameter) || {};
   if (p0.action === 'list') return listRegistrations_(p0.key);
   if (p0.action === 'views') return pageViews_(p0.hit === '1');
+  if (p0.action === 'lookup') return checkinLookup_(p0);
+  if (p0.action === 'checkin') return checkinConfirm_(p0);
 
   var lock = LockService.getScriptLock();
   try {
@@ -139,9 +147,90 @@ function listRegistrations_(key) {
   var data = rows.filter(function (r) { return r[1] !== ''; }).map(function (r) {
     var t = r[0] instanceof Date ? r[0].toISOString() : String(r[0]);
     return { time: t, name: r[1], email: r[2], school: r[3], program: r[4],
-             source: r[5], referrer: r[6], interest: r[7], reason: r[8] };
+             source: r[5], referrer: r[6], interest: r[7], reason: r[8],
+             checkin: r[9] instanceof Date ? r[9].toISOString() : String(r[9] || '') };
   });
   return json_({ ok: true, updated: new Date().toISOString(), rows: data });
+}
+
+// ===== 現場報到 =====
+// lookup：輸入姓名或 Email（需完全相符），回傳符合的報名資料（Email 遮蔽）
+// checkin：以列號＋姓名確認後，在「報到時間」欄寫入時間；已報到者不會覆寫
+function checkinGate_(p) {
+  var now = new Date();
+  if (now < CHECKIN_OPEN) return '報到尚未開放（說明會當天 11/29 開放）';
+  if (now >= CHECKIN_CLOSE) return '報到已結束';
+  var code = PropertiesService.getScriptProperties().getProperty('CHECKIN_CODE');
+  if (code && String(p.code || '').trim() !== code) {
+    Utilities.sleep(500);
+    return 'CODE';
+  }
+  return '';
+}
+
+function norm_(v) {
+  return String(v == null ? '' : v).replace(/\s+/g, '').toLowerCase();
+}
+
+function maskEmail_(e) {
+  var m = String(e).match(/^([^@]*)@(.*)$/);
+  if (!m) return '';
+  var u = m[1];
+  return (u.length <= 2 ? u.charAt(0) : u.slice(0, 2)) + '***@' + m[2];
+}
+
+function checkinLookup_(p) {
+  var gate = checkinGate_(p);
+  if (gate === 'CODE') return json_({ ok: false, needCode: true, error: '報到代碼錯誤，請掃描現場 QR Code' });
+  if (gate) return json_({ ok: false, error: gate });
+  var q = norm_(clean_(p.q, 120));
+  if (q.length < 2) return json_({ ok: false, error: '請輸入完整姓名或報名時填寫的 Email' });
+
+  var sheet = getSheet_();
+  var last = sheet.getLastRow();
+  var rows = last > 1 ? sheet.getRange(2, 1, last - 1, HEADERS.length).getValues() : [];
+  var matches = [];
+  rows.forEach(function (r, i) {
+    if (r[1] === '') return;
+    if (norm_(r[1]) !== q && norm_(r[2]) !== q) return;
+    matches.push({
+      row: i + 2,
+      name: String(r[1]),
+      email: maskEmail_(r[2]),
+      school: String(r[3]),
+      program: String(r[4]),
+      checkin: r[9] instanceof Date ? r[9].toISOString() : String(r[9] || '')
+    });
+  });
+  return json_({ ok: true, rows: matches.slice(0, 10) });
+}
+
+function checkinConfirm_(p) {
+  var gate = checkinGate_(p);
+  if (gate === 'CODE') return json_({ ok: false, needCode: true, error: '報到代碼錯誤，請掃描現場 QR Code' });
+  if (gate) return json_({ ok: false, error: gate });
+  var row = parseInt(p.row, 10);
+  var name = norm_(clean_(p.name, 50));
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    var sheet = getSheet_();
+    if (!(row >= 2 && row <= sheet.getLastRow())) return json_({ ok: false, error: '找不到這筆報名資料，請重新查詢' });
+    var r = sheet.getRange(row, 1, 1, HEADERS.length).getValues()[0];
+    if (!name || norm_(r[1]) !== name) return json_({ ok: false, error: '資料已變動，請重新查詢' });
+    var already = r[9] instanceof Date || String(r[9] || '') !== '';
+    var t = already ? r[9] : new Date();
+    if (!already) {
+      sheet.getRange(row, CHECKIN_COL).setValue(t).setNumberFormat('yyyy/mm/dd hh:mm:ss');
+    }
+    return json_({ ok: true, already: already, name: String(r[1]),
+                   time: t instanceof Date ? t.toISOString() : String(t) });
+  } catch (err) {
+    console.error(err);
+    return json_({ ok: false, error: '系統忙碌中，請再試一次' });
+  } finally {
+    try { lock.releaseLock(); } catch (ignore) {}
+  }
 }
 
 function getSheet_() {
