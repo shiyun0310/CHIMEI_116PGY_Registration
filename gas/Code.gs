@@ -12,9 +12,6 @@ var SEND_CONFIRMATION = false;  // 設為 true 才會在報名成功後寄確認
 var REG_DEADLINE = new Date('2026-11-14T00:00:00+08:00'); // 報名截止：11/13（五）23:59 前
 var NOTIFY_EMAIL = '';          // 有新報名時通知承辦人（留空則不通知）
 
-// 現場報到：只有這段時間內可以查詢／報到（測試時可暫時把 CHECKIN_OPEN 改早）
-var CHECKIN_OPEN = new Date('2026-11-29T00:00:00+08:00');
-var CHECKIN_CLOSE = new Date('2026-11-30T00:00:00+08:00');
 // 報到代碼（可選）：在「指令碼屬性」新增 CHECKIN_CODE，現場 QR Code 網址帶 ?c=代碼；未設定則不檢查
 
 var EVENT_INFO = '日期：115年11月29日（星期日）\n' +
@@ -157,9 +154,6 @@ function listRegistrations_(key) {
 // lookup：輸入姓名（需與報名時一模一樣，只忽略前後空白），回傳符合的報名資料（Email 遮蔽）
 // checkin：以列號＋姓名確認後，在「報到時間」欄寫入時間；已報到者不會覆寫
 function checkinGate_(p) {
-  var now = new Date();
-  if (now < CHECKIN_OPEN) return '報到尚未開放（說明會當天 11/29 開放）';
-  if (now >= CHECKIN_CLOSE) return '報到已結束';
   var code = PropertiesService.getScriptProperties().getProperty('CHECKIN_CODE');
   if (code && String(p.code || '').trim() !== code) {
     Utilities.sleep(500);
