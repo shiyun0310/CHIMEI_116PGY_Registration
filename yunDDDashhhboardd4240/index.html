@@ -192,11 +192,11 @@
       <section class="card">
         <div class="tbl-head">
           <div><h2>報名名單</h2><span class="count" id="count"></span></div>
-          <input type="search" id="q" placeholder="搜尋姓名、學校、E-mail…（或輸入「已報到」「未報到」）" aria-label="搜尋報名名單">
+          <input type="search" id="q" placeholder="搜尋姓名、學校、E-mail…（或輸入「已報到」「未報到」「已簽退」「未簽退」）" aria-label="搜尋報名名單">
         </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>#</th><th>報名時間</th><th>姓名</th><th>E-mail</th><th>就讀學校</th><th>學制</th><th>得知管道</th><th>推薦人</th><th>參與原因</th><th>想進一步了解</th><th>報到</th></tr></thead>
+            <thead><tr><th>#</th><th>報名時間</th><th>姓名</th><th>E-mail</th><th>就讀學校</th><th>學制</th><th>得知管道</th><th>推薦人</th><th>參與原因</th><th>想進一步了解</th><th>報到</th><th>簽退</th></tr></thead>
             <tbody id="tbody"></tbody>
           </table>
         </div>
@@ -304,7 +304,8 @@
       // 說明會當天（或已有人報到）改顯示報到人數
       $('kDaysLabel').textContent = '已報到';
       setNum('kDays', nIn, '/ ' + rows.length + ' 人');
-      $('kDaysNote').textContent = '報到率 ' + (rows.length ? Math.round(nIn / rows.length * 100) : 0) + '%｜未到 ' + (rows.length - nIn) + ' 人';
+      var nOut = rows.filter(function (r) { return r.checkout; }).length;
+      $('kDaysNote').textContent = '報到率 ' + (rows.length ? Math.round(nIn / rows.length * 100) : 0) + '%｜未到 ' + (rows.length - nIn) + ' 人｜已簽退 ' + nOut + ' 人';
     }
     $('kTotalNote').textContent = rows.length ? '最新：' + timeFmt.format(rows[0].date) : '尚無報名';
     var yest = dayKey(new Date(now.getTime() - 864e5));
@@ -416,27 +417,29 @@
       if (!q) return true;
       if (q === '已報到') return !!r.checkin;
       if (q === '未報到') return !r.checkin;
+      if (q === '已簽退') return !!r.checkout;
+      if (q === '未簽退') return !!r.checkin && !r.checkout;
       return [r.name, r.email, r.school, r.program, r.source, r.referrer, r.reason, r.interest].join(' ').toLowerCase().indexOf(q) >= 0;
     });
     $('count').textContent = q ? '符合 ' + list.length + ' / ' + rows.length + ' 筆' : '共 ' + rows.length + ' 筆（新到舊）';
     var tb = $('tbody'); tb.textContent = '';
     if (!list.length) {
       var tr0 = document.createElement('tr'), td0 = document.createElement('td');
-      td0.colSpan = 11; td0.className = 'empty'; td0.textContent = rows.length ? '找不到符合的資料' : '目前還沒有報名資料';
+      td0.colSpan = 12; td0.className = 'empty'; td0.textContent = rows.length ? '找不到符合的資料' : '目前還沒有報名資料';
       tr0.appendChild(td0); tb.appendChild(tr0); return;
     }
     list.forEach(function (r) {
       var tr = document.createElement('tr');
       var idx = rows.length - rows.indexOf(r);
-      [[idx, 'num'], [timeFmt.format(r.date), 'time'], [r.name, 'nw'], [r.email, 'mail'], [r.school], [r.program, 'nw'], [r.source], [r.referrer, 'nw'], [r.reason, 'long'], [r.interest, 'long'], [checkinText(r), 'time']]
+      [[idx, 'num'], [timeFmt.format(r.date), 'time'], [r.name, 'nw'], [r.email, 'mail'], [r.school], [r.program, 'nw'], [r.source], [r.referrer, 'nw'], [r.reason, 'long'], [r.interest, 'long'], [checkinText(r.checkin), 'time'], [checkinText(r.checkout), 'time']]
         .forEach(function (c) { var td = document.createElement('td'); td.textContent = c[0] == null ? '' : c[0]; if (c[1]) td.className = c[1]; tr.appendChild(td); });
       tb.appendChild(tr);
     });
   }
-  function checkinText(r) {
-    if (!r.checkin) return '';
-    var d = new Date(r.checkin);
-    return isNaN(d) ? String(r.checkin) : '✓ ' + timeFmt.format(d).slice(-5);
+  function checkinText(v) {
+    if (!v) return '';
+    var d = new Date(v);
+    return isNaN(d) ? String(v) : '✓ ' + timeFmt.format(d).slice(-5);
   }
   $('q').addEventListener('input', renderTable);
 
@@ -507,13 +510,14 @@
   }
 
   $('xlsx').addEventListener('click', function () {
-    var head = ['序號', '報名時間', '姓名', '電子郵件', '就讀學校', '學制', '得知管道', '推薦人姓名', '參與原因', '想進一步了解的部分', '報到時間'];
+    var head = ['序號', '報名時間', '姓名', '電子郵件', '就讀學校', '學制', '得知管道', '推薦人姓名', '參與原因', '想進一步了解的部分', '報到時間', '簽退時間'];
     var fullFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    function fullTime(v) { return v && !isNaN(new Date(v)) ? fullFmt.format(new Date(v)) : (v || ''); }
     var data = rows.slice().reverse().map(function (r, i) {
       return [i + 1, fullFmt.format(r.date), r.name, r.email, r.school, r.program, r.source, r.referrer, r.reason, r.interest,
-        r.checkin && !isNaN(new Date(r.checkin)) ? fullFmt.format(new Date(r.checkin)) : (r.checkin || '')];
+        fullTime(r.checkin), fullTime(r.checkout)];
     });
-    var blob = buildXlsx(head, data, [7, 21, 12, 30, 24, 15, 24, 12, 50, 50, 21]);
+    var blob = buildXlsx(head, data, [7, 21, 12, 30, 24, 15, 24, 12, 50, 50, 21, 21]);
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'PGY116_registrations_' + dayKey(new Date()) + '.xlsx';
