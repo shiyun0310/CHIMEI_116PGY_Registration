@@ -125,8 +125,7 @@
       </dl>
       <button class="btn btn-navy" type="button" id="outBtn"><span class="spin" aria-hidden="true"></span>簽退</button>
       <p class="err" id="outErr" role="alert"></p>
-      <p class="note" id="okNote">請向報到櫃台工作人員出示此畫面。活動結束離場時，請回到此頁按「簽退」。</p>
-      <button class="btn-link btn" type="button" id="next">幫其他人報到／簽退</button>
+      <p class="note" id="okNote">活動結束離場時，請回到此頁按「簽退」。</p>
     </section>
 
     <p class="help">找不到報名資料？請直接洽報到櫃台工作人員。</p>
@@ -256,7 +255,7 @@
     $('okOut').textContent = out ? fmt(info.checkout) : '—';
     $('outBtn').hidden = out || !info.row;
     $('outErr').textContent = '';
-    $('okNote').textContent = out ? '請向工作人員出示此畫面。' : '請向報到櫃台工作人員出示此畫面。活動結束離場時，請回到此頁按「簽退」。';
+    $('okNote').hidden = out;
     $('done').classList.toggle('again', !out && !!info.already);
     $('done').classList.toggle('out', out);
     show('done');
@@ -265,11 +264,6 @@
   $('outBtn').addEventListener('click', function () { if (current) doCheckout(current, $('outBtn'), $('outErr')); });
 
   $('back').addEventListener('click', function () { show('search'); $('q').select(); });
-  $('next').addEventListener('click', function () {
-    set(localStorage, DONE_STORE, null);
-    $('q').value = ''; $('searchErr').textContent = '';
-    show('search'); $('q').focus();
-  });
 
   /* ---------- 開始：同一支手機已報到過就直接顯示結果 ---------- */
   var saved = null;
