@@ -132,6 +132,15 @@
     .times dt { color: var(--muted); text-align: right; }
     .times dd { margin: 0; font-family: var(--font-en); font-weight: 800; text-align: left; }
 
+    .sync { margin: -8px 0 16px; font-size: .9rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .sync.pending { color: var(--muted); }
+    .sync.ok { color: var(--green); }
+    .sync.err { color: var(--red); }
+    .sync .spin { display: inline-block; width: 13px; height: 13px; border-color: var(--muted); border-right-color: transparent; }
+    .done.fail .mark { background: var(--red); }
+    .queue { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 10;
+      background: var(--ink); color: #fff; border-radius: 999px; padding: 8px 16px; font-size: .85rem; box-shadow: 0 6px 18px rgba(0,0,0,.2); white-space: nowrap; }
+    .diag { margin-top: 10px; font-size: .78rem; color: var(--muted); text-align: center; font-family: ui-monospace, monospace; }
     .help { margin-top: 8px; text-align: center; color: var(--muted); font-size: .9rem; }
   </style>
 </head>
@@ -217,10 +226,13 @@
         <dt>報到時間</dt><dd id="okIn"></dd>
         <dt>簽退時間</dt><dd id="okOut"></dd>
       </dl>
+      <p class="sync" id="sync" role="status"></p>
       <button class="btn" type="button" id="home">返回簽退系統</button>
     </section>
 
     <p class="help">找不到報名資料？請直接洽報到工作人員。</p>
+    <p class="diag" id="diag" hidden></p>
+    <div class="queue" id="queue" role="status" hidden></div>
   </main>
 
 <script>
@@ -373,6 +385,14 @@
   // CSV 由「查詢名單」工作表發布（Email 已遮蔽），約有數分鐘延遲：
   // CSV 顯示「已報到、未簽退」→ 立即帶出；查不到或狀態可能過時 → 再向 GAS 即時確認。
   var csvIndex = null; // 姓名 → [報名資料]
+  // 檢查模式：網址加 ?debug 會在頁面底部顯示 CSV 狀態與每次查詢的來源、耗時
+  var DEBUG = /[?&]debug\b/.test(location.search);
+  var csvInfo = CSV_URL ? '讀取中…' : '未設定', lastSrc = '';
+  function diag() {
+    if (!DEBUG) return;
+    $('diag').hidden = false;
+    $('diag').textContent = 'CSV：' + csvInfo + (lastSrc ? '｜上次查詢：' + lastSrc : '');
+  }
   function parseCsv(text) {
     var out = [], row = [], cell = '', q = false;
     for (var i = 0; i < text.length; i++) {
@@ -408,8 +428,10 @@
           (idx[r.name] = idx[r.name] || []).push(r);
         });
         csvIndex = idx;
+        csvInfo = Object.keys(idx).length + ' 人，' + timeFmt.format(new Date()).slice(-5) + ' 載入';
+        diag();
       })
-      .catch(function (e) { console.warn('CSV 讀取失敗，改用 GAS 查詢', e); });
+      .catch(function (e) { console.warn('CSV 讀取失敗，改用 GAS 查詢', e); csvInfo = '讀取失敗（' + (e && e.message || e) + '）'; diag(); });
   }
   loadCsv();
   // 預熱 GAS：頁面打開就先喚醒一次（之後每 4 分鐘一次），按「報到／簽退」時就不用等冷啟動
@@ -468,13 +490,17 @@
     var hit = csvIndex && csvIndex[q];
     if (hit && hit.every(function (r) { return r.checkin; })) {
       $('qSpin').classList.remove('on');
+      lastSrc = 'CSV（即時）'; diag();
       return showRows(hit, q);
     }
 
     // 2) GAS 即時查詢（CSV 未設定、讀取失敗、查不到、或顯示尚未報到時）
     $('qSpin').classList.add('on');
+    var t0 = Date.now();
+    var why = !csvIndex ? 'CSV 未載入' : !hit ? 'CSV 查無此人' : 'CSV 顯示未報到';
     post({ action: 'lookup', q: q }).then(function (res) {
       if (my !== seq) return;
+      lastSrc = 'GAS ' + ((Date.now() - t0) / 1000).toFixed(1) + ' 秒（' + why + '）'; diag();
       showRows(res.rows, q);
     }).catch(function (err) {
       if (my !== seq) return;
@@ -515,28 +541,97 @@
       return;
     }
     $('err').textContent = '';
-    var btn = $('submitBtn'); btn.disabled = true; btn.classList.add('loading');
-    post(data).then(function (res) {
-      $('okName').textContent = res.name;
-      $('okStatus').textContent = res.already ? '您已完成簽退' : '簽退成功，感謝您的參與！';
-      $('okIn').textContent = fmt(res.time);
-      $('okOut').textContent = fmt(res.checkout);
-      $('form').hidden = true; $('done').hidden = false;
-      window.scrollTo(0, 0);
-    }).catch(function (err) {
-      $('err').textContent = err.message;
-    }).then(function () { btn.disabled = false; btn.classList.remove('loading'); });
+    // 按下立即顯示簽退成功，問卷與簽退在背景寫入 GAS（存在手機，失敗自動重試）
+    var item = { id: Date.now() + '-' + person.row, data: data, at: new Date().toISOString() };
+    var list = loadQueue().filter(function (x) { return x.data.row !== data.row; });
+    list.push(item); saveQueue(list);
+    current = item;
+    $('okName').textContent = person.name;
+    $('okStatus').textContent = '簽退成功，感謝您的參與！';
+    $('okIn').textContent = fmt(person.checkin);
+    $('okOut').textContent = fmt(item.at);
+    $('done').classList.remove('fail');
+    $('form').hidden = true; $('done').hidden = false;
+    renderQueue();
+    window.scrollTo(0, 0);
+    sync(item, 0);
   });
+
+  /* ---------- 背景寫入（簽退＋問卷） ---------- */
+  var QUEUE_STORE = 'pgy116-checkout-queue';
+  var RETRY_MS = [1500, 4000, 8000, 15000];
+  var current = null, inflight = {};
+  function loadQueue() { try { return JSON.parse(get(localStorage, QUEUE_STORE) || '[]') || []; } catch (e) { return []; } }
+  function saveQueue(list) { set(localStorage, QUEUE_STORE, list.length ? JSON.stringify(list) : null); renderQueue(); }
+  function dropItem(id) { saveQueue(loadQueue().filter(function (x) { return x.id !== id; })); }
+  function renderQueue() {
+    var n = loadQueue().length;
+    $('queue').hidden = !n || !$('done').hidden;
+    $('queue').textContent = '有 ' + n + ' 筆簽退資料同步中，請勿關閉網路…';
+  }
+  function setSync(kind, text) {
+    var el = $('sync'); el.className = 'sync ' + kind; el.textContent = '';
+    if (kind === 'pending') el.appendChild(el2('span', 'spin'));
+    el.appendChild(document.createTextNode(text));
+  }
+  function el2(tag, cls) { var n = document.createElement(tag); n.className = cls; return n; }
+
+  function sendItem(item) {
+    var body = new URLSearchParams(item.data); body.set('code', code());
+    return fetch(GAS_URL, { method: 'POST', body: body })
+      .then(function (r) { return r.json(); }, function () { throw { retry: true, msg: '網路連線異常' }; })
+      .then(function (res) {
+        if (!res) throw { retry: true, msg: '系統忙碌中' };
+        if (res.needCode) { $('codeBox').hidden = false; set(sessionStorage, CODE_STORE, null); }
+        if (!res.ok) throw { retry: /忙碌/.test(res.error || ''), msg: res.error || '系統忙碌中' };
+        return res;
+      }, function (e) { throw e.retry != null ? e : { retry: true, msg: '系統忙碌中' }; });
+  }
+
+  function sync(item, attempt) {
+    if (inflight[item.id]) return;
+    inflight[item.id] = true;
+    var mine = function () { return current && current.id === item.id; };
+    if (mine()) setSync('pending', '資料同步中…');
+    sendItem(item).then(function (res) {
+      dropItem(item.id);
+      if (mine()) {
+        $('okStatus').textContent = res.already ? '您已完成簽退' : '簽退成功，感謝您的參與！';
+        $('okIn').textContent = fmt(res.time);
+        $('okOut').textContent = fmt(res.checkout);
+        setSync('ok', '✓ 已完成登記');
+      }
+    }).catch(function (e) {
+      if (e && e.retry) {
+        if (mine()) setSync(attempt >= 2 ? 'err' : 'pending', attempt >= 2 ? '網路不穩，正在自動重試…（如持續出現請洽工作人員）' : '資料同步中…');
+        setTimeout(function () { sync(item, attempt + 1); }, RETRY_MS[Math.min(attempt, RETRY_MS.length - 1)]);
+      } else {
+        dropItem(item.id);
+        if (mine()) {
+          $('okStatus').textContent = '簽退未完成';
+          $('done').classList.add('fail');
+          setSync('err', '⚠ ' + ((e && e.msg) || '簽退失敗') + '，請洽工作人員');
+        }
+      }
+    }).then(function () { inflight[item.id] = false; });
+  }
+  function flushQueue() { loadQueue().forEach(function (x) { sync(x, 0); }); }
+  window.addEventListener('online', flushQueue);
 
   $('home').addEventListener('click', function () {
     $('form').reset(); person = null; lastQ = ''; setFound();
     [].forEach.call(document.querySelectorAll('.q.bad'), function (n) { n.classList.remove('bad'); });
     $('err').textContent = '';
     $('done').hidden = true; $('form').hidden = false;
+    current = null; $('sync').textContent = ''; $('sync').className = 'sync'; $('done').classList.remove('fail');
+    renderQueue();
     updateProgress(); window.scrollTo(0, 0); $('q').focus();
   });
 
   updateProgress();
+  renderQueue();
+  flushQueue();
+  diag();
 })();
 </script>
 </body>
