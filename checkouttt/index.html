@@ -104,6 +104,8 @@
     .scale input:checked + span { background: var(--navy); border-color: var(--ink); color: #fff; }
     .scale input:checked + span small { color: #DCE3F7; }
     .scale input:focus-visible + span { outline: 3px dashed var(--red); outline-offset: 2px; }
+    .scale.two { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .scale.two span { min-height: 56px; font-weight: 900; font-size: 1.05rem; }
     textarea { clear: both; display: block; width: 100%; min-height: 92px; padding: 10px 14px; font-size: 16px; border: 2px solid var(--line); border-radius: 12px; background: #fff; resize: vertical; }
 
     /* submit */
@@ -150,6 +152,7 @@
           <li><b>1</b>輸入姓名</li>
           <li><b>2</b>滿意度 7 題</li>
           <li><b>3</b>心得與建議（選填）</li>
+          <li><b>4</b>甄試參加意願</li>
         </ul>
       </div>
 
@@ -189,6 +192,15 @@
         <div id="textQs"></div>
       </section>
 
+      <!-- 4. 甄試意願 -->
+      <section class="sec" id="sec4">
+        <div class="sec-h">
+          <div class="num">4</div>
+          <div><h3>甄試參加意願<span class="tag">必填</span></h3><p>讓我們提前為您準備甄試相關資訊。</p></div>
+        </div>
+        <div id="choiceQs"></div>
+      </section>
+
       <div class="submit">
         <p class="err" id="err" role="alert"></p>
         <p class="progress" id="progress"></p>
@@ -223,16 +235,17 @@
   var SATIS = ['非常不滿意', '不滿意', '普通', '滿意', '非常滿意'];
   var WILL = ['非常低', '低', '普通', '高', '非常高'];
   var SURVEY = [
-    { type: 'scale', q: '整體而言，您對本次說明會的滿意度', labels: SATIS },
     { type: 'scale', q: '說明會讓我清楚了解奇美醫院 PGY 訓練制度與課程安排', labels: AGREE },
     { type: 'scale', q: '分科互動交流時間，有助於我了解各科的訓練特色', labels: AGREE },
     { type: 'scale', q: '學長姐的經驗分享內容實用、具參考價值', labels: AGREE },
     { type: 'scale', q: '講者說明清楚，提問與交流時間充足', labels: AGREE },
     { type: 'scale', q: '活動時間安排、場地與報到流程', labels: SATIS },
     { type: 'scale', q: '參加後，您選擇奇美醫院作為 PGY 訓練醫院的意願', labels: WILL },
+    { type: 'scale', q: '整體而言，您對本次說明會的滿意度', labels: SATIS },
     { type: 'text', q: '本次說明會中，您印象最深刻或最有收穫的部分是？', ph: '例如：某一科的介紹、學長姐的分享…' },
     { type: 'text', q: '在考慮奇美醫院作為 PGY 訓練醫院時，您最在意或還有疑慮的是什麼？', ph: '例如：值班與工時、薪資福利、離家距離…' },
-    { type: 'text', q: '對本次活動或奇美醫院 PGY 訓練，您有什麼建議？', ph: '想對我們說的話…' }
+    { type: 'text', q: '對本次活動或奇美醫院 PGY 訓練，您有什麼建議？', ph: '想對我們說的話…' },
+    { type: 'choice', q: '今日說明會結束後，對於 116/1/24 本院舉辦之 PGY 甄試，您有意願來參加嗎？', opts: ['願意參與', '不參與'] }
   ];
 
   var $ = function (id) { return document.getElementById(id); };
@@ -272,13 +285,26 @@
     var lg = el('legend');
     lg.appendChild(el('span', 'n', n + '.'));
     lg.appendChild(document.createTextNode(item.q));
-    if (item.type === 'scale') lg.appendChild(el('span', 'req', '*'));
+    if (item.type !== 'text') lg.appendChild(el('span', 'req', '*'));
     fs.appendChild(lg);
     if (item.type === 'text') {
       var ta = el('textarea'); ta.name = 'q' + n; ta.maxLength = 500; ta.placeholder = item.ph || '';
       ta.setAttribute('aria-label', item.q);
       fs.appendChild(ta);
       $('textQs').appendChild(fs);
+      return;
+    }
+    if (item.type === 'choice') {
+      var two = el('div', 'scale two');
+      item.opts.forEach(function (o) {
+        var lb2 = el('label');
+        var in2 = el('input'); in2.type = 'radio'; in2.name = 'q' + n; in2.value = o;
+        in2.addEventListener('change', onAnswer);
+        var sp2 = el('span', null, o);
+        lb2.appendChild(in2); lb2.appendChild(sp2); two.appendChild(lb2);
+      });
+      fs.appendChild(two);
+      $('choiceQs').appendChild(fs);
       return;
     }
     var sc = el('div', 'scale');
@@ -293,10 +319,10 @@
     fs.appendChild(sc);
     $('scaleQs').appendChild(fs);
   });
-  var SCALE_N = SURVEY.filter(function (x) { return x.type === 'scale'; }).length;
+  var REQ_N = SURVEY.filter(function (x) { return x.type !== 'text'; }).length;
 
   function answered() {
-    return SURVEY.filter(function (x, i) { return x.type === 'scale' && document.querySelector('input[name="q' + (i + 1) + '"]:checked'); }).length;
+    return SURVEY.filter(function (x, i) { return x.type !== 'text' && document.querySelector('input[name="q' + (i + 1) + '"]:checked'); }).length;
   }
   function onAnswer(e) {
     e.target.closest('.q').classList.remove('bad');
@@ -305,7 +331,7 @@
   }
   function updateProgress() {
     var n = answered();
-    $('progress').textContent = (person ? '填寫人：' + person.name + '｜' : '尚未輸入填寫人｜') + '滿意度已填 ' + n + ' / ' + SCALE_N + ' 題';
+    $('progress').textContent = (person ? '填寫人：' + person.name + '｜' : '尚未輸入填寫人｜') + '必填已完成 ' + n + ' / ' + REQ_N + ' 題';
   }
 
   /* ---------- 1. 填寫人：輸入姓名自動查詢 ---------- */
@@ -416,7 +442,7 @@
       else { $('q' + n).classList.add('bad'); if (!missing) missing = $('q' + n); }
     });
     if (missing) {
-      $('err').textContent = '還有 ' + (SCALE_N - answered()) + ' 題滿意度沒有填答（標示紅框）';
+      $('err').textContent = '還有 ' + (REQ_N - answered()) + ' 題必填沒有填答（標示紅框）';
       missing.scrollIntoView({ block: 'center' });
       return;
     }
