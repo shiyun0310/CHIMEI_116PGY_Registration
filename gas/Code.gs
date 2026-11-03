@@ -21,6 +21,9 @@ var EVENT_INFO = '日期：115年11月29日（星期日）\n' +
 var HEADERS = ['報名時間', '姓名', '電子郵件', '就讀學校', '學制',
                '得知管道', '推薦人姓名', '想進一步了解的部分', '參與原因', '報到時間'];
 var CHECKIN_COL = 10; // 「報到時間」在第 J 欄
+// 完成報到的人另外寫一份到第二個工作表「報到系統」
+var CHECKIN_SHEET_NAME = '報到系統';
+var CHECKIN_HEADERS = ['姓名', '電子郵件', '就讀學校', '學制'];
 
 var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學',
                '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '天主教輔仁大學', '慈濟大學',
@@ -216,6 +219,7 @@ function checkinConfirm_(p) {
     var t = already ? r[9] : new Date();
     if (!already) {
       sheet.getRange(row, CHECKIN_COL).setValue(t).setNumberFormat('yyyy/mm/dd hh:mm:ss');
+      getCheckinSheet_().appendRow([r[1], r[2], r[3], r[4]].map(function (v) { return safe_(String(v)); }));
     }
     return json_({ ok: true, already: already, name: String(r[1]),
                    time: t instanceof Date ? t.toISOString() : String(t) });
@@ -242,6 +246,18 @@ function getSheet_() {
   return sheet;
 }
 
+// 「報到系統」工作表：不存在時建立在第二頁，只放 姓名／電子郵件／就讀學校／學制
+function getCheckinSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(CHECKIN_SHEET_NAME) || ss.insertSheet(CHECKIN_SHEET_NAME, Math.min(1, ss.getSheets().length));
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(CHECKIN_HEADERS);
+    sheet.getRange(1, 1, 1, CHECKIN_HEADERS.length).setFontWeight('bold').setBackground('#FFC83D');
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
 function clean_(v, max) {
   return String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim().slice(0, max);
 }
@@ -258,4 +274,5 @@ function json_(obj) {
 // 第一次部署前可手動執行一次，完成授權並建立工作表
 function setup() {
   getSheet_();
+  getCheckinSheet_();
 }
