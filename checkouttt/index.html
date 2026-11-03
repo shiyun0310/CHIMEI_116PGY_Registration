@@ -81,7 +81,8 @@
     /* 滿意度 */
     .q { border: 0; margin: 0 0 18px; padding: 0; }
     .q legend { font-weight: 700; margin-bottom: 8px; padding: 0; }
-    .q legend .req { color: var(--red); margin-left: 2px; }
+    .req { color: var(--red); margin-left: 2px; }
+    .q legend .opt { color: var(--muted); font-weight: 500; font-size: .85em; margin-left: 4px; }
     .scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
     .scale label { margin: 0; }
     .scale input { position: absolute; opacity: 0; pointer-events: none; }
@@ -112,8 +113,8 @@
   <main>
     <!-- 1. 查詢 -->
     <form class="card" id="search">
-      <h2>查詢報名資料</h2>
-      <p class="hint">請輸入您的姓名，填寫滿意度調查後即完成簽退</p>
+      <h2>填寫人<span class="req" aria-hidden="true">*</span></h2>
+      <p class="hint">輸入姓名後，系統會自動帶出您的資料。</p>
       <label for="q">姓名</label>
       <input type="text" id="q" autocomplete="name" enterkeyhint="search" placeholder="例如：王小明" required>
       <div id="codeBox" hidden>
@@ -138,8 +139,6 @@
       <h2>滿意度調查</h2>
       <p class="who" id="who"></p>
       <div id="qs"></div>
-      <label for="comment">其他建議（選填）</label>
-      <textarea id="comment" maxlength="500" placeholder="想對我們說的話…"></textarea>
       <p class="err" id="surveyErr" role="alert"></p>
       <button class="btn btn-primary" type="submit" id="submitBtn"><span class="spin" aria-hidden="true"></span>送出並簽退</button>
       <button class="btn-link btn" type="button" id="back2">不是我，重新查詢</button>
@@ -165,13 +164,19 @@
   'use strict';
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
   var CODE_STORE = 'pgy116-checkin-code';
-  // 滿意度題目（1～5 分）。要改題目時，gas/Code.gs 的 SURVEY_HEADERS 也要一起改，順序需相同。
+  // 滿意度題目：scale = 1～5 分（必填）；text = 詳答（選填）
+  // 要改題目時，gas/Code.gs 的 SURVEY 也要一起改，題數與順序需相同。
   var SURVEY = [
-    { q: '整體而言，您對本次說明會的滿意度', lo: '非常不滿意', hi: '非常滿意' },
-    { q: '議程內容（PGY 訓練制度介紹）對您有幫助', lo: '非常不同意', hi: '非常同意' },
-    { q: '分科互動交流對您有幫助', lo: '非常不同意', hi: '非常同意' },
-    { q: '場地、動線與報到流程', lo: '非常不滿意', hi: '非常滿意' },
-    { q: '參加後，您選擇奇美醫院作為 PGY 訓練醫院的意願', lo: '非常低', hi: '非常高' }
+    { type: 'scale', q: '整體而言，您對本次說明會的滿意度', lo: '非常不滿意', hi: '非常滿意' },
+    { type: 'scale', q: '說明會讓我清楚了解奇美醫院 PGY 訓練制度與課程安排', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '分科互動交流時間，有助於我了解各科的訓練特色', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '學長姐的經驗分享內容實用、具參考價值', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '講者說明清楚，提問與交流時間充足', lo: '非常不同意', hi: '非常同意' },
+    { type: 'scale', q: '活動時間安排、場地與報到流程', lo: '非常不滿意', hi: '非常滿意' },
+    { type: 'scale', q: '參加後，您選擇奇美醫院作為 PGY 訓練醫院的意願', lo: '非常低', hi: '非常高' },
+    { type: 'text', q: '本次說明會中，您印象最深刻或最有收穫的部分是？', ph: '例如：某一科的介紹、學長姐的分享…' },
+    { type: 'text', q: '關於奇美醫院 PGY 訓練，您還想進一步了解哪些資訊？', ph: '例如：值班制度、薪資福利、宿舍…' },
+    { type: 'text', q: '對本次活動或奇美醫院 PGY 訓練，您有什麼建議？', ph: '想對我們說的話…' }
   ];
   // 舊版曾把報到結果存在手機裡；現在每次打開都從查詢畫面開始，順手清掉
   try { localStorage.removeItem('pgy116-checkin-done'); } catch (e) {}
@@ -268,8 +273,16 @@
     SURVEY.forEach(function (item, i) {
       var fs = document.createElement('fieldset'); fs.className = 'q'; fs.id = 'q' + (i + 1);
       var lg = document.createElement('legend'); lg.textContent = (i + 1) + '. ' + item.q;
-      var req = document.createElement('span'); req.className = 'req'; req.textContent = '*'; lg.appendChild(req);
+      var req = document.createElement('span');
+      req.className = item.type === 'text' ? 'opt' : 'req';
+      req.textContent = item.type === 'text' ? '（選填）' : '*';
+      lg.appendChild(req);
       fs.appendChild(lg);
+      if (item.type === 'text') {
+        var ta = document.createElement('textarea'); ta.name = 'q' + (i + 1); ta.maxLength = 500;
+        ta.placeholder = item.ph || ''; ta.setAttribute('aria-label', item.q);
+        fs.appendChild(ta); box.appendChild(fs); return;
+      }
       var sc = document.createElement('div'); sc.className = 'scale';
       for (var v = 1; v <= 5; v++) {
         var lb = document.createElement('label');
@@ -301,15 +314,16 @@
   $('survey').addEventListener('submit', function (e) {
     e.preventDefault();
     if (!target) return;
-    var data = { action: 'checkout', row: target.row, name: target.name, survey: '1', comment: $('comment').value.trim() };
+    var data = { action: 'checkout', row: target.row, name: target.name, survey: '1' };
     var missing = null;
-    SURVEY.forEach(function (_, i) {
+    SURVEY.forEach(function (item, i) {
+      if (item.type === 'text') { data['q' + (i + 1)] = document.querySelector('textarea[name="q' + (i + 1) + '"]').value.trim(); return; }
       var c = document.querySelector('input[name="q' + (i + 1) + '"]:checked');
       if (c) data['q' + (i + 1)] = c.value;
       else { $('q' + (i + 1)).classList.add('bad'); if (!missing) missing = $('q' + (i + 1)); }
     });
     if (missing) {
-      $('surveyErr').textContent = '還有題目沒有填答（標示紅框）';
+      $('surveyErr').textContent = '還有必填題目沒有填答（標示紅框）';
       missing.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }

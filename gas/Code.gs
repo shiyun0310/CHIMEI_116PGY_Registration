@@ -26,10 +26,23 @@ var CHECKOUT_COL = 11; // 「簽退時間」在第 K 欄
 var CHECKIN_SHEET_NAME = '報到系統';
 var CHECKIN_HEADERS = ['姓名', '電子郵件', '就讀學校', '學制', '報到時間', '簽退時間'];
 // 簽退時填寫的滿意度調查寫到「滿意度調查」工作表（第三頁）
-// 題目順序需與網站 checkouttt/index.html 的 SURVEY 相同（各題 1～5 分）
+// 題數與順序需與網站 checkouttt/index.html 的 SURVEY 相同
+// scale：1～5 分（必填）；text：詳答（選填）
 var SURVEY_SHEET_NAME = '滿意度調查';
-var SURVEY_QUESTIONS = ['整體滿意度', '議程內容有幫助', '分科互動交流有幫助', '場地動線與報到流程', '選擇奇美PGY意願'];
-var SURVEY_HEADERS = ['填答時間', '姓名', '電子郵件', '就讀學校', '學制'].concat(SURVEY_QUESTIONS, ['其他建議']);
+var SURVEY = [
+  { h: '1. 整體滿意度', t: 'scale' },
+  { h: '2. 了解PGY訓練制度與課程', t: 'scale' },
+  { h: '3. 分科互動交流有幫助', t: 'scale' },
+  { h: '4. 學長姐經驗分享具參考價值', t: 'scale' },
+  { h: '5. 講者說明與交流時間', t: 'scale' },
+  { h: '6. 時間安排、場地與報到流程', t: 'scale' },
+  { h: '7. 選擇奇美PGY意願', t: 'scale' },
+  { h: '8. 印象最深刻／最有收穫的部分', t: 'text' },
+  { h: '9. 還想了解的資訊', t: 'text' },
+  { h: '10. 其他建議', t: 'text' }
+];
+var SURVEY_HEADERS = ['填答時間', '姓名', '電子郵件', '就讀學校', '學制']
+  .concat(SURVEY.map(function (x) { return x.h; }));
 
 var SCHOOLS = ['國立臺灣大學', '國立陽明交通大學', '國立成功大學', '臺北醫學大學', '長庚大學',
                '中國醫藥大學', '高雄醫學大學', '中山醫學大學', '天主教輔仁大學', '慈濟大學',
@@ -258,16 +271,19 @@ function checkoutConfirm_(p) {
     if (!name || norm_(r[1]) !== name) return json_({ ok: false, error: '資料已變動，請重新查詢' });
     if (!filled_(r[9])) return json_({ ok: false, error: '尚未報到，無法簽退' });
     var already = filled_(r[10]);
-    // 滿意度：每題需為 1～5 分（已簽退者不再寫入）
-    var scores = SURVEY_QUESTIONS.map(function (_, i) { return parseInt(p['q' + (i + 1)], 10); });
-    if (!already && scores.some(function (v) { return !(v >= 1 && v <= 5); })) {
-      return json_({ ok: false, error: '請完成滿意度調查所有題目' });
+    // 滿意度：評分題需為 1～5 分，詳答題選填（已簽退者不再寫入）
+    var answers = SURVEY.map(function (x, i) {
+      var v = p['q' + (i + 1)];
+      return x.t === 'scale' ? parseInt(v, 10) : safe_(clean_(v, 500));
+    });
+    var incomplete = SURVEY.some(function (x, i) { return x.t === 'scale' && !(answers[i] >= 1 && answers[i] <= 5); });
+    if (!already && incomplete) {
+      return json_({ ok: false, error: '請完成滿意度調查所有必填題目' });
     }
     var t = already ? r[10] : new Date();
     if (!already) {
       var sv = getSurveySheet_();
-      sv.appendRow([t].concat([r[1], r[2], r[3], r[4]].map(function (v) { return safe_(String(v)); }),
-                              scores, [safe_(clean_(p.comment, 500))]));
+      sv.appendRow([t].concat([r[1], r[2], r[3], r[4]].map(function (v) { return safe_(String(v)); }), answers));
       sv.getRange(sv.getLastRow(), 1).setNumberFormat('yyyy/mm/dd hh:mm:ss');
       sheet.getRange(row, CHECKOUT_COL).setValue(t).setNumberFormat('yyyy/mm/dd hh:mm:ss');
       // 同步「報到系統」：找同姓名＋Email 的那一列寫入簽退時間（找不到就補一列）
@@ -343,6 +359,9 @@ function getSurveySheet_() {
     sheet.appendRow(SURVEY_HEADERS);
     sheet.getRange(1, 1, 1, SURVEY_HEADERS.length).setFontWeight('bold').setBackground('#FFC83D');
     sheet.setFrozenRows(1);
+  } else if (sheet.getRange(1, 1, 1, SURVEY_HEADERS.length).getValues()[0].join('|') !== SURVEY_HEADERS.join('|')) {
+    // 題目有改時更新標題列（舊的測試資料請自行刪除）
+    sheet.getRange(1, 1, 1, SURVEY_HEADERS.length).setValues([SURVEY_HEADERS]).setFontWeight('bold').setBackground('#FFC83D');
   }
   return sheet;
 }
