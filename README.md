@@ -7,6 +7,7 @@
 - `assets/js/main.js`：倒數計時、分科分頁、加入行事曆、報名表送出
 - `checkinnnnn/`：說明會當天的現場簽到頁面
 - `checkouttt/`：簽退＋滿意度調查頁面（設定見 `gas/README.md`）
+- `drawwwww/`：現場抽獎頁（扭蛋機），從報到系統抽出已報到者（設定見 `gas/README.md`）
 
 ## 報名表
 
