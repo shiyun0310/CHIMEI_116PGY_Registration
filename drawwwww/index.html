@@ -58,11 +58,11 @@
 
     /* ---------- stage：左 數字｜中 抽獎機｜右 規則與獎品 ---------- */
     .stage {
-      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(16px, 2vw, 2.4rem);
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(16px, 2vw, 2.4rem);
       padding: .6rem clamp(16px, 2vw, 2rem) 1.2rem; align-items: start;
     }
     .col { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
-    .center { align-items: center; gap: .7rem; }
+    .center { align-items: center; gap: .5rem; }
     .panel { background: var(--card); border: 3px solid var(--ink); border-radius: 1.1rem; box-shadow: 6px 6px 0 var(--orange); padding: 1rem 1.2rem; }
     .panel h2 { margin: 0 0 .5rem; font-size: 1.35rem; font-weight: 900; display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
     .panel h2 .tbtn { min-height: 32px; font-size: .65rem; }
@@ -83,7 +83,7 @@
     .prizes { display: grid; gap: .55rem; }
     .pbtn {
       display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .55rem .8rem; border-radius: .8rem;
-      border: 2px solid var(--line); background: var(--soft); color: var(--ink); font-size: 1.3rem; font-weight: 900; cursor: pointer; line-height: 1.3;
+      border: 2px solid var(--line); background: var(--soft); color: var(--ink); font-size: 1.15rem; font-weight: 900; cursor: pointer; line-height: 1.3;
     }
     .pbtn .ic { flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); border: 2px solid var(--ink); font-family: var(--font-en); font-size: .75em; }
     .pbtn:hover { border-color: var(--ink); }
@@ -104,14 +104,14 @@
     .empty { color: var(--muted); font-size: .85rem; margin: 0; }
 
     .ticker {
-      min-height: 3.2rem; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;
+      min-height: 2.8rem; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;
       font-size: 2.3rem; font-weight: 900; letter-spacing: .06em; color: var(--red); line-height: 1.2;
     }
     .ticker.idle { color: var(--ink-2); font-size: 1.25rem; font-weight: 700; letter-spacing: .02em; }
     .ticker .pz { display: inline-block; font-size: .55em; background: var(--yellow); color: var(--ink); border: 2px solid var(--ink); border-radius: .5em; padding: 0 .5em; margin-right: .4em; vertical-align: .2em; letter-spacing: 0; }
 
     /* ---------- capsule machine ---------- */
-    .machine { position: relative; width: min(100%, 30rem, calc((100vh - 16rem) * .68)); min-width: 220px; aspect-ratio: 380 / 560; user-select: none; }
+    .machine { position: relative; width: min(100%, 34rem, calc((100vh - 13rem) * .68)); min-width: 220px; aspect-ratio: 380 / 560; user-select: none; }
     .globe {
       position: absolute; left: 3%; top: 0; width: 94%; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
       background: radial-gradient(circle at 32% 28%, #fff 0, #F3F8FF 20%, #DCE8FB 60%, #BFD2F2 100%);
@@ -123,7 +123,7 @@
       background: rgba(255,255,255,.75); filter: blur(4px); transform: rotate(-30deg); pointer-events: none; z-index: 5;
     }
     .ball {
-      position: absolute; width: 12%; aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--ink); overflow: hidden;
+      position: absolute; width: 16%; aspect-ratio: 1; border-radius: 50%; border: 4px solid var(--ink); overflow: hidden;
       background: linear-gradient(to bottom, var(--c) 0 50%, #fff 50% 100%); will-change: transform;
     }
     .ball::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - 1.5px); height: 3px; background: var(--ink); }
@@ -162,7 +162,8 @@
     .go:hover { background: var(--yellow); }
     .go:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
     .go[disabled] { opacity: .5; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 var(--ink); }
-    .msg { color: var(--red); font-weight: 700; min-height: 1.4em; margin: 0; text-align: center; font-size: .9rem; }
+    .msg { color: var(--red); font-weight: 700; margin: 0; text-align: center; font-size: .9rem; }
+    .msg:empty { display: none; }
 
     /* 窄螢幕改成上下排列：抽獎機在最上面 */
     @media (max-width: 900px) {
@@ -457,15 +458,15 @@
 
   /* ---------- machine ---------- */
   var balls = [];
-  // 在球體下半部用蜂巢排列堆滿扭蛋（約 40 顆）
+  // 在球體下半部用蜂巢排列堆扭蛋（約 20 顆）
   function buildBalls() {
-    var g = $('globe'), size = 12, R = 41.5, i = 0;
+    var g = $('globe'), size = 16, R = 39, i = 0;
     for (var row = 0; row < 7; row++) {
-      var cy = 84 - row * 9.6, dy = Math.abs(cy - 50);
-      if (dy > R) continue;
-      var maxDx = Math.sqrt(R * R - dy * dy), off = row % 2 ? 5.6 : 0;
+      var cy = 80 - row * 13, dy = Math.abs(cy - 50);
+      if (dy > R || cy < 26) continue;
+      var maxDx = Math.sqrt(R * R - dy * dy), off = row % 2 ? 7.5 : 0;
       for (var k = -4; k <= 4; k++) {
-        var cx = 50 + off + k * 11.2;
+        var cx = 50 + off + k * 15;
         if (Math.abs(cx - 50) > maxDx) continue;
         var el = document.createElement('div');
         el.className = 'ball';
@@ -485,7 +486,7 @@
     balls.forEach(function (b) {
       var frames = [{ transform: b.el.style.transform }];
       for (var k = 0; k < 7; k++) {
-        var dx = rand(240) - 120, dy = -(rand(480) + 60);
+        var dx = rand(180) - 90, dy = -(rand(360) + 40);
         frames.push({ transform: 'translate(' + dx + '%,' + dy + '%) rotate(' + rand(720) + 'deg)' });
       }
       frames.push({ transform: 'rotate(' + rand(360) + 'deg)' });
