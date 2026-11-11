@@ -18,5 +18,5 @@
 - `checkinnnnn/`：現場簽到頁（橘黃色系）
 - `checkouttt/`：簽退＋滿意度調查頁（藍色系）；題目在 `SURVEY`，需與 `gas/Code.gs` 的 `SURVEY` 題數、順序一致
 - `yunDDDashhhboardd4240/`：報名狀況儀表板
-- `drawwwww/`：現場抽獎頁（扭蛋機）；用儀表板密碼登入，只抽已報到者，不需改 GAS
+- `drawwwww/`：現場抽獎頁（淺色三欄、扭蛋機）；用儀表板密碼登入，只抽 11/29 13:30 前報到者（`CUTOFF`），不需改 GAS
 - `gas/Code.gs`：Google Apps Script 後端（報名、報到、簽退、滿意度）；設定說明見 `gas/README.md`
