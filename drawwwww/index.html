@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#172B6A">
+  <meta name="theme-color" content="#FFF6E5">
   <title>抽獎｜奇美醫院PGY醫師招募說明會</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23FFA319'/%3E%3Cpath d='M4 32h56' stroke='%23161616' stroke-width='5'/%3E%3Cpath d='M4 32a28 28 0 0 0 56 0z' fill='%23fff'/%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23161616' stroke-width='5'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,81 +12,117 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      color-scheme: dark;
-      --navy: #213C8F; --navy-d: #172B6A; --navy-dd: #0E1B47; --orange: #FFA319; --red: #F2541B; --yellow: #FFC83D; --green: #1E9E5A;
-      --ink: #161616; --muted: #AEB8D6; --line: rgba(255,255,255,.14);
+      color-scheme: light;
+      --navy: #213C8F; --orange: #FFA319; --red: #F2541B; --yellow: #FFC83D; --green: #1E9E5A;
+      --ink: #161616; --ink-2: #3A4050; --muted: #6B7180; --line: #EADFCB;
+      --bg: #FFF6E5; --card: #FFFFFF; --soft: #FFF9EE;
       --font: "Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
       --font-en: "Poppins", var(--font);
     }
     * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
+    /* 整體字級隨螢幕寬度放大，投影時字夠大 */
+    html { -webkit-text-size-adjust: 100%; font-size: clamp(16px, 1.3vw, 30px); }
     body {
-      margin: 0; font-family: var(--font); color: #fff; line-height: 1.55; min-height: 100vh; overflow-x: hidden;
-      background: radial-gradient(1200px 700px at 50% 30%, var(--navy) 0%, var(--navy-d) 45%, var(--navy-dd) 100%);
+      margin: 0; font-family: var(--font); color: var(--ink); line-height: 1.5; min-height: 100vh; overflow-x: hidden;
+      background:
+        radial-gradient(40vw 40vw at 0% 100%, rgba(255,163,25,.16), transparent 70%),
+        radial-gradient(36vw 36vw at 100% 0%, rgba(242,84,27,.10), transparent 70%),
+        var(--bg);
     }
     [hidden] { display: none !important; }
     button, input { font: inherit; }
 
     /* ---------- header ---------- */
-    .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px clamp(16px, 3vw, 32px); }
-    .top h1 { margin: 0; font-size: clamp(1.1rem, 2.4vw, 1.6rem); font-weight: 900; line-height: 1.3; }
-    .top h1 small { display: block; font-family: var(--font-en); font-size: .55em; font-weight: 800; letter-spacing: .2em; color: var(--orange); }
-    .tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .chip { font-size: .9rem; color: var(--muted); }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap; padding: .7rem clamp(16px, 2vw, 2rem) .2rem; }
+    .top h1 { margin: 0; font-size: 1.6rem; font-weight: 900; line-height: 1.25; }
+    .top h1 small { display: block; font-family: var(--font-en); font-size: .5em; font-weight: 800; letter-spacing: .25em; color: var(--red); }
+    .tools { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+    .chip { font-size: .7rem; color: var(--muted); }
     .tbtn {
-      min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 2px solid rgba(255,255,255,.35); background: transparent;
-      color: #fff; font-weight: 700; font-size: .9rem; cursor: pointer;
+      min-height: 36px; padding: .2rem .8rem; border-radius: 999px; border: 2px solid var(--ink); background: #fff;
+      color: var(--ink); font-weight: 700; font-size: .7rem; cursor: pointer;
     }
-    .tbtn:hover { border-color: var(--orange); color: var(--orange); }
-    .tbtn:focus-visible, .go:focus-visible, input:focus-visible, .rbtn:focus-visible { outline: 3px dashed var(--yellow); outline-offset: 3px; }
+    .tbtn:hover { background: var(--yellow); }
+    .tbtn:focus-visible, .go:focus-visible, input:focus-visible, .rbtn:focus-visible, .pbtn:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
     .tbtn[disabled] { opacity: .5; cursor: progress; }
 
     /* ---------- login ---------- */
-    .login { max-width: 420px; margin: 10vh auto 0; padding: 0 16px; }
-    .login form { background: #fff; color: var(--ink); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 6px 6px 0 var(--orange); padding: 26px 22px; }
+    .login { max-width: 460px; margin: 10vh auto 0; padding: 0 16px; }
+    .login form { background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: 6px 6px 0 var(--orange); padding: 26px 22px; }
     .login h2 { margin: 0 0 4px; font-weight: 900; }
-    .login p { margin: 0 0 16px; color: #555; font-size: .92rem; }
-    .login input { width: 100%; min-height: 50px; padding: 10px 14px; font-size: 18px; border: 2px solid var(--ink); border-radius: 14px; background: #F6F8FC; margin-bottom: 14px; }
+    .login p { margin: 0 0 16px; color: var(--ink-2); font-size: .9rem; }
+    .login input { width: 100%; min-height: 50px; padding: 10px 14px; font-size: 18px; border: 2px solid var(--ink); border-radius: 14px; background: var(--soft); margin-bottom: 14px; }
     .login button { width: 100%; min-height: 50px; border-radius: 999px; border: 2px solid var(--ink); background: var(--red); color: #fff; font-weight: 900; font-size: 1.05rem; box-shadow: 3px 3px 0 var(--ink); cursor: pointer; }
     .login button[disabled] { opacity: .6; cursor: progress; }
     .login .err { color: var(--red); font-weight: 700; min-height: 1.4em; margin: 10px 0 0; }
 
-    /* ---------- stage ---------- */
-    .stage { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; padding: 0 clamp(16px, 3vw, 32px) 32px; max-width: 1280px; margin: 0 auto; }
-    @media (max-width: 900px) { .stage { grid-template-columns: 1fr; } }
-    .center { display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: 0; }
+    /* ---------- stage：左 數字｜中 抽獎機｜右 規則與獎品 ---------- */
+    .stage {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(16px, 2vw, 2.4rem);
+      padding: .6rem clamp(16px, 2vw, 2rem) 1.2rem; align-items: start;
+    }
+    .col { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+    .center { align-items: center; gap: .7rem; }
+    .panel { background: var(--card); border: 3px solid var(--ink); border-radius: 1.1rem; box-shadow: 6px 6px 0 var(--orange); padding: 1rem 1.2rem; }
+    .panel h2 { margin: 0 0 .5rem; font-size: 1.35rem; font-weight: 900; display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+    .panel h2 .tbtn { min-height: 32px; font-size: .65rem; }
 
-    .stats { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-    .stat { background: rgba(255,255,255,.08); border: 1px solid var(--line); border-radius: 14px; padding: 6px 16px; text-align: center; min-width: 110px; }
-    .stat b { display: block; font-family: var(--font-en); font-size: 1.6rem; line-height: 1.2; color: var(--yellow); }
-    .stat span { font-size: .82rem; color: var(--muted); }
+    .stat { text-align: center; padding: 1.1rem 1rem 1.2rem; }
+    .stat .lbl { font-size: 1.45rem; font-weight: 900; color: var(--ink-2); }
+    .stat .num { font-family: var(--font-en); font-weight: 800; font-size: 5.6rem; line-height: 1.05; color: var(--red); }
+    .stat .num small { font-family: var(--font); font-size: .3em; font-weight: 900; color: var(--ink); margin-left: .15em; }
+    .stat.alt { box-shadow: 6px 6px 0 var(--yellow); }
+    .stat.alt .num { color: var(--navy); }
+    .substat { margin: 0; text-align: center; font-size: 1rem; font-weight: 700; color: var(--ink-2); }
+    .substat b { color: var(--red); font-family: var(--font-en); }
 
-    .prize { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
-    .prize label { font-weight: 700; color: var(--muted); }
-    .prize input { min-height: 42px; width: min(280px, 70vw); padding: 6px 14px; border-radius: 12px; border: 2px solid rgba(255,255,255,.3); background: rgba(255,255,255,.08); color: #fff; font-size: 1rem; }
-    .prize input::placeholder { color: rgba(255,255,255,.45); }
+    .rules { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
+    .rules li { position: relative; padding-left: 1.1em; font-size: 1.25rem; font-weight: 700; line-height: 1.4; }
+    .rules li::before { content: ""; position: absolute; left: 0; top: .55em; width: .45em; height: .45em; border-radius: 50%; background: var(--red); }
+    .prizes { display: grid; gap: .55rem; }
+    .pbtn {
+      display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .55rem .8rem; border-radius: .8rem;
+      border: 2px solid var(--line); background: var(--soft); color: var(--ink); font-size: 1.3rem; font-weight: 900; cursor: pointer; line-height: 1.3;
+    }
+    .pbtn .ic { flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); border: 2px solid var(--ink); font-family: var(--font-en); font-size: .75em; }
+    .pbtn:hover { border-color: var(--ink); }
+    .pbtn.on { background: var(--yellow); border-color: var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+    .pbtn.on .ic { background: var(--red); color: #fff; }
+    .hint { margin: .5rem 0 0; font-size: .75rem; color: var(--muted); }
+
+    ol.winners { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; max-height: 34vh; overflow: auto; }
+    ol.winners li { background: var(--soft); border: 1px solid var(--line); border-radius: .7rem; padding: .35rem .6rem; display: grid; grid-template-columns: auto 1fr auto; gap: .5rem; align-items: center; }
+    ol.winners .no { font-family: var(--font-en); font-weight: 800; color: var(--red); min-width: 1.4em; font-size: 1rem; }
+    ol.winners .nm { font-weight: 900; font-size: 1.1rem; }
+    ol.winners .sub { display: block; font-size: .7rem; color: var(--muted); font-weight: 500; }
+    ol.winners .pz { display: inline-block; font-size: .7rem; background: var(--yellow); border-radius: 6px; padding: 0 .4em; margin-left: .4em; font-weight: 700; vertical-align: .15em; }
+    ol.winners li.absent .nm { text-decoration: line-through; opacity: .5; }
+    ol.winners li.absent .no { color: var(--muted); }
+    ol.winners .x { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 1.1rem; min-width: 32px; min-height: 32px; border-radius: 8px; }
+    ol.winners .x:hover { color: var(--ink); background: rgba(0,0,0,.06); }
+    .empty { color: var(--muted); font-size: .85rem; margin: 0; }
 
     .ticker {
-      min-height: 64px; width: min(560px, 100%); display: flex; align-items: center; justify-content: center; text-align: center;
-      font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 900; letter-spacing: .06em; color: var(--yellow);
-      text-shadow: 0 0 18px rgba(255,200,61,.45);
+      min-height: 3.2rem; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;
+      font-size: 2.3rem; font-weight: 900; letter-spacing: .06em; color: var(--red); line-height: 1.2;
     }
-    .ticker.idle { color: rgba(255,255,255,.55); font-size: clamp(1rem, 2.4vw, 1.3rem); font-weight: 700; text-shadow: none; letter-spacing: .02em; }
+    .ticker.idle { color: var(--ink-2); font-size: 1.25rem; font-weight: 700; letter-spacing: .02em; }
+    .ticker .pz { display: inline-block; font-size: .55em; background: var(--yellow); color: var(--ink); border: 2px solid var(--ink); border-radius: .5em; padding: 0 .5em; margin-right: .4em; vertical-align: .2em; letter-spacing: 0; }
 
     /* ---------- capsule machine ---------- */
-    .machine { position: relative; width: min(82vw, clamp(220px, calc((100vh - 380px) * .68), 380px)); aspect-ratio: 380 / 560; user-select: none; }
+    .machine { position: relative; width: min(100%, 30rem, calc((100vh - 16rem) * .68)); min-width: 220px; aspect-ratio: 380 / 560; user-select: none; }
     .globe {
       position: absolute; left: 3%; top: 0; width: 94%; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
-      background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.55) 0, rgba(255,255,255,.12) 18%, rgba(190,215,255,.10) 55%, rgba(120,150,230,.22) 100%);
-      border: 5px solid var(--ink); box-shadow: inset 0 -18px 40px rgba(0,0,0,.25), 0 10px 40px rgba(0,0,0,.35);
+      background: radial-gradient(circle at 32% 28%, #fff 0, #F3F8FF 20%, #DCE8FB 60%, #BFD2F2 100%);
+      border: 5px solid var(--ink); box-shadow: inset 0 -18px 40px rgba(33,60,143,.18), 0 10px 30px rgba(0,0,0,.12);
       z-index: 2;
     }
     .globe::after { /* glass highlight */
-      content: ""; position: absolute; left: 14%; top: 10%; width: 26%; height: 16%; border-radius: 50%;
-      background: rgba(255,255,255,.55); filter: blur(4px); transform: rotate(-30deg); pointer-events: none; z-index: 5;
+      content: ""; position: absolute; left: 14%; top: 9%; width: 26%; height: 14%; border-radius: 50%;
+      background: rgba(255,255,255,.75); filter: blur(4px); transform: rotate(-30deg); pointer-events: none; z-index: 5;
     }
     .ball {
-      position: absolute; width: 17%; aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--ink); overflow: hidden;
+      position: absolute; width: 12%; aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--ink); overflow: hidden;
       background: linear-gradient(to bottom, var(--c) 0 50%, #fff 50% 100%); will-change: transform;
     }
     .ball::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - 1.5px); height: 3px; background: var(--ink); }
@@ -95,12 +131,12 @@
     .neck { position: absolute; left: 30%; width: 40%; top: 60%; height: 10%; background: var(--yellow); border: 5px solid var(--ink); border-radius: 10px; z-index: 1; }
     .body {
       position: absolute; left: 0; right: 0; top: 66%; bottom: 4%; background: var(--red); border: 5px solid var(--ink); border-radius: 28px 28px 22px 22px;
-      box-shadow: 8px 8px 0 rgba(0,0,0,.35); z-index: 3; overflow: hidden;
+      box-shadow: 8px 8px 0 var(--ink); z-index: 3; overflow: hidden;
     }
-    .body::before { content: ""; position: absolute; left: -20%; top: -60%; width: 60%; height: 120%; border-radius: 50%; background: rgba(255,255,255,.12); }
+    .body::before { content: ""; position: absolute; left: -20%; top: -60%; width: 60%; height: 120%; border-radius: 50%; background: rgba(255,255,255,.14); }
     .label {
       position: absolute; left: 8%; top: 12%; padding: 2px 10px; border-radius: 8px; background: var(--yellow); color: var(--ink);
-      border: 3px solid var(--ink); font-family: var(--font-en); font-weight: 800; font-size: clamp(.7rem, 2.2vw, .95rem); letter-spacing: .1em;
+      border: 3px solid var(--ink); font-family: var(--font-en); font-weight: 800; font-size: .8rem; letter-spacing: .1em;
     }
     .crank {
       position: absolute; right: 12%; top: 14%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: #fff; border: 5px solid var(--ink);
@@ -114,57 +150,45 @@
     }
     .feet { position: absolute; left: 6%; right: 6%; bottom: 0; height: 6%; display: flex; justify-content: space-between; z-index: 2; }
     .feet i { width: 18%; background: var(--ink); border-radius: 0 0 10px 10px; }
-    .drop { /* capsule that pops out of the chute */
-      position: absolute; left: 15%; bottom: 13%; width: 18%; aspect-ratio: 1; z-index: 4; opacity: 0;
-    }
+    .drop { position: absolute; left: 15%; bottom: 13%; width: 18%; aspect-ratio: 1; z-index: 4; opacity: 0; }
     .drop .ball { width: 100%; left: 0; top: 0; }
 
     .go {
-      position: relative; min-width: 220px; min-height: 64px; padding: 10px 34px; border-radius: 999px; border: 4px solid var(--ink);
-      background: var(--orange); color: var(--ink); font-size: 1.45rem; font-weight: 900; letter-spacing: .15em; cursor: pointer;
+      position: relative; min-width: 11em; min-height: 3.2rem; padding: .3rem 1.6rem; border-radius: 999px; border: 4px solid var(--ink);
+      background: var(--orange); color: var(--ink); font-size: 1.6rem; font-weight: 900; letter-spacing: .15em; cursor: pointer;
       box-shadow: 5px 5px 0 var(--ink); transition: transform .12s, box-shadow .12s, background .2s;
     }
     .go:hover { background: var(--yellow); }
     .go:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
-    .go[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 var(--ink); }
-    .tip { margin: -6px 0 0; color: var(--muted); font-size: .85rem; text-align: center; }
-    .msg { color: var(--yellow); font-weight: 700; min-height: 1.4em; margin: 0; text-align: center; }
+    .go[disabled] { opacity: .5; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 var(--ink); }
+    .msg { color: var(--red); font-weight: 700; min-height: 1.4em; margin: 0; text-align: center; font-size: .9rem; }
 
-    /* ---------- side panel ---------- */
-    .side { background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 20px; padding: 16px; align-self: start; }
-    .side h3 { margin: 0 0 10px; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .side h3 .tbtn { min-height: 32px; padding: 2px 10px; font-size: .8rem; }
-    .opt { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; color: var(--muted); margin: 0 0 14px; cursor: pointer; }
-    .opt input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--orange); }
-    ol.winners { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: 58vh; overflow: auto; }
-    ol.winners li { background: rgba(255,255,255,.08); border-radius: 12px; padding: 8px 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
-    ol.winners .no { font-family: var(--font-en); font-weight: 800; color: var(--orange); min-width: 1.6em; }
-    ol.winners .nm { font-weight: 900; }
-    ol.winners .sub { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
-    ol.winners .pz { display: inline-block; font-size: .75rem; background: var(--yellow); color: var(--ink); border-radius: 6px; padding: 0 6px; margin-left: 6px; font-weight: 700; vertical-align: 2px; }
-    ol.winners li.absent .nm { text-decoration: line-through; opacity: .55; }
-    ol.winners li.absent .no { color: var(--muted); }
-    ol.winners .x { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 1.1rem; min-width: 32px; min-height: 32px; border-radius: 8px; }
-    ol.winners .x:hover { color: #fff; background: rgba(255,255,255,.1); }
-    .empty { color: var(--muted); font-size: .9rem; margin: 0; }
+    /* 窄螢幕改成上下排列：抽獎機在最上面 */
+    @media (max-width: 900px) {
+      html { font-size: 16px; }
+      .stage { grid-template-columns: 1fr; }
+      .center { order: -1; }
+      .machine { width: min(82vw, 360px); }
+      .stat .num { font-size: 4rem; }
+    }
 
     /* ---------- reveal overlay ---------- */
-    .overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(8,14,40,.78); backdrop-filter: blur(4px); }
-    .big { position: absolute; left: 50%; top: 50%; width: min(300px, 64vw); aspect-ratio: 1; margin: calc(min(300px, 64vw) / -2) 0 0 calc(min(300px, 64vw) / -2); }
+    .overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(255,246,229,.86); backdrop-filter: blur(5px); }
+    .big { position: absolute; left: 50%; top: 50%; width: min(14rem, 64vw); aspect-ratio: 1; margin: calc(min(14rem, 64vw) / -2) 0 0 calc(min(14rem, 64vw) / -2); }
     .half { position: absolute; left: 0; width: 100%; height: 50%; border: 6px solid var(--ink); }
     .half.t { top: 0; border-radius: 999px 999px 0 0; border-bottom-width: 3px; background: var(--c, var(--orange)); transform-origin: 8% 100%; }
     .half.b { bottom: 0; border-radius: 0 0 999px 999px; border-top-width: 3px; background: #fff; }
     .half.t::before { content: ""; position: absolute; left: 16%; top: 18%; width: 26%; height: 24%; border-radius: 50%; background: rgba(255,255,255,.5); }
     .card {
-      position: relative; z-index: 2; width: min(620px, 100%); background: #fff; color: var(--ink); border: 4px solid var(--ink); border-radius: 26px;
-      box-shadow: 10px 10px 0 var(--orange); padding: clamp(22px, 4vw, 40px) clamp(18px, 4vw, 40px); text-align: center;
+      position: relative; z-index: 2; width: min(34rem, 100%); background: #fff; color: var(--ink); border: 4px solid var(--ink); border-radius: 1.5rem;
+      box-shadow: 12px 12px 0 var(--orange); padding: 2rem 1.6rem; text-align: center;
     }
-    .card .kicker { font-family: var(--font-en); font-weight: 800; letter-spacing: .3em; color: var(--red); font-size: .95rem; }
-    .card .pzt { display: inline-block; margin-top: 8px; background: var(--yellow); border: 3px solid var(--ink); border-radius: 10px; padding: 2px 14px; font-weight: 900; font-size: 1.1rem; }
-    .card .who { font-size: clamp(2.6rem, 10vw, 5rem); font-weight: 900; line-height: 1.15; margin: 14px 0 8px; letter-spacing: .08em; word-break: break-word; }
-    .card .meta { color: #4A5060; font-size: clamp(1rem, 2.6vw, 1.3rem); font-weight: 700; margin: 0 0 22px; }
-    .card .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-    .rbtn { min-height: 52px; padding: 8px 22px; border-radius: 999px; border: 3px solid var(--ink); font-weight: 900; font-size: 1.05rem; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); background: #fff; color: var(--ink); }
+    .card .kicker { font-family: var(--font-en); font-weight: 800; letter-spacing: .3em; color: var(--red); font-size: 1rem; }
+    .card .pzt { display: inline-block; margin-top: .5rem; background: var(--yellow); border: 3px solid var(--ink); border-radius: .6rem; padding: .1rem .8rem; font-weight: 900; font-size: 1.4rem; }
+    .card .who { font-size: clamp(3rem, 5.5rem, 22vw); font-weight: 900; line-height: 1.15; margin: .8rem 0 .4rem; letter-spacing: .08em; word-break: break-word; }
+    .card .meta { color: var(--ink-2); font-size: 1.35rem; font-weight: 700; margin: 0 0 1.3rem; }
+    .card .btns { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+    .rbtn { min-height: 52px; padding: .3rem 1.2rem; border-radius: 999px; border: 3px solid var(--ink); font-weight: 900; font-size: 1.05rem; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); background: #fff; color: var(--ink); }
     .rbtn.primary { background: var(--red); color: #fff; }
     .rbtn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
     canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
@@ -187,7 +211,7 @@
   <section class="login" id="login" hidden>
     <form id="loginForm" autocomplete="off">
       <h2>抽獎系統登入</h2>
-      <p>請輸入儀表板密碼（與報名狀況儀表板相同）。名單取自報到系統，只有<b>已報到</b>的人會進入抽獎池。</p>
+      <p>請輸入儀表板密碼（與報名狀況儀表板相同）。名單取自報到系統，只有 <b>11/29 13:30 前報到</b>的人會進入抽獎池。</p>
       <input id="pw" type="password" placeholder="密碼" aria-label="密碼" autocomplete="current-password">
       <button id="loginBtn" type="submit">進入抽獎</button>
       <p class="err" id="loginErr" role="alert"></p>
@@ -195,18 +219,27 @@
   </section>
 
   <div class="stage" id="stage" hidden>
-    <div class="center">
-      <div class="stats">
-        <div class="stat"><b id="sIn">0</b><span>已報到</span></div>
-        <div class="stat"><b id="sPool">0</b><span>可抽人數</span></div>
-        <div class="stat"><b id="sWin">0</b><span>已中獎</span></div>
+    <!-- 左：人數 -->
+    <section class="col">
+      <div class="panel stat">
+        <div class="lbl">目前總報到人數</div>
+        <div class="num"><span id="sIn">0</span><small>人</small></div>
       </div>
-      <div class="prize">
-        <label for="prize">目前獎項</label>
-        <input id="prize" type="text" maxlength="30" placeholder="例如：頭獎・AirPods（可留空）">
+      <div class="panel stat alt">
+        <div class="lbl">13:30 前報到人數</div>
+        <div class="num"><span id="sEarly">0</span><small>人</small></div>
       </div>
-      <div class="ticker idle" id="ticker" aria-live="polite">按下「開始抽獎」轉動扭蛋機</div>
+      <p class="substat">已中獎 <b id="sWin">0</b> 人・尚可抽 <b id="sPool">0</b> 人</p>
+      <div class="panel">
+        <h2>中獎名單 <button class="tbtn" id="clear" type="button">清空</button></h2>
+        <ol class="winners" id="winners"></ol>
+        <p class="empty" id="noWin">尚未抽出得獎者</p>
+      </div>
+    </section>
 
+    <!-- 中：抽獎機 -->
+    <section class="col center">
+      <div class="ticker idle" id="ticker" aria-live="polite">按下「開始抽獎」轉動扭蛋機</div>
       <div class="machine" id="machine" aria-hidden="true">
         <div class="globe" id="globe"></div>
         <div class="neck"></div>
@@ -218,18 +251,29 @@
         <div class="drop" id="drop"><div class="ball" id="dropBall"></div></div>
         <div class="feet"><i></i><i></i></div>
       </div>
-
       <button class="go" id="go" type="button">開始抽獎</button>
-      <p class="tip">也可以按鍵盤空白鍵抽獎</p>
       <p class="msg" id="msg" role="status"></p>
-    </div>
+    </section>
 
-    <aside class="side">
-      <label class="opt"><input type="checkbox" id="onlyOut"> 只抽<b>已簽退</b>（已填完滿意度）的人</label>
-      <h3>中獎名單 <button class="tbtn" id="clear" type="button">清空</button></h3>
-      <ol class="winners" id="winners"></ol>
-      <p class="empty" id="noWin">尚未抽出得獎者</p>
-    </aside>
+    <!-- 右：規則與獎品 -->
+    <section class="col">
+      <div class="panel">
+        <h2>抽籤規則</h2>
+        <ul class="rules">
+          <li>11/29（日）13:30 前報到者</li>
+          <li>已經中獎的人不會再被抽到</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>抽獎品</h2>
+        <div class="prizes" id="prizes">
+          <button class="pbtn" type="button" data-prize="iPad Wi-Fi 機型 128GB"><span class="ic">1</span>iPad Wi-Fi 機型 128GB</button>
+          <button class="pbtn" type="button" data-prize="Apple Watch SE 3"><span class="ic">2</span>Apple Watch SE 3</button>
+          <button class="pbtn" type="button" data-prize="AirPods 5"><span class="ic">3</span>AirPods 5</button>
+        </div>
+        <p class="hint">點選獎品，設定這一輪要抽的獎項（會記在中獎名單上）</p>
+      </div>
+    </section>
   </div>
 
   <div class="overlay" id="overlay" hidden>
@@ -251,15 +295,17 @@
 (function () {
   'use strict';
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
+  var CUTOFF = new Date('2026-11-29T13:30:00+08:00'); // 抽獎資格：此時間前報到
   var KEY_STORE = 'pgy116-dash-key';          // 與儀表板共用（sessionStorage）
   var WIN_STORE = 'pgy116-draw-winners';      // 中獎紀錄（localStorage，重新整理也不會消失）
-  var OPT_STORE = 'pgy116-draw-only-out';
+  var PRIZE_STORE = 'pgy116-draw-prize';
   var COLORS = ['#FFA319', '#F2541B', '#FFC83D', '#1E9E5A', '#3B82F6', '#A855F7', '#EC4899', '#14B8A6'];
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var $ = function (id) { return document.getElementById(id); };
   var people = [];      // 已報到者
   var winners = loadWinners();
+  var prize = '';
   var spinning = false, current = null, autoTimer = null;
   var timeFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', hour12: false });
 
@@ -286,7 +332,9 @@
   }
   function setPeople(res) {
     people = res.rows.filter(function (r) { return r.checkin; }).map(function (r) {
-      return { id: idOf(r), name: String(r.name).trim(), school: r.school || '', program: r.program || '', out: !!r.checkout };
+      var t = new Date(r.checkin);
+      return { id: idOf(r), name: String(r.name).trim(), school: r.school || '', program: r.program || '',
+               early: !isNaN(t) && t < CUTOFF };
     });
     $('updated').textContent = '名單更新於 ' + timeFmt.format(new Date());
     render();
@@ -302,11 +350,11 @@
     }).then(function () { $('refresh').disabled = false; });
   }
 
+  // 抽獎池：13:30 前報到、且還沒中獎（含標記不在現場）的人
   function pool() {
     var taken = {};
     winners.forEach(function (w) { taken[w.id] = 1; });
-    var onlyOut = $('onlyOut').checked;
-    return people.filter(function (p) { return !taken[p.id] && (!onlyOut || p.out); });
+    return people.filter(function (p) { return p.early && !taken[p.id]; });
   }
 
   /* ---------- views ---------- */
@@ -339,27 +387,45 @@
     if (d.fullscreenElement) d.exitFullscreen && d.exitFullscreen();
     else d.documentElement.requestFullscreen && d.documentElement.requestFullscreen().catch(function () {});
   });
-  try { $('onlyOut').checked = localStorage.getItem(OPT_STORE) === '1'; } catch (e) {}
-  $('onlyOut').addEventListener('change', function () {
-    try { localStorage.setItem(OPT_STORE, this.checked ? '1' : '0'); } catch (e) {}
-    render();
-  });
   $('clear').addEventListener('click', function () {
     if (!winners.length || spinning) return;
     if (!confirm('確定要清空全部中獎名單？清空後所有人都會重新回到抽獎池。')) return;
     winners = []; saveWinners(); render();
   });
 
+  /* ---------- prizes ---------- */
+  function setPrize(v) {
+    prize = v || '';
+    try { localStorage.setItem(PRIZE_STORE, prize); } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll('.pbtn'), function (b) {
+      var on = b.getAttribute('data-prize') === prize;
+      b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    if (!spinning) idleTicker();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.pbtn'), function (b) {
+    b.addEventListener('click', function () {
+      if (spinning) return;
+      var v = b.getAttribute('data-prize');
+      setPrize(prize === v ? '' : v);
+    });
+  });
+  function idleTicker(text) {
+    var t = $('ticker'); t.classList.add('idle'); t.textContent = '';
+    if (prize) { var s = document.createElement('span'); s.className = 'pz'; s.textContent = prize; t.appendChild(s); }
+    t.appendChild(document.createTextNode(text || '按下「開始抽獎」轉動扭蛋機'));
+  }
+
   /* ---------- render ---------- */
   function render() {
     var p = pool();
     $('sIn').textContent = people.length;
+    $('sEarly').textContent = people.filter(function (x) { return x.early; }).length;
     $('sPool').textContent = p.length;
     $('sWin').textContent = winners.filter(function (w) { return !w.absent; }).length;
     $('go').disabled = spinning || !p.length;
-    $('msg').textContent = people.length && !p.length ? ($('onlyOut').checked ? '沒有可抽的已簽退者了' : '所有已報到者都抽過了') :
-                           !people.length ? '目前還沒有人報到' : '';
-    renderBalls(p.length);
+    $('msg').textContent = !people.length ? '目前還沒有人報到' :
+                           !p.length ? '沒有符合資格、尚未中獎的人了' : '';
     var ol = $('winners'); ol.textContent = '';
     var n = 0;
     winners.forEach(function (w, i) {
@@ -388,24 +454,26 @@
 
   /* ---------- machine ---------- */
   var balls = [];
-  function renderBalls(n) {
-    var count = Math.max(6, Math.min(22, n || 0));
-    if (balls.length === count) return;
-    var g = $('globe');
-    balls.forEach(function (b) { b.el.remove(); });
-    balls = [];
-    for (var i = 0; i < count; i++) {
-      var el = document.createElement('div');
-      el.className = 'ball';
-      el.style.setProperty('--c', COLORS[i % COLORS.length]);
-      // 堆在球體下半部
-      var row = Math.floor(i / 6), col = i % 6;
-      var x = 10 + col * 13 + (row % 2) * 6 + (rand(5) - 2);
-      var y = 72 - row * 13 + (rand(5) - 2);
-      el.style.left = x + '%'; el.style.top = y + '%';
-      el.style.transform = 'rotate(' + rand(360) + 'deg)';
-      g.appendChild(el);
-      balls.push({ el: el, x: x, y: y });
+  // 在球體下半部用蜂巢排列堆滿扭蛋（約 40 顆）
+  function buildBalls() {
+    var g = $('globe'), size = 12, R = 41.5, i = 0;
+    for (var row = 0; row < 7; row++) {
+      var cy = 84 - row * 9.6, dy = Math.abs(cy - 50);
+      if (dy > R) continue;
+      var maxDx = Math.sqrt(R * R - dy * dy), off = row % 2 ? 5.6 : 0;
+      for (var k = -4; k <= 4; k++) {
+        var cx = 50 + off + k * 11.2;
+        if (Math.abs(cx - 50) > maxDx) continue;
+        var el = document.createElement('div');
+        el.className = 'ball';
+        el.style.setProperty('--c', COLORS[(i * 5 + row) % COLORS.length]);
+        el.style.left = (cx - size / 2 + (rand(3) - 1)) + '%';
+        el.style.top = (cy - size / 2 + (rand(3) - 1)) + '%';
+        el.style.transform = 'rotate(' + rand(360) + 'deg)';
+        g.appendChild(el);
+        balls.push({ el: el });
+        i++;
+      }
     }
   }
 
@@ -414,7 +482,7 @@
     balls.forEach(function (b) {
       var frames = [{ transform: b.el.style.transform }];
       for (var k = 0; k < 7; k++) {
-        var dx = (rand(60) - 30) * 1.0, dy = -(rand(320) + 40) * (k < 6 ? 1 : 0);
+        var dx = rand(240) - 120, dy = -(rand(480) + 60);
         frames.push({ transform: 'translate(' + dx + '%,' + dy + '%) rotate(' + rand(720) + 'deg)' });
       }
       frames.push({ transform: 'rotate(' + rand(360) + 'deg)' });
@@ -444,7 +512,7 @@
     spinning = true; render();
     var pick = p[rand(p.length)];
     var color = COLORS[rand(COLORS.length)];
-    current = { id: pick.id, name: pick.name, school: pick.school, program: pick.program, prize: $('prize').value.trim(), color: color };
+    current = { id: pick.id, name: pick.name, school: pick.school, program: pick.program, prize: prize, color: color };
 
     crankDeg += 720;
     $('crank').style.transform = 'rotate(' + crankDeg + 'deg)';
@@ -507,8 +575,7 @@
     $('overlay').hidden = true; $('drop').style.opacity = '0';
     stopConfetti();
     spinning = false; current = null;
-    $('ticker').classList.add('idle');
-    $('ticker').textContent = absent ? '重新抽獎中…' : '按下「開始抽獎」轉動扭蛋機';
+    idleTicker(absent ? '重新抽獎中…' : '');
     render();
     if (absent) setTimeout(draw, 400); else $('go').focus();
   }
@@ -530,7 +597,7 @@
     var dpr = window.devicePixelRatio || 1;
     cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     parts = [];
-    for (var i = 0; i < 180; i++) {
+    for (var i = 0; i < 200; i++) {
       var side = i % 2 ? 1 : -1;
       parts.push({
         x: side < 0 ? 0 : innerWidth, y: innerHeight * 0.7,
@@ -553,7 +620,8 @@
   function stopConfetti() { cancelAnimationFrame(raf); ctx.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
 
   /* ---------- start ---------- */
-  renderBalls(12);
+  buildBalls();
+  try { setPrize(localStorage.getItem(PRIZE_STORE) || ''); } catch (e) { setPrize(''); }
   if (sGet(KEY_STORE)) { showStage(); refresh(false); } else showLogin();
 })();
 </script>
