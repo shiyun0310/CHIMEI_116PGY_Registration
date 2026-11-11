@@ -537,7 +537,10 @@
 
   function reveal() {
     var o = $('overlay'), big = $('big'), top = $('bigTop'), card = $('card');
-    var drop = $('drop'); drop.getAnimations && drop.getAnimations().forEach(function (a) { a.cancel(); });
+    // 清掉上一輪留下的動畫（淡出、蓋子打開都有 fill:forwards，不清掉第二次起扭蛋會看不到）
+    [$('drop'), big, top, card].forEach(function (el) {
+      if (el.getAnimations) el.getAnimations().forEach(function (a) { a.cancel(); });
+    });
     top.style.setProperty('--c', current.color);
     top.style.transform = ''; big.style.opacity = '1'; big.hidden = false; card.hidden = true;
     o.hidden = false;
