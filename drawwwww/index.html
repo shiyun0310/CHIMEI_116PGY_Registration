@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#172B6A">
+  <title>抽獎｜奇美醫院PGY醫師招募說明會</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23FFA319'/%3E%3Cpath d='M4 32h56' stroke='%23161616' stroke-width='5'/%3E%3Cpath d='M4 32a28 28 0 0 0 56 0z' fill='%23fff'/%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23161616' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --navy: #213C8F; --navy-d: #172B6A; --navy-dd: #0E1B47; --orange: #FFA319; --red: #F2541B; --yellow: #FFC83D; --green: #1E9E5A;
+      --ink: #161616; --muted: #AEB8D6; --line: rgba(255,255,255,.14);
+      --font: "Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --font-en: "Poppins", var(--font);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; font-family: var(--font); color: #fff; line-height: 1.55; min-height: 100vh; overflow-x: hidden;
+      background: radial-gradient(1200px 700px at 50% 30%, var(--navy) 0%, var(--navy-d) 45%, var(--navy-dd) 100%);
+    }
+    [hidden] { display: none !important; }
+    button, input { font: inherit; }
+
+    /* ---------- header ---------- */
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px clamp(16px, 3vw, 32px); }
+    .top h1 { margin: 0; font-size: clamp(1.1rem, 2.4vw, 1.6rem); font-weight: 900; line-height: 1.3; }
+    .top h1 small { display: block; font-family: var(--font-en); font-size: .55em; font-weight: 800; letter-spacing: .2em; color: var(--orange); }
+    .tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .chip { font-size: .9rem; color: var(--muted); }
+    .tbtn {
+      min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 2px solid rgba(255,255,255,.35); background: transparent;
+      color: #fff; font-weight: 700; font-size: .9rem; cursor: pointer;
+    }
+    .tbtn:hover { border-color: var(--orange); color: var(--orange); }
+    .tbtn:focus-visible, .go:focus-visible, input:focus-visible, .rbtn:focus-visible { outline: 3px dashed var(--yellow); outline-offset: 3px; }
+    .tbtn[disabled] { opacity: .5; cursor: progress; }
+
+    /* ---------- login ---------- */
+    .login { max-width: 420px; margin: 10vh auto 0; padding: 0 16px; }
+    .login form { background: #fff; color: var(--ink); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 6px 6px 0 var(--orange); padding: 26px 22px; }
+    .login h2 { margin: 0 0 4px; font-weight: 900; }
+    .login p { margin: 0 0 16px; color: #555; font-size: .92rem; }
+    .login input { width: 100%; min-height: 50px; padding: 10px 14px; font-size: 18px; border: 2px solid var(--ink); border-radius: 14px; background: #F6F8FC; margin-bottom: 14px; }
+    .login button { width: 100%; min-height: 50px; border-radius: 999px; border: 2px solid var(--ink); background: var(--red); color: #fff; font-weight: 900; font-size: 1.05rem; box-shadow: 3px 3px 0 var(--ink); cursor: pointer; }
+    .login button[disabled] { opacity: .6; cursor: progress; }
+    .login .err { color: var(--red); font-weight: 700; min-height: 1.4em; margin: 10px 0 0; }
+
+    /* ---------- stage ---------- */
+    .stage { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; padding: 0 clamp(16px, 3vw, 32px) 32px; max-width: 1280px; margin: 0 auto; }
+    @media (max-width: 900px) { .stage { grid-template-columns: 1fr; } }
+    .center { display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: 0; }
+
+    .stats { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .stat { background: rgba(255,255,255,.08); border: 1px solid var(--line); border-radius: 14px; padding: 6px 16px; text-align: center; min-width: 110px; }
+    .stat b { display: block; font-family: var(--font-en); font-size: 1.6rem; line-height: 1.2; color: var(--yellow); }
+    .stat span { font-size: .82rem; color: var(--muted); }
+
+    .prize { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+    .prize label { font-weight: 700; color: var(--muted); }
+    .prize input { min-height: 42px; width: min(280px, 70vw); padding: 6px 14px; border-radius: 12px; border: 2px solid rgba(255,255,255,.3); background: rgba(255,255,255,.08); color: #fff; font-size: 1rem; }
+    .prize input::placeholder { color: rgba(255,255,255,.45); }
+
+    .ticker {
+      min-height: 64px; width: min(560px, 100%); display: flex; align-items: center; justify-content: center; text-align: center;
+      font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 900; letter-spacing: .06em; color: var(--yellow);
+      text-shadow: 0 0 18px rgba(255,200,61,.45);
+    }
+    .ticker.idle { color: rgba(255,255,255,.55); font-size: clamp(1rem, 2.4vw, 1.3rem); font-weight: 700; text-shadow: none; letter-spacing: .02em; }
+
+    /* ---------- capsule machine ---------- */
+    .machine { position: relative; width: min(82vw, clamp(220px, calc((100vh - 380px) * .68), 380px)); aspect-ratio: 380 / 560; user-select: none; }
+    .globe {
+      position: absolute; left: 3%; top: 0; width: 94%; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+      background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.55) 0, rgba(255,255,255,.12) 18%, rgba(190,215,255,.10) 55%, rgba(120,150,230,.22) 100%);
+      border: 5px solid var(--ink); box-shadow: inset 0 -18px 40px rgba(0,0,0,.25), 0 10px 40px rgba(0,0,0,.35);
+      z-index: 2;
+    }
+    .globe::after { /* glass highlight */
+      content: ""; position: absolute; left: 14%; top: 10%; width: 26%; height: 16%; border-radius: 50%;
+      background: rgba(255,255,255,.55); filter: blur(4px); transform: rotate(-30deg); pointer-events: none; z-index: 5;
+    }
+    .ball {
+      position: absolute; width: 17%; aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--ink); overflow: hidden;
+      background: linear-gradient(to bottom, var(--c) 0 50%, #fff 50% 100%); will-change: transform;
+    }
+    .ball::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - 1.5px); height: 3px; background: var(--ink); }
+    .ball::before { content: ""; position: absolute; left: 18%; top: 12%; width: 28%; height: 20%; border-radius: 50%; background: rgba(255,255,255,.55); }
+
+    .neck { position: absolute; left: 30%; width: 40%; top: 60%; height: 10%; background: var(--yellow); border: 5px solid var(--ink); border-radius: 10px; z-index: 1; }
+    .body {
+      position: absolute; left: 0; right: 0; top: 66%; bottom: 4%; background: var(--red); border: 5px solid var(--ink); border-radius: 28px 28px 22px 22px;
+      box-shadow: 8px 8px 0 rgba(0,0,0,.35); z-index: 3; overflow: hidden;
+    }
+    .body::before { content: ""; position: absolute; left: -20%; top: -60%; width: 60%; height: 120%; border-radius: 50%; background: rgba(255,255,255,.12); }
+    .label {
+      position: absolute; left: 8%; top: 12%; padding: 2px 10px; border-radius: 8px; background: var(--yellow); color: var(--ink);
+      border: 3px solid var(--ink); font-family: var(--font-en); font-weight: 800; font-size: clamp(.7rem, 2.2vw, .95rem); letter-spacing: .1em;
+    }
+    .crank {
+      position: absolute; right: 12%; top: 14%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: #fff; border: 5px solid var(--ink);
+      transition: transform 2.4s cubic-bezier(.3,.1,.2,1);
+    }
+    .crank::before { content: ""; position: absolute; left: -12%; right: -12%; top: 38%; height: 24%; border-radius: 99px; background: var(--orange); border: 4px solid var(--ink); }
+    .crank::after { content: ""; position: absolute; left: 38%; top: 38%; width: 24%; height: 24%; border-radius: 50%; background: var(--ink); }
+    .chute {
+      position: absolute; left: 10%; bottom: 12%; width: 34%; height: 34%; border-radius: 16px 16px 8px 8px; background: #3A0F02;
+      border: 5px solid var(--ink); box-shadow: inset 0 8px 0 rgba(0,0,0,.4);
+    }
+    .feet { position: absolute; left: 6%; right: 6%; bottom: 0; height: 6%; display: flex; justify-content: space-between; z-index: 2; }
+    .feet i { width: 18%; background: var(--ink); border-radius: 0 0 10px 10px; }
+    .drop { /* capsule that pops out of the chute */
+      position: absolute; left: 15%; bottom: 13%; width: 18%; aspect-ratio: 1; z-index: 4; opacity: 0;
+    }
+    .drop .ball { width: 100%; left: 0; top: 0; }
+
+    .go {
+      position: relative; min-width: 220px; min-height: 64px; padding: 10px 34px; border-radius: 999px; border: 4px solid var(--ink);
+      background: var(--orange); color: var(--ink); font-size: 1.45rem; font-weight: 900; letter-spacing: .15em; cursor: pointer;
+      box-shadow: 5px 5px 0 var(--ink); transition: transform .12s, box-shadow .12s, background .2s;
+    }
+    .go:hover { background: var(--yellow); }
+    .go:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+    .go[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 var(--ink); }
+    .tip { margin: -6px 0 0; color: var(--muted); font-size: .85rem; text-align: center; }
+    .msg { color: var(--yellow); font-weight: 700; min-height: 1.4em; margin: 0; text-align: center; }
+
+    /* ---------- side panel ---------- */
+    .side { background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 20px; padding: 16px; align-self: start; }
+    .side h3 { margin: 0 0 10px; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .side h3 .tbtn { min-height: 32px; padding: 2px 10px; font-size: .8rem; }
+    .opt { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; color: var(--muted); margin: 0 0 14px; cursor: pointer; }
+    .opt input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--orange); }
+    ol.winners { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: 58vh; overflow: auto; }
+    ol.winners li { background: rgba(255,255,255,.08); border-radius: 12px; padding: 8px 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+    ol.winners .no { font-family: var(--font-en); font-weight: 800; color: var(--orange); min-width: 1.6em; }
+    ol.winners .nm { font-weight: 900; }
+    ol.winners .sub { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
+    ol.winners .pz { display: inline-block; font-size: .75rem; background: var(--yellow); color: var(--ink); border-radius: 6px; padding: 0 6px; margin-left: 6px; font-weight: 700; vertical-align: 2px; }
+    ol.winners li.absent .nm { text-decoration: line-through; opacity: .55; }
+    ol.winners li.absent .no { color: var(--muted); }
+    ol.winners .x { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 1.1rem; min-width: 32px; min-height: 32px; border-radius: 8px; }
+    ol.winners .x:hover { color: #fff; background: rgba(255,255,255,.1); }
+    .empty { color: var(--muted); font-size: .9rem; margin: 0; }
+
+    /* ---------- reveal overlay ---------- */
+    .overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(8,14,40,.78); backdrop-filter: blur(4px); }
+    .big { position: absolute; left: 50%; top: 50%; width: min(300px, 64vw); aspect-ratio: 1; margin: calc(min(300px, 64vw) / -2) 0 0 calc(min(300px, 64vw) / -2); }
+    .half { position: absolute; left: 0; width: 100%; height: 50%; border: 6px solid var(--ink); }
+    .half.t { top: 0; border-radius: 999px 999px 0 0; border-bottom-width: 3px; background: var(--c, var(--orange)); transform-origin: 8% 100%; }
+    .half.b { bottom: 0; border-radius: 0 0 999px 999px; border-top-width: 3px; background: #fff; }
+    .half.t::before { content: ""; position: absolute; left: 16%; top: 18%; width: 26%; height: 24%; border-radius: 50%; background: rgba(255,255,255,.5); }
+    .card {
+      position: relative; z-index: 2; width: min(620px, 100%); background: #fff; color: var(--ink); border: 4px solid var(--ink); border-radius: 26px;
+      box-shadow: 10px 10px 0 var(--orange); padding: clamp(22px, 4vw, 40px) clamp(18px, 4vw, 40px); text-align: center;
+    }
+    .card .kicker { font-family: var(--font-en); font-weight: 800; letter-spacing: .3em; color: var(--red); font-size: .95rem; }
+    .card .pzt { display: inline-block; margin-top: 8px; background: var(--yellow); border: 3px solid var(--ink); border-radius: 10px; padding: 2px 14px; font-weight: 900; font-size: 1.1rem; }
+    .card .who { font-size: clamp(2.6rem, 10vw, 5rem); font-weight: 900; line-height: 1.15; margin: 14px 0 8px; letter-spacing: .08em; word-break: break-word; }
+    .card .meta { color: #4A5060; font-size: clamp(1rem, 2.6vw, 1.3rem); font-weight: 700; margin: 0 0 22px; }
+    .card .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .rbtn { min-height: 52px; padding: 8px 22px; border-radius: 999px; border: 3px solid var(--ink); font-weight: 900; font-size: 1.05rem; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); background: #fff; color: var(--ink); }
+    .rbtn.primary { background: var(--red); color: #fff; }
+    .rbtn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+
+    @keyframes shake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-10deg); } 40% { transform: rotate(9deg); } 60% { transform: rotate(-7deg); } 80% { transform: rotate(5deg); } }
+    .machine.shaking .globe { animation: shake .35s ease-in-out 5; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1><small>LUCKY DRAW</small>奇美醫院 PGY 說明會・現場抽獎</h1>
+    <div class="tools" id="tools" hidden>
+      <span class="chip" id="updated"></span>
+      <button class="tbtn" id="refresh" type="button">更新名單</button>
+      <button class="tbtn" id="fs" type="button">全螢幕</button>
+      <button class="tbtn" id="logout" type="button">登出</button>
+    </div>
+  </header>
+
+  <section class="login" id="login" hidden>
+    <form id="loginForm" autocomplete="off">
+      <h2>抽獎系統登入</h2>
+      <p>請輸入儀表板密碼（與報名狀況儀表板相同）。名單取自報到系統，只有<b>已報到</b>的人會進入抽獎池。</p>
+      <input id="pw" type="password" placeholder="密碼" aria-label="密碼" autocomplete="current-password">
+      <button id="loginBtn" type="submit">進入抽獎</button>
+      <p class="err" id="loginErr" role="alert"></p>
+    </form>
+  </section>
+
+  <div class="stage" id="stage" hidden>
+    <div class="center">
+      <div class="stats">
+        <div class="stat"><b id="sIn">0</b><span>已報到</span></div>
+        <div class="stat"><b id="sPool">0</b><span>可抽人數</span></div>
+        <div class="stat"><b id="sWin">0</b><span>已中獎</span></div>
+      </div>
+      <div class="prize">
+        <label for="prize">目前獎項</label>
+        <input id="prize" type="text" maxlength="30" placeholder="例如：頭獎・AirPods（可留空）">
+      </div>
+      <div class="ticker idle" id="ticker" aria-live="polite">按下「開始抽獎」轉動扭蛋機</div>
+
+      <div class="machine" id="machine" aria-hidden="true">
+        <div class="globe" id="globe"></div>
+        <div class="neck"></div>
+        <div class="body">
+          <span class="label">PGY 116</span>
+          <div class="crank" id="crank"></div>
+          <div class="chute"></div>
+        </div>
+        <div class="drop" id="drop"><div class="ball" id="dropBall"></div></div>
+        <div class="feet"><i></i><i></i></div>
+      </div>
+
+      <button class="go" id="go" type="button">開始抽獎</button>
+      <p class="tip">也可以按鍵盤空白鍵抽獎</p>
+      <p class="msg" id="msg" role="status"></p>
+    </div>
+
+    <aside class="side">
+      <label class="opt"><input type="checkbox" id="onlyOut"> 只抽<b>已簽退</b>（已填完滿意度）的人</label>
+      <h3>中獎名單 <button class="tbtn" id="clear" type="button">清空</button></h3>
+      <ol class="winners" id="winners"></ol>
+      <p class="empty" id="noWin">尚未抽出得獎者</p>
+    </aside>
+  </div>
+
+  <div class="overlay" id="overlay" hidden>
+    <div class="big" id="big"><div class="half t" id="bigTop"></div><div class="half b"></div></div>
+    <div class="card" id="card" hidden>
+      <div class="kicker">CONGRATULATIONS</div>
+      <div class="pzt" id="rPrize" hidden></div>
+      <div class="who" id="rName"></div>
+      <p class="meta" id="rMeta"></p>
+      <div class="btns">
+        <button class="rbtn primary" id="ok" type="button">恭喜！繼續抽獎</button>
+        <button class="rbtn" id="absent" type="button">不在現場，重抽</button>
+      </div>
+    </div>
+  </div>
+  <canvas id="confetti" hidden></canvas>
+
+<script>
+(function () {
+  'use strict';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
+  var KEY_STORE = 'pgy116-dash-key';          // 與儀表板共用（sessionStorage）
+  var WIN_STORE = 'pgy116-draw-winners';      // 中獎紀錄（localStorage，重新整理也不會消失）
+  var OPT_STORE = 'pgy116-draw-only-out';
+  var COLORS = ['#FFA319', '#F2541B', '#FFC83D', '#1E9E5A', '#3B82F6', '#A855F7', '#EC4899', '#14B8A6'];
+  var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var people = [];      // 已報到者
+  var winners = loadWinners();
+  var spinning = false, current = null, autoTimer = null;
+  var timeFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', hour12: false });
+
+  function sGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function sSet(k, v) { try { v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch (e) {} }
+  function loadWinners() { try { return JSON.parse(localStorage.getItem(WIN_STORE)) || []; } catch (e) { return []; } }
+  function saveWinners() { try { localStorage.setItem(WIN_STORE, JSON.stringify(winners)); } catch (e) {} }
+  function idOf(r) { return String(r.name).trim() + '|' + String(r.email).trim().toLowerCase(); }
+  function rand(n) { // 均勻亂數 0..n-1
+    if (window.crypto && crypto.getRandomValues) {
+      var a = new Uint32Array(1), lim = Math.floor(4294967296 / n) * n;
+      do { crypto.getRandomValues(a); } while (a[0] >= lim);
+      return a[0] % n;
+    }
+    return Math.floor(Math.random() * n);
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, REDUCED ? Math.min(ms, 150) : ms); }); }
+
+  /* ---------- data ---------- */
+  function fetchRows(key) {
+    return fetch(GAS_URL, { method: 'POST', body: new URLSearchParams({ action: 'list', key: key }) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) { if (!res || !res.ok) throw new Error((res && res.error) || '讀取失敗'); return res; });
+  }
+  function setPeople(res) {
+    people = res.rows.filter(function (r) { return r.checkin; }).map(function (r) {
+      return { id: idOf(r), name: String(r.name).trim(), school: r.school || '', program: r.program || '', out: !!r.checkout };
+    });
+    $('updated').textContent = '名單更新於 ' + timeFmt.format(new Date());
+    render();
+  }
+  function refresh(silent) {
+    var key = sGet(KEY_STORE);
+    if (!key) return showLogin();
+    if (spinning) return;
+    if (!silent) { $('refresh').disabled = true; }
+    return fetchRows(key).then(setPeople).catch(function (err) {
+      if (/密碼/.test(err.message)) { sSet(KEY_STORE, null); showLogin(err.message); }
+      else $('updated').textContent = '更新失敗：' + (err.message === 'Failed to fetch' ? '網路連線異常' : err.message);
+    }).then(function () { $('refresh').disabled = false; });
+  }
+
+  function pool() {
+    var taken = {};
+    winners.forEach(function (w) { taken[w.id] = 1; });
+    var onlyOut = $('onlyOut').checked;
+    return people.filter(function (p) { return !taken[p.id] && (!onlyOut || p.out); });
+  }
+
+  /* ---------- views ---------- */
+  function showLogin(msg) {
+    clearInterval(autoTimer);
+    $('stage').hidden = true; $('tools').hidden = true; $('login').hidden = false;
+    $('loginErr').textContent = msg || ''; $('pw').value = ''; $('pw').focus();
+  }
+  function showStage() {
+    $('login').hidden = true; $('stage').hidden = false; $('tools').hidden = false;
+    clearInterval(autoTimer);
+    autoTimer = setInterval(function () { refresh(true); }, 60000); // 每分鐘自動補進新報到者
+  }
+
+  $('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var key = $('pw').value.trim();
+    if (!key) return;
+    $('loginBtn').disabled = true; $('loginErr').textContent = '';
+    fetchRows(key).then(function (res) {
+      sSet(KEY_STORE, key); showStage(); setPeople(res);
+    }).catch(function (err) {
+      $('loginErr').textContent = err.message === 'Failed to fetch' ? '網路連線異常，請稍後再試' : err.message;
+    }).then(function () { $('loginBtn').disabled = false; });
+  });
+  $('refresh').addEventListener('click', function () { refresh(false); });
+  $('logout').addEventListener('click', function () { sSet(KEY_STORE, null); people = []; showLogin(); });
+  $('fs').addEventListener('click', function () {
+    var d = document;
+    if (d.fullscreenElement) d.exitFullscreen && d.exitFullscreen();
+    else d.documentElement.requestFullscreen && d.documentElement.requestFullscreen().catch(function () {});
+  });
+  try { $('onlyOut').checked = localStorage.getItem(OPT_STORE) === '1'; } catch (e) {}
+  $('onlyOut').addEventListener('change', function () {
+    try { localStorage.setItem(OPT_STORE, this.checked ? '1' : '0'); } catch (e) {}
+    render();
+  });
+  $('clear').addEventListener('click', function () {
+    if (!winners.length || spinning) return;
+    if (!confirm('確定要清空全部中獎名單？清空後所有人都會重新回到抽獎池。')) return;
+    winners = []; saveWinners(); render();
+  });
+
+  /* ---------- render ---------- */
+  function render() {
+    var p = pool();
+    $('sIn').textContent = people.length;
+    $('sPool').textContent = p.length;
+    $('sWin').textContent = winners.filter(function (w) { return !w.absent; }).length;
+    $('go').disabled = spinning || !p.length;
+    $('msg').textContent = people.length && !p.length ? ($('onlyOut').checked ? '沒有可抽的已簽退者了' : '所有已報到者都抽過了') :
+                           !people.length ? '目前還沒有人報到' : '';
+    renderBalls(p.length);
+    var ol = $('winners'); ol.textContent = '';
+    var n = 0;
+    winners.forEach(function (w, i) {
+      var li = document.createElement('li');
+      if (w.absent) li.className = 'absent'; else n++;
+      var no = document.createElement('span'); no.className = 'no'; no.textContent = w.absent ? '—' : n;
+      var box = document.createElement('div');
+      var nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = w.name;
+      box.appendChild(nm);
+      if (w.prize && !w.absent) { var pz = document.createElement('span'); pz.className = 'pz'; pz.textContent = w.prize; box.appendChild(pz); }
+      var sub = document.createElement('span'); sub.className = 'sub';
+      sub.textContent = (w.absent ? '不在現場・' : '') + [w.school, w.program].filter(Boolean).join('・');
+      box.appendChild(sub);
+      var x = document.createElement('button'); x.className = 'x'; x.type = 'button'; x.textContent = '×';
+      x.title = '移除（放回抽獎池）'; x.setAttribute('aria-label', '移除 ' + w.name);
+      x.addEventListener('click', function () {
+        if (spinning) return;
+        if (!confirm('把「' + w.name + '」從名單移除，放回抽獎池？')) return;
+        winners.splice(i, 1); saveWinners(); render();
+      });
+      li.appendChild(no); li.appendChild(box); li.appendChild(x);
+      ol.appendChild(li);
+    });
+    $('noWin').hidden = winners.length > 0;
+  }
+
+  /* ---------- machine ---------- */
+  var balls = [];
+  function renderBalls(n) {
+    var count = Math.max(6, Math.min(22, n || 0));
+    if (balls.length === count) return;
+    var g = $('globe');
+    balls.forEach(function (b) { b.el.remove(); });
+    balls = [];
+    for (var i = 0; i < count; i++) {
+      var el = document.createElement('div');
+      el.className = 'ball';
+      el.style.setProperty('--c', COLORS[i % COLORS.length]);
+      // 堆在球體下半部
+      var row = Math.floor(i / 6), col = i % 6;
+      var x = 10 + col * 13 + (row % 2) * 6 + (rand(5) - 2);
+      var y = 72 - row * 13 + (rand(5) - 2);
+      el.style.left = x + '%'; el.style.top = y + '%';
+      el.style.transform = 'rotate(' + rand(360) + 'deg)';
+      g.appendChild(el);
+      balls.push({ el: el, x: x, y: y });
+    }
+  }
+
+  function jumble(ms) {
+    if (REDUCED || !balls[0] || !balls[0].el.animate) return;
+    balls.forEach(function (b) {
+      var frames = [{ transform: b.el.style.transform }];
+      for (var k = 0; k < 7; k++) {
+        var dx = (rand(60) - 30) * 1.0, dy = -(rand(320) + 40) * (k < 6 ? 1 : 0);
+        frames.push({ transform: 'translate(' + dx + '%,' + dy + '%) rotate(' + rand(720) + 'deg)' });
+      }
+      frames.push({ transform: 'rotate(' + rand(360) + 'deg)' });
+      var a = b.el.animate(frames, { duration: ms, easing: 'ease-in-out' });
+      a.onfinish = function () { b.el.style.transform = frames[frames.length - 1].transform; };
+    });
+  }
+
+  function runTicker(names, ms) {
+    var t = $('ticker'); t.classList.remove('idle');
+    var start = performance.now();
+    return new Promise(function (resolve) {
+      (function step() {
+        var e = performance.now() - start;
+        if (e >= ms) return resolve();
+        t.textContent = names[rand(names.length)];
+        setTimeout(step, 50 + Math.pow(e / ms, 2.2) * 260); // 越來越慢
+      })();
+    });
+  }
+
+  var crankDeg = 0;
+  function draw() {
+    if (spinning) return;
+    var p = pool();
+    if (!p.length) return;
+    spinning = true; render();
+    var pick = p[rand(p.length)];
+    var color = COLORS[rand(COLORS.length)];
+    current = { id: pick.id, name: pick.name, school: pick.school, program: pick.program, prize: $('prize').value.trim(), color: color };
+
+    crankDeg += 720;
+    $('crank').style.transform = 'rotate(' + crankDeg + 'deg)';
+    $('machine').classList.add('shaking');
+    jumble(2400);
+    runTicker(p.map(function (x) { return x.name; }), REDUCED ? 200 : 2600).then(function () {
+      $('ticker').textContent = '？？？';
+      $('machine').classList.remove('shaking');
+      var drop = $('drop');
+      $('dropBall').style.setProperty('--c', color);
+      if (drop.animate && !REDUCED) {
+        drop.animate([
+          { opacity: 0, transform: 'translate(0,-60%) scale(.6)' },
+          { opacity: 1, transform: 'translate(0,0) scale(1)', offset: .35 },
+          { opacity: 1, transform: 'translate(40%,140%) scale(1.1)', offset: .7 },
+          { opacity: 1, transform: 'translate(55%,110%) scale(1.1)', offset: .85 },
+          { opacity: 1, transform: 'translate(60%,140%) scale(1.1)' }
+        ], { duration: 900, easing: 'ease-in', fill: 'forwards' });
+      }
+      return wait(950);
+    }).then(reveal);
+  }
+
+  function reveal() {
+    var o = $('overlay'), big = $('big'), top = $('bigTop'), card = $('card');
+    var drop = $('drop'); drop.getAnimations && drop.getAnimations().forEach(function (a) { a.cancel(); });
+    top.style.setProperty('--c', current.color);
+    top.style.transform = ''; big.style.opacity = '1'; big.hidden = false; card.hidden = true;
+    o.hidden = false;
+    var anim = big.animate && !REDUCED;
+    if (anim) big.animate([{ transform: 'scale(.2) translateY(60%)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 500, easing: 'ease-out' });
+    wait(550).then(function () {
+      if (anim) big.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-8deg)' }, { transform: 'rotate(8deg)' }, { transform: 'rotate(-5deg)' }, { transform: 'rotate(0)' }], { duration: 700 });
+      return wait(750);
+    }).then(function () {
+      if (anim) top.animate([{ transform: 'rotate(0)' }, { transform: 'translateY(-30%) rotate(-75deg)' }], { duration: 350, fill: 'forwards', easing: 'ease-out' });
+      return wait(300);
+    }).then(function () {
+      if (anim) big.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+      $('rName').textContent = current.name;
+      $('rMeta').textContent = [current.school, current.program].filter(Boolean).join('・');
+      $('rPrize').textContent = current.prize; $('rPrize').hidden = !current.prize;
+      card.hidden = false;
+      if (card.animate && !REDUCED) card.animate([{ transform: 'scale(.3)', opacity: 0 }, { transform: 'scale(1.06)', opacity: 1 }, { transform: 'scale(1)' }], { duration: 450, easing: 'cubic-bezier(.2,1.4,.4,1)' });
+      $('ticker').textContent = '🎉 ' + current.name;
+      // 先記錄，避免中途重新整理而遺失
+      winners.push({ id: current.id, name: current.name, school: current.school, program: current.program, prize: current.prize, time: new Date().toISOString() });
+      saveWinners();
+      confetti();
+      setTimeout(function () { big.hidden = true; $('ok').focus(); }, 320);
+    });
+  }
+
+  function closeReveal(absent) {
+    if (!current) return;
+    if (absent) {
+      var w = winners[winners.length - 1];
+      if (w && w.id === current.id) { w.absent = true; saveWinners(); }
+    }
+    $('overlay').hidden = true; $('drop').style.opacity = '0';
+    stopConfetti();
+    spinning = false; current = null;
+    $('ticker').classList.add('idle');
+    $('ticker').textContent = absent ? '重新抽獎中…' : '按下「開始抽獎」轉動扭蛋機';
+    render();
+    if (absent) setTimeout(draw, 400); else $('go').focus();
+  }
+  $('ok').addEventListener('click', function () { closeReveal(false); });
+  $('absent').addEventListener('click', function () { closeReveal(true); });
+  $('go').addEventListener('click', draw);
+  document.addEventListener('keydown', function (e) {
+    if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if ($('stage').hidden) return;
+    if (!$('overlay').hidden) { if (e.key === 'Escape' && !$('card').hidden) { e.preventDefault(); closeReveal(false); } return; }
+    if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); draw(); }
+  });
+
+  /* ---------- confetti ---------- */
+  var cv = $('confetti'), ctx = cv.getContext('2d'), parts = [], raf = 0;
+  function confetti() {
+    if (REDUCED) return;
+    cv.hidden = false;
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    parts = [];
+    for (var i = 0; i < 180; i++) {
+      var side = i % 2 ? 1 : -1;
+      parts.push({
+        x: side < 0 ? 0 : innerWidth, y: innerHeight * 0.7,
+        vx: -side * (4 + Math.random() * 9), vy: -(9 + Math.random() * 12),
+        w: 6 + Math.random() * 8, h: 4 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4,
+        c: COLORS[i % COLORS.length]
+      });
+    }
+    var start = performance.now();
+    cancelAnimationFrame(raf);
+    (function tick(t) {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      parts.forEach(function (p) {
+        p.vy += 0.32; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+      });
+      if (t - start < 4500) raf = requestAnimationFrame(tick); else stopConfetti();
+    })(start);
+  }
+  function stopConfetti() { cancelAnimationFrame(raf); ctx.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
+
+  /* ---------- start ---------- */
+  renderBalls(12);
+  if (sGet(KEY_STORE)) { showStage(); refresh(false); } else showLogin();
+})();
+</script>
+</body>
+</html>
