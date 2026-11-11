@@ -577,9 +577,10 @@
     $('overlay').hidden = true; $('drop').style.opacity = '0';
     stopConfetti();
     spinning = false; current = null;
-    idleTicker(absent ? '重新抽獎中…' : '');
+    var redraw = absent && pool().length > 0;   // 沒有人可抽時不重抽
+    idleTicker(redraw ? '重新抽獎中…' : '');
     render();
-    if (absent) setTimeout(draw, 400); else $('go').focus();
+    if (redraw) setTimeout(draw, 400); else $('go').focus();
   }
   $('ok').addEventListener('click', function () { closeReveal(false); });
   $('absent').addEventListener('click', function () { closeReveal(true); });
