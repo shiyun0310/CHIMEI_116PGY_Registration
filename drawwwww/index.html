@@ -45,6 +45,9 @@
     .tbtn:hover { background: var(--yellow); }
     .tbtn:focus-visible, .go:focus-visible, input:focus-visible, .rbtn:focus-visible, .pbtn:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
     .tbtn[disabled] { opacity: .5; cursor: progress; }
+    .tbtn[aria-pressed="false"] { opacity: .55; }
+    .chip.hint { color: var(--red); font-weight: 700; animation: blink 1.6s ease-in-out infinite; }
+    @keyframes blink { 50% { opacity: .35; } }
 
     /* ---------- login ---------- */
     .login { max-width: 460px; margin: 10vh auto 0; padding: 0 16px; }
@@ -204,6 +207,9 @@
     <h1>奇美醫院 PGY 說明會・現場抽獎</h1>
     <div class="tools" id="tools" hidden>
       <span class="chip" id="updated"></span>
+      <span class="chip hint" id="audioHint">點一下畫面開始播放音樂</span>
+      <button class="tbtn" id="bgm" type="button" aria-pressed="true">🎵 音樂：開</button>
+      <button class="tbtn" id="sfx" type="button" aria-pressed="true">🔊 音效：開</button>
       <button class="tbtn" id="fs" type="button">全螢幕</button>
       <button class="tbtn" id="logout" type="button">登出</button>
     </div>
@@ -498,6 +504,7 @@
         var e = performance.now() - start;
         if (e >= ms) return resolve();
         t.textContent = names[rand(names.length)];
+        Sound.tick(e / ms);
         setTimeout(step, 50 + Math.pow(e / ms, 2.2) * 260); // 越來越慢
       })();
     });
@@ -513,6 +520,7 @@
     var color = COLORS[rand(COLORS.length)];
     current = { id: pick.id, name: pick.name, school: pick.school, program: pick.program, prize: prize, color: color };
 
+    Sound.duck(true); Sound.crank(); Sound.rattle(2.4); Sound.drumroll(REDUCED ? 0.3 : 2.6);
     crankDeg += 720;
     $('crank').style.transform = 'rotate(' + crankDeg + 'deg)';
     $('machine').classList.add('shaking');
@@ -530,7 +538,8 @@
           { opacity: 1, transform: 'translate(55%,110%) scale(1.1)', offset: .85 },
           { opacity: 1, transform: 'translate(60%,140%) scale(1.1)' }
         ], { duration: 900, easing: 'ease-in', fill: 'forwards' });
-      }
+        Sound.thunk(0.6); Sound.thunk(0.8, 0.5); Sound.thunk(0.9, 0.3);
+      } else Sound.thunk(0);
       return wait(950);
     }).then(reveal);
   }
@@ -545,11 +554,14 @@
     top.style.transform = ''; big.style.opacity = '1'; big.hidden = false; card.hidden = true;
     o.hidden = false;
     var anim = big.animate && !REDUCED;
+    Sound.whoosh();
     if (anim) big.animate([{ transform: 'scale(.2) translateY(60%)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 500, easing: 'ease-out' });
     wait(550).then(function () {
+      Sound.rattle(0.7, 0.6);
       if (anim) big.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-8deg)' }, { transform: 'rotate(8deg)' }, { transform: 'rotate(-5deg)' }, { transform: 'rotate(0)' }], { duration: 700 });
       return wait(750);
     }).then(function () {
+      Sound.pop();
       if (anim) top.animate([{ transform: 'rotate(0)' }, { transform: 'translateY(-30%) rotate(-75deg)' }], { duration: 350, fill: 'forwards', easing: 'ease-out' });
       return wait(300);
     }).then(function () {
@@ -564,6 +576,7 @@
       winners.push({ id: current.id, name: current.name, school: current.school, program: current.program, prize: current.prize, time: new Date().toISOString() });
       saveWinners();
       confetti();
+      Sound.fanfare();
       setTimeout(function () { big.hidden = true; $('ok').focus(); }, 320);
     });
   }
@@ -578,6 +591,7 @@
     stopConfetti();
     spinning = false; current = null;
     var redraw = absent && pool().length > 0;   // 沒有人可抽時不重抽
+    if (!redraw) Sound.duck(false);
     idleTicker(redraw ? '重新抽獎中…' : '');
     render();
     if (redraw) setTimeout(draw, 400); else $('go').focus();
@@ -621,6 +635,188 @@
     })(start);
   }
   function stopConfetti() { cancelAnimationFrame(raf); ctx.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
+
+  /* ---------- sound：全部用 Web Audio 即時合成，不需要音檔 ---------- */
+  var Sound = (function () {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    var ac = null, master, musicBus, sfxBus, noiseBuf, timer = null, nextT = 0, step = 0, ducked = false;
+    var MUSIC_VOL = 0.24, DUCK_VOL = 0.06, SFX_VOL = 0.85;
+    var E8 = 60 / 116 / 2;   // 116 BPM 的八分音符
+    function pref(k) { try { return localStorage.getItem(k) !== '0'; } catch (e) { return true; } }
+    function savePref(k, v) { try { localStorage.setItem(k, v ? '1' : '0'); } catch (e) {} }
+    var musicOn = pref('pgy116-draw-music'), sfxOn = pref('pgy116-draw-sfx');
+    function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+    function init() {
+      if (ac) return true;
+      if (!AC) return false;
+      try { ac = new AC(); } catch (e) { return false; }
+      var comp = ac.createDynamicsCompressor(); comp.connect(ac.destination);
+      master = ac.createGain(); master.gain.value = 0.9; master.connect(comp);
+      musicBus = ac.createGain(); musicBus.gain.value = musicOn ? MUSIC_VOL : 0; musicBus.connect(master);
+      sfxBus = ac.createGain(); sfxBus.gain.value = sfxOn ? SFX_VOL : 0; sfxBus.connect(master);
+      noiseBuf = ac.createBuffer(1, ac.sampleRate, ac.sampleRate);
+      var d = noiseBuf.getChannelData(0);
+      for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      return true;
+    }
+    function ready() { return ac && ac.state === 'running'; }
+    function now(delay) { return ac.currentTime + (delay || 0) + 0.01; }
+
+    /* --- 基本音色 --- */
+    function tone(bus, t, f, dur, type, vol, attack, f2) {
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = type || 'triangle';
+      o.frequency.setValueAtTime(f, t);
+      if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + (attack || 0.005));
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(bus); o.start(t); o.stop(t + dur + 0.05);
+    }
+    function bell(bus, t, f, dur, vol) { tone(bus, t, f, dur, 'sine', vol); tone(bus, t, f * 2, dur * 0.6, 'sine', vol * 0.3); }
+    function noise(bus, t, dur, vol, type, freq, q, freq2) {
+      var s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+      s.buffer = noiseBuf; f.type = type || 'highpass'; f.frequency.setValueAtTime(freq || 6000, t);
+      if (freq2) f.frequency.exponentialRampToValueAtTime(freq2, t + dur);
+      if (q) f.Q.value = q;
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      s.connect(f); f.connect(g); g.connect(bus); s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.02);
+    }
+    function brass(t, f, dur, vol) {
+      var f1 = ac.createBiquadFilter(), g = ac.createGain();
+      f1.type = 'lowpass'; f1.frequency.setValueAtTime(700, t); f1.frequency.exponentialRampToValueAtTime(3200, t + 0.06);
+      f1.frequency.exponentialRampToValueAtTime(1600, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
+      g.gain.setValueAtTime(vol, t + Math.max(0.04, dur - 0.12)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      [-7, 7].forEach(function (c) {
+        var o = ac.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = c;
+        o.connect(f1); o.start(t); o.stop(t + dur + 0.05);
+      });
+      f1.connect(g); g.connect(sfxBus);
+    }
+
+    /* --- 背景音樂：輕快的八小節循環（C–G–Am–F–C–G–F–G） --- */
+    var CH = [[60,64,67,72],[59,62,67,71],[57,60,64,69],[57,60,65,69],[60,64,67,72],[59,62,67,71],[57,60,65,69],[59,62,67,71]];
+    var BASS = [36, 43, 45, 41, 36, 43, 41, 43];
+    var ARP = [0, 2, 1, 3, 2, 3, 1, 2];
+    var MEL = [76,0,79,76, 74,0,71,74, 72,0,76,72, 72,74,77,0, 79,0,76,79, 79,77,74,0, 72,74,77,81, 79,0,0,0];
+    function musicStep(t, s) {
+      var bar = Math.floor(s / 8) % 8, e = s % 8, ch = CH[bar];
+      bell(musicBus, t, hz(ch[ARP[e]] + 12), 0.45, 0.09);                       // 音樂盒琶音
+      if (e % 2 === 1) noise(musicBus, t, 0.04, 0.05, 'highpass', 8000);          // 沙鈴
+      if (e === 0 || e === 4) {
+        tone(musicBus, t, hz(BASS[bar]), 0.5, 'triangle', 0.32, 0.01);            // 低音
+        tone(musicBus, t, 140, 0.16, 'sine', 0.35, 0.003, 45);                    // 輕鼓
+      }
+      if (e === 2 || e === 6) noise(musicBus, t, 0.09, 0.07, 'bandpass', 1800, 0.8); // 拍手感
+      if (e % 2 === 0) { var m = MEL[bar * 4 + e / 2]; if (m) tone(musicBus, t, hz(m), E8 * 1.9, 'triangle', 0.16, 0.01); }
+    }
+    function startMusic() {
+      if (!ac || timer) return;
+      nextT = ac.currentTime + 0.1;
+      timer = setInterval(function () {
+        if (nextT < ac.currentTime - 0.05) nextT = ac.currentTime + 0.05;          // 分頁在背景時不補播
+        while (nextT < ac.currentTime + 0.2) { musicStep(nextT, step); step++; nextT += E8; }
+      }, 40);
+    }
+    function stopMusic() { clearInterval(timer); timer = null; }
+    function musicLevel() { return musicOn ? (ducked ? DUCK_VOL : MUSIC_VOL) : 0; }
+    function fadeMusic(sec) {
+      if (!ac) return;
+      var g = musicBus.gain, t = ac.currentTime;
+      g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(musicLevel(), t + (sec || 0.4));
+    }
+
+    return {
+      unlock: function () {
+        if (!init()) return;
+        var go = function () { if (musicOn) startMusic(); updateHint(); };
+        if (ac.state === 'suspended') ac.resume().then(go, function () {}); else go();
+      },
+      running: function () { return ready(); },
+      music: function (v) {
+        if (v === undefined) return musicOn;
+        musicOn = v; savePref('pgy116-draw-music', v);
+        if (!ac) return v;
+        fadeMusic(0.3);
+        if (v) startMusic(); else setTimeout(function () { if (!musicOn) stopMusic(); }, 400);
+        return v;
+      },
+      sfx: function (v) {
+        if (v === undefined) return sfxOn;
+        sfxOn = v; savePref('pgy116-draw-sfx', v);
+        if (ac) sfxBus.gain.setValueAtTime(v ? SFX_VOL : 0, ac.currentTime);
+        return v;
+      },
+      duck: function (on) { ducked = on; fadeMusic(on ? 0.3 : 1.2); },
+
+      /* --- 轉動時 --- */
+      tick: function (p) {             // 名字跳動：越來越慢的「喀」
+        if (!ready()) return; var t = now();
+        tone(sfxBus, t, 2300 - p * 900, 0.035, 'square', 0.07);
+        noise(sfxBus, t, 0.025, 0.18, 'highpass', 3500);
+      },
+      crank: function () {             // 轉把手的棘輪聲
+        if (!ready()) return;
+        for (var i = 0; i < 14; i++) noise(sfxBus, now(i * 0.085 + i * i * 0.004), 0.03, 0.35, 'bandpass', 1300, 3);
+      },
+      rattle: function (sec, vol) {    // 扭蛋在球體裡碰撞
+        if (!ready()) return; vol = vol || 1;
+        var n = Math.round(sec * 22);
+        for (var i = 0; i < n; i++) {
+          var t = now(Math.random() * sec);
+          noise(sfxBus, t, 0.03 + Math.random() * 0.04, (0.08 + Math.random() * 0.16) * vol, 'bandpass', 2200 + Math.random() * 2600, 6);
+          if (Math.random() < 0.4) tone(sfxBus, t, 700 + Math.random() * 900, 0.05, 'sine', 0.06 * vol);
+        }
+      },
+      drumroll: function (sec) {       // 小鼓滾奏，越來越大聲
+        if (!ready()) return;
+        for (var x = 0; x < sec; x += 0.045) noise(sfxBus, now(x), 0.06, 0.04 + 0.28 * Math.pow(x / sec, 1.6), 'highpass', 1600);
+      },
+      thunk: function (delay, vol) {   // 扭蛋掉出來
+        if (!ready()) return; var t = now(delay); vol = vol || 1;
+        tone(sfxBus, t, 230, 0.16, 'sine', 0.55 * vol, 0.003, 70);
+        noise(sfxBus, t, 0.05, 0.25 * vol, 'lowpass', 900);
+      },
+
+      /* --- 開獎時 --- */
+      whoosh: function () {
+        if (!ready()) return;
+        noise(sfxBus, now(), 0.45, 0.22, 'bandpass', 350, 1.2, 3200);
+      },
+      pop: function () {               // 扭蛋打開
+        if (!ready()) return; var t = now();
+        noise(sfxBus, t, 0.09, 0.6, 'highpass', 900);
+        tone(sfxBus, t, 380, 0.12, 'sine', 0.35, 0.003, 1400);
+      },
+      fanfare: function () {           // 號角＋鈸＋亮晶晶
+        if (!ready()) return; var t = now(), d = 0.11;
+        [67, 72, 76].forEach(function (m, i) { brass(t + i * d, hz(m), d * 0.9, 0.16); });
+        brass(t + 3 * d, hz(79), 0.32, 0.18);
+        [72, 76, 79, 84].forEach(function (m) { brass(t + 3 * d + 0.34, hz(m), 1.5, 0.12); });
+        tone(sfxBus, t + 3 * d + 0.34, hz(48), 1.4, 'triangle', 0.4, 0.01);
+        noise(sfxBus, t + 3 * d + 0.34, 1.8, 0.28, 'highpass', 5000);
+        tone(sfxBus, t + 3 * d + 0.34, 120, 0.3, 'sine', 0.6, 0.003, 40);
+        var pent = [84, 86, 88, 91, 93, 96, 98, 100];
+        for (var i = 0; i < 16; i++) bell(sfxBus, t + 0.5 + i * 0.09 + Math.random() * 0.05, hz(pent[Math.floor(Math.random() * pent.length)]), 0.5, 0.07);
+      }
+    };
+  })();
+  window.drawSound = Sound;   // 方便除錯
+
+  function updateHint() { $('audioHint').hidden = Sound.running() || (!Sound.music() && !Sound.sfx()); }
+  function updateAudioBtns() {
+    var m = Sound.music(), x = Sound.sfx();
+    $('bgm').textContent = '🎵 音樂：' + (m ? '開' : '關'); $('bgm').setAttribute('aria-pressed', m ? 'true' : 'false');
+    $('sfx').textContent = '🔊 音效：' + (x ? '開' : '關'); $('sfx').setAttribute('aria-pressed', x ? 'true' : 'false');
+    updateHint();
+  }
+  // 瀏覽器規定要先有一次點擊或按鍵才能出聲
+  ['pointerdown', 'keydown'].forEach(function (ev) { document.addEventListener(ev, Sound.unlock, true); });
+  $('bgm').addEventListener('click', function () { Sound.music(!Sound.music()); updateAudioBtns(); });
+  $('sfx').addEventListener('click', function () { Sound.sfx(!Sound.sfx()); updateAudioBtns(); });
+  updateAudioBtns();
 
   /* ---------- start ---------- */
   buildBalls();
