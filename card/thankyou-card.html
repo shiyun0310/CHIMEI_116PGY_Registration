@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PGY 說明會小卡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  /* 9 × 13 cm 小卡（直式），列印請選「實際大小」、無邊界 */
+  @page { size: 90mm 130mm; margin: 0; }
+  :root {
+    --navy: #213C8F;
+    --navy-d: #172B6A;
+    --orange: #FFA319;
+    --red: #F2541B;
+    --yellow: #FFC83D;
+    --ink: #1d2433;
+    --muted: #4a5266;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e9ecf3; }
+  body {
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: flex; justify-content: center; padding: 16px;
+  }
+  @media print { html, body { background: none; } body { padding: 0; display: block; } .card { box-shadow: none !important; } }
+
+  .card {
+    position: relative; overflow: hidden;
+    width: 90mm; height: 130mm;
+    background: #fff;
+    box-shadow: 0 18px 40px -18px rgba(23,43,106,.45);
+    color: var(--ink);
+  }
+  /* 背景：淡化大樓 + 白色漸層 */
+  .bg {
+    position: absolute; inset: 0;
+    background: url("../assets/img/building-sky-960.webp") center 20% / cover no-repeat;
+    opacity: .16; filter: grayscale(.4);
+  }
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 0%, #fff 55%); }
+
+  /* 色塊 */
+  .blob-tr { position: absolute; top: -10mm; right: -12mm; width: 44mm; height: 26mm; background: var(--orange); border-radius: 0 0 0 60% / 0 0 0 80%; transform: rotate(-8deg); }
+  .blob-tr2 { position: absolute; top: -14mm; right: -6mm; width: 26mm; height: 22mm; background: var(--yellow); border-radius: 50%; opacity: .95; }
+  .blob-bl { position: absolute; bottom: 8mm; left: -14mm; width: 30mm; height: 24mm; background: var(--yellow); border-radius: 50%; }
+  .blob-bl2 { position: absolute; bottom: 4mm; left: -8mm; width: 20mm; height: 20mm; background: var(--navy); border-radius: 50%; }
+  .dots { position: absolute; bottom: 12mm; left: 2.5mm; width: 9mm; height: 9mm;
+    background: radial-gradient(circle, #fff 0.45mm, transparent 0.5mm) 0 0 / 2.4mm 2.4mm; opacity: .9; }
+
+  .inner { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; padding: 7mm 6.5mm 0; }
+
+  /* 抬頭 */
+  .tag {
+    align-self: flex-start;
+    font-family: "Poppins", "Noto Sans TC", sans-serif; font-weight: 800;
+    font-size: 6.4pt; letter-spacing: .04em; color: var(--navy);
+    background: #fff; border: .45mm solid var(--navy); border-radius: 99px;
+    padding: .5mm 2.4mm; box-shadow: .7mm .7mm 0 var(--navy);
+  }
+  .hello {
+    margin-top: 3.2mm;
+    font-size: 15pt; font-weight: 900; color: var(--navy); letter-spacing: .03em; line-height: 1.2;
+  }
+  .hello span { background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 92%, transparent 92%); padding: 0 .6mm; }
+
+  p { font-size: 7.5pt; line-height: 1.75; font-weight: 500; color: var(--ink); text-align: justify; }
+  .lead { margin-top: 3.2mm; }
+  .lead b { color: var(--red); font-weight: 700; }
+
+  /* 兩份心意 */
+  .gift-title {
+    margin-top: 4mm; display: flex; align-items: center; gap: 1.6mm;
+    font-size: 7.4pt; font-weight: 900; color: #fff;
+  }
+  .gift-title span { background: var(--navy); border-radius: 99px; padding: .55mm 2.6mm; }
+  .gift-title i { flex: 1; height: .35mm; background: repeating-linear-gradient(90deg, var(--navy) 0 1mm, transparent 1mm 2mm); opacity: .35; }
+
+  .gifts { margin-top: 2.6mm; display: grid; gap: 2mm; }
+  .gift {
+    display: flex; align-items: center; gap: 2.2mm;
+    background: #FFF6E2; border: .4mm solid var(--orange); border-radius: 2.6mm;
+    padding: 2mm 2.4mm 2mm 1.8mm;
+  }
+  .gift .ic {
+    flex: none; width: 7.4mm; height: 7.4mm; border-radius: 50%;
+    display: grid; place-items: center; background: var(--navy);
+  }
+  .gift .ic svg { width: 4.4mm; height: 4.4mm; }
+  .gift.alt { background: #EEF2FB; border-color: var(--navy); }
+  .gift.alt .ic { background: var(--red); }
+  .gift h3 { font-size: 8.2pt; font-weight: 900; color: var(--navy); line-height: 1.3; }
+  .gift p { font-size: 6.9pt; line-height: 1.45; color: var(--muted); }
+
+  /* 360° 段落 */
+  .quote { margin-top: 4mm; }
+  .deg { font-family: "Poppins", sans-serif; font-weight: 800; color: var(--red); }
+  .deg.n { color: var(--navy); }
+  .hl { font-weight: 900; color: var(--navy); }
+
+  /* 甄試日期 */
+  .exam {
+    margin-top: 4mm; display: flex; align-items: center; gap: 1.8mm;
+    background: var(--navy); color: #fff; border-radius: 99px;
+    padding: 1.2mm 3mm 1.2mm 1.3mm; font-size: 7.3pt; font-weight: 700; line-height: 1.35;
+  }
+  .exam .cal { flex: none; width: 6mm; height: 6mm; border-radius: 50%; background: var(--yellow); display: grid; place-items: center; }
+  .exam .cal svg { width: 3.6mm; height: 3.6mm; }
+  .exam b { color: var(--yellow); font-family: "Poppins", "Noto Sans TC", sans-serif; font-weight: 800; font-size: 7.6pt; }
+
+  /* 署名 */
+  .sign { margin-top: auto; padding-bottom: 4mm; text-align: right; font-size: 7.6pt; font-weight: 700; color: var(--navy); }
+  .sign strong { font-size: 10.5pt; font-weight: 900; letter-spacing: .12em; margin: 0 .4mm 0 1mm; }
+
+  /* 頁尾 */
+  .foot {
+    position: relative; z-index: 1;
+    margin: 0 -6.5mm; height: 8mm; background: var(--navy);
+    display: flex; align-items: center; justify-content: flex-end; gap: 1.6mm; padding: 0 5mm;
+    color: #fff; font-size: 6.2pt; font-weight: 700; letter-spacing: .06em;
+  }
+  .foot img { height: 5.4mm; background: #fff; border-radius: 50%; padding: .5mm; }
+  .foot em { font-style: normal; font-family: "Poppins", sans-serif; font-size: 5pt; letter-spacing: .02em; opacity: .75; font-weight: 700; }
+  .foot .stack { display: flex; flex-direction: column; line-height: 1.2; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="bg"></div>
+  <div class="blob-tr"></div><div class="blob-tr2"></div>
+  <div class="blob-bl"></div><div class="blob-bl2"></div><div class="dots"></div>
+
+  <div class="inner">
+    <div class="tag">116學年度 PGY 招募說明會</div>
+
+    <h1 class="hello"><span>未來夥伴，您好：</span></h1>
+
+    <p class="lead">希望今天的每一段分享，都能讓您感受到<b>奇美的溫度</b>，<br>也讓您看見：這裡，或許正是您醫師生涯最美好的起點。</p>
+
+    <div class="gift-title"><span>我們特別為您準備了兩份心意</span><i></i></div>
+
+    <div class="gifts">
+      <div class="gift">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FFC83D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 10h18"/></svg>
+        </div>
+        <div>
+          <h3>A4 摺疊版夾</h3>
+          <p>為您收納每一段學習的累積</p>
+        </div>
+      </div>
+      <div class="gift alt">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/><path d="M6 15h4"/></svg>
+        </div>
+        <div>
+          <h3>奇美博物館埃及特展悠遊卡</h3>
+          <p>願您在忙碌之餘，依然保有探索世界的好奇心</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="quote">在奇美，我們始終相信，專業只是人生的 <span class="deg n">90°</span>，<br>其餘的 <span class="deg">270°</span>，是熱情、是人文、是生活，更是無限可能。<br>我們願陪伴您從 PGY 出發，找到自己、發揮所長，<br>一起走出屬於您的 <span class="hl"><span class="deg">360°</span> 醫學人生</span>！</p>
+
+    <div class="exam">
+      <div class="cal"><svg viewBox="0 0 24 24" fill="none" stroke="#213C8F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+      <div>奇美醫院 <b>116 年 1 月 24 日（日）</b>甄試<br>期待與您再次相見！</div>
+    </div>
+
+    <div class="sign">奇美醫院院長<strong>林宏榮</strong>敬上</div>
+
+    <div class="foot">
+      <img src="../assets/img/chimei-logo.png" alt="奇美醫院">
+      <div class="stack">奇美醫院 ・ 奇美教學部<em>Chi Mei Medical Center</em></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
