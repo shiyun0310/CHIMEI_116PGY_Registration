@@ -52,8 +52,8 @@
   .deco .arc-y { fill: none; stroke: var(--yellow); stroke-width: 12; stroke-linecap: round; }
   .deco .squiggle { fill: none; stroke: var(--navy); stroke-width: 6; stroke-linecap: round; }
   .d-br .squiggle { stroke: var(--red); }
-  .d-tl { width: 130mm; top: -22mm; left: -24mm; }
-  .d-tr { width: 160mm; top: -6mm; right: -10mm; }
+  .d-tl { width: 120mm; top: -34mm; left: -30mm; }
+  .d-tr { width: 150mm; top: -42mm; right: -22mm; }
   .d-bl { width: 130mm; bottom: -14mm; left: -12mm; }
   .d-br { width: 130mm; bottom: -16mm; right: -8mm; }
 
@@ -64,7 +64,7 @@
   .inner {
     position: relative; z-index: 2; height: 100%;
     display: flex; flex-direction: column; align-items: center; text-align: center;
-    padding: 30mm 26mm 0;
+    padding: 26mm 26mm 0;
   }
 
   /* 抬頭 */
@@ -82,8 +82,9 @@
     background: var(--soft); padding: 1.6mm 7mm; border-radius: 999px; border: .7mm solid var(--navy);
   }
   .event {
-    margin-top: 6mm; font-weight: 900; font-size: 15.5mm; letter-spacing: .03em; line-height: 1.25;
+    margin-top: 8mm; font-weight: 900; font-size: 27mm; letter-spacing: .02em; line-height: 1.2; white-space: nowrap;
   }
+  .event .hl { color: var(--navy); }
   .event em { font-style: normal; font-family: "Poppins", sans-serif; color: var(--red); }
   .event b {
     font-family: "Poppins", sans-serif; color: #fff; background: var(--navy);
@@ -91,7 +92,7 @@
   }
 
   /* 電梯圖示 + 5F */
-  .lift-row { margin-top: 24mm; display: flex; align-items: center; justify-content: center; gap: 16mm; }
+  .lift-row { margin-top: 22mm; display: flex; align-items: center; justify-content: center; gap: 16mm; }
   .lift { width: 118mm; height: 132mm; filter: drop-shadow(2.6mm 2.6mm 0 var(--ink)); }
   .floor {
     position: relative; font-family: "Poppins", sans-serif; font-weight: 900;
@@ -202,9 +203,8 @@
   <svg class="ic" style="top:236mm;right:16mm;width:14mm;height:14mm;color:var(--red)"><use href="#i-flower"/></svg>
 
   <div class="inner">
-    <div class="brand"><img src="../assets/img/chimei-logo.png" alt="奇美醫院 LOGO">奇美醫院教學部</div>
     <p class="kicker">CHI MEI MEDICAL CENTER</p>
-    <h2 class="event"><em>116</em>學年度 西醫<b>PGY</b>醫師招募說明會</h2>
+    <h2 class="event">西醫<b>PGY</b>醫師<span class="hl">招募說明會</span></h2>
 
     <div class="lift-row">
       <!-- 電梯圖示 -->
