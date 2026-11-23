@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>電梯指引公告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* A2 直式電梯公告（420 × 594 mm），列印請選「實際大小」、無邊界 */
+  @page { size: 420mm 594mm; margin: 0; }
+  :root {
+    --navy: #213C8F;
+    --navy-d: #172B6A;
+    --orange: #FFA319;
+    --red: #F2541B;
+    --yellow: #FFC83D;
+    --ink: #161616;
+    --soft: #F6F8FC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e9ecf3; }
+  body {
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: flex; justify-content: center; padding: 16px;
+  }
+  @media print { html, body { background: none; } body { padding: 0; display: block; } .sheet { box-shadow: none !important; } }
+
+  .sheet {
+    position: relative; overflow: hidden;
+    width: 420mm; height: 594mm;
+    background: #fff; color: var(--ink);
+    box-shadow: 0 18px 40px -18px rgba(23,43,106,.45);
+  }
+  .bg {
+    position: absolute; inset: 0;
+    background: url("../assets/img/building-sky-1920.webp") center 30% / cover no-repeat;
+    opacity: .13;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.35), #000 40%, #000 70%, rgba(0,0,0,.15));
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.35), #000 40%, #000 70%, rgba(0,0,0,.15));
+  }
+
+  /* 角落色塊（沿用網站 Memphis 造型） */
+  .deco { position: absolute; pointer-events: none; }
+  .deco .b-navy { fill: var(--navy); }
+  .deco .b-orange { fill: var(--orange); }
+  .deco .b-red { fill: var(--red); }
+  .deco .dots circle { fill: #fff; }
+  .deco .arc, .deco .lines { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; }
+  .deco .arc-y { fill: none; stroke: var(--yellow); stroke-width: 12; stroke-linecap: round; }
+  .deco .squiggle { fill: none; stroke: var(--navy); stroke-width: 6; stroke-linecap: round; }
+  .d-br .squiggle { stroke: var(--red); }
+  .d-tl { width: 130mm; top: -22mm; left: -24mm; }
+  .d-tr { width: 160mm; top: -6mm; right: -10mm; }
+  .d-bl { width: 130mm; bottom: -14mm; left: -12mm; }
+  .d-br { width: 130mm; bottom: -16mm; right: -8mm; }
+
+  /* 小圖示漂浮 */
+  .ic { position: absolute; }
+  .star { color: var(--orange); }
+
+  .inner {
+    position: relative; z-index: 2; height: 100%;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 30mm 26mm 0;
+  }
+
+  /* 抬頭 */
+  .brand {
+    display: inline-flex; align-items: center; gap: 4mm;
+    background: #fff; border-radius: 999px; padding: 2.4mm 9mm 2.4mm 6mm;
+    box-shadow: 0 6mm 12mm -6mm rgba(23,43,106,.45);
+    font-weight: 900; font-size: 13mm; color: var(--navy); letter-spacing: .04em;
+  }
+  .brand img { height: 20mm; width: auto; }
+  .kicker {
+    margin-top: 7mm;
+    font-family: "Poppins", sans-serif; font-weight: 800; letter-spacing: .2em;
+    font-size: 6.4mm; color: var(--navy);
+    background: var(--soft); padding: 1.6mm 7mm; border-radius: 999px; border: .7mm solid var(--navy);
+  }
+  .event {
+    margin-top: 6mm; font-weight: 900; font-size: 15.5mm; letter-spacing: .03em; line-height: 1.25;
+  }
+  .event em { font-style: normal; font-family: "Poppins", sans-serif; color: var(--red); }
+  .event b {
+    font-family: "Poppins", sans-serif; color: #fff; background: var(--navy);
+    padding: 0 .22em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); margin: 0 .1em;
+  }
+
+  /* 電梯圖示 + 5F */
+  .lift-row { margin-top: 24mm; display: flex; align-items: center; justify-content: center; gap: 16mm; }
+  .lift { width: 118mm; height: 132mm; filter: drop-shadow(2.6mm 2.6mm 0 var(--ink)); }
+  .floor {
+    position: relative; font-family: "Poppins", sans-serif; font-weight: 900;
+    font-size: 150mm; line-height: .9; letter-spacing: -.04em;
+  }
+  .floor .f {
+    position: relative; display: inline-block; color: var(--navy);
+    -webkit-text-stroke: .06em #fff; paint-order: stroke fill; transform: rotate(-5deg);
+  }
+  .floor .f::after {
+    content: attr(data-t); position: absolute; left: 0; top: 0; z-index: -1;
+    color: var(--orange); -webkit-text-stroke: .06em var(--orange); paint-order: stroke fill;
+    transform: translate(.06em, .06em);
+  }
+  .floor .f + .f { transform: rotate(4deg) translateY(.04em); }
+  .floor .f + .f { color: var(--red); }
+  .floor .f + .f::after { color: var(--yellow); -webkit-text-stroke-color: var(--yellow); }
+  .bubble {
+    position: absolute; right: -6mm; top: -16mm; white-space: nowrap;
+    font-family: "Noto Sans TC", sans-serif; font-size: 11mm; font-weight: 900; letter-spacing: .02em; line-height: 1.2;
+    background: #fff; color: var(--ink); border: .9mm solid var(--ink); border-radius: 6mm;
+    padding: 2.4mm 5.4mm; box-shadow: 1.6mm 1.6mm 0 var(--ink); transform: rotate(6deg);
+  }
+  .bubble::before, .bubble::after { content: ""; position: absolute; width: 0; height: 0; border-style: solid; }
+  .bubble::before { bottom: -6mm; left: 9mm; border-width: 6mm 5.4mm 0 0; border-color: var(--ink) transparent transparent transparent; }
+  .bubble::after { bottom: -3.7mm; left: 10mm; border-width: 4mm 3.4mm 0 0; border-color: #fff transparent transparent transparent; }
+
+  /* 主訊息 */
+  .msg { margin-top: 10mm; font-weight: 900; line-height: 1.12; }
+  .msg .l1 { font-size: 62mm; color: var(--ink); letter-spacing: .04em; }
+  .msg .l2 { font-size: 42mm; color: var(--navy); margin-top: 4mm; letter-spacing: .04em; }
+  .msg .l2 .five { font-family: "Poppins", sans-serif; color: var(--red); font-size: 1.25em; margin: 0 .04em; line-height: 1; }
+  .msg .l3 {
+    display: inline-block; font-size: 64mm; color: var(--ink); letter-spacing: .04em; margin-top: 2mm;
+    background: linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 92%, transparent 92%);
+    padding: 0 .08em;
+  }
+
+  .ecg { width: 190mm; margin-top: 8mm; }
+  .ecg path { fill: none; stroke: var(--red); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+  .chips { margin-top: 7mm; display: flex; justify-content: center; gap: 5mm; flex-wrap: wrap; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 3mm; padding: 2.6mm 7mm 2.6mm 3.2mm; border-radius: 999px;
+    font-weight: 700; font-size: 9.6mm; color: #fff; white-space: nowrap;
+  }
+  .chip svg { width: 11.5mm; height: 11.5mm; color: var(--ink); background: #fff; border-radius: 50%; padding: 1.2mm; }
+  .c-navy { background: var(--navy); }
+  .c-orange { background: var(--orange); color: var(--ink); }
+  .c-red { background: var(--red); }
+
+  /* 底部斜帶標語 */
+  .tape {
+    position: absolute; z-index: 3; left: -10mm; right: -10mm; bottom: 20mm;
+    background: var(--navy); border-block: 1.4mm solid var(--ink); box-shadow: 0 2.4mm 0 var(--ink);
+    transform: rotate(-3deg); color: #fff; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; gap: 8mm;
+    padding: 3.6mm 0; font-weight: 900; font-size: 11mm; letter-spacing: .06em; white-space: nowrap;
+  }
+  .tape b { font-family: "Poppins", sans-serif; color: var(--yellow); }
+  .tape svg { width: 9mm; height: 9mm; flex: none; }
+  .tape .s { color: var(--yellow); }
+  .tape .fl { color: var(--orange); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-cal" viewBox="0 0 64 64"><rect x="6" y="12" width="52" height="46" rx="8" fill="#fff" stroke="currentColor" stroke-width="4"/><path d="M6 26h52" stroke="currentColor" stroke-width="4"/><path d="M6 20a8 8 0 0 1 8-8h36a8 8 0 0 1 8 8v6H6z" fill="#F2541B"/><path d="M20 6v12M44 6v12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="42" r="7" fill="#FFB21C"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 64 64"><circle cx="32" cy="34" r="24" fill="#FFB21C" stroke="currentColor" stroke-width="4"/><path d="M32 34V20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M32 34h10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="34" r="3" fill="currentColor"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 64 64"><path d="M32 60S10 38 10 24a22 22 0 0 1 44 0c0 14-22 36-22 36z" fill="#F2541B" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="32" cy="24" r="8" fill="#fff" stroke="currentColor" stroke-width="4"/></symbol>
+    <symbol id="i-star" viewBox="0 0 64 64"><path d="M32 4l7 19 21 1-16 13 6 21-18-12-18 12 6-21L4 24l21-1z" fill="currentColor"/></symbol>
+    <symbol id="i-flower" viewBox="0 0 64 64"><path d="M32 30C20 4 44 4 32 30 58 18 58 46 32 34 44 60 20 60 32 34 6 46 6 18 32 30z" fill="currentColor"/></symbol>
+    <symbol id="i-steth" viewBox="0 0 64 64"><path d="M18 8v16a12 12 0 0 0 24 0V8" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M30 36v8a10 10 0 0 0 20 0v-6" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="32" r="7" fill="#FFB21C" stroke="currentColor" stroke-width="4"/><circle cx="18" cy="8" r="3.5" fill="currentColor"/><circle cx="42" cy="8" r="3.5" fill="currentColor"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 64 64"><path d="M32 56S6 40 6 22A13 13 0 0 1 32 16a13 13 0 0 1 26 6c0 18-26 34-26 34z" fill="#F2541B"/><path d="M14 30h9l4-8 6 16 4-8h12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="sheet">
+  <div class="bg"></div>
+
+  <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true">
+    <path class="b-navy" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/>
+    <g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g>
+    <path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/>
+  </svg>
+  <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true">
+    <path class="b-orange" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/>
+    <path class="squiggle" d="M60 150c30-40 60 40 90 0s60 40 90 0 60 40 90 0"/>
+    <path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/>
+  </svg>
+  <svg class="deco d-bl" viewBox="0 0 320 300" aria-hidden="true">
+    <path class="b-red" d="M0 120c50-30 100 10 130 60s70 50 60 100-160 30-190 20z"/>
+    <path class="lines" d="M30 200c30-10 60 10 80 40M20 240c30-6 50 10 66 34"/>
+    <path class="arc-y" d="M150 90a50 50 0 0 1 70 70M150 120a26 26 0 0 1 40 36"/>
+  </svg>
+  <svg class="deco d-br" viewBox="0 0 320 300" aria-hidden="true">
+    <path class="b-navy" d="M320 80c-60 0-90 40-110 90s-80 40-80 90 50 50 190 40z"/>
+    <g class="dots"><circle cx="250" cy="170" r="7"/><circle cx="280" cy="140" r="5"/><circle cx="220" cy="230" r="6"/><circle cx="270" cy="250" r="7"/></g>
+    <path class="squiggle" d="M60 60c20-30 40 30 60 0s40 30 60 0"/>
+  </svg>
+
+  <!-- 漂浮小圖示 -->
+  <svg class="ic" style="top:188mm;left:22mm;width:22mm;height:22mm;color:var(--ink)"><use href="#i-steth"/></svg>
+  <svg class="ic" style="top:300mm;right:20mm;width:24mm;height:24mm"><use href="#i-heart"/></svg>
+  <svg class="ic" style="top:120mm;right:30mm;width:16mm;height:16mm;color:var(--orange)"><use href="#i-star"/></svg>
+  <svg class="ic" style="top:330mm;left:18mm;width:14mm;height:14mm;color:var(--yellow)"><use href="#i-star"/></svg>
+  <svg class="ic" style="top:236mm;right:16mm;width:14mm;height:14mm;color:var(--red)"><use href="#i-flower"/></svg>
+
+  <div class="inner">
+    <div class="brand"><img src="../assets/img/chimei-logo.png" alt="奇美醫院 LOGO">奇美醫院教學部</div>
+    <p class="kicker">CHI MEI MEDICAL CENTER</p>
+    <h2 class="event"><em>116</em>學年度 西醫<b>PGY</b>醫師招募說明會</h2>
+
+    <div class="lift-row">
+      <!-- 電梯圖示 -->
+      <svg class="lift" viewBox="0 0 120 134" aria-hidden="true">
+        <rect x="3" y="3" width="114" height="128" rx="14" fill="#213C8F" stroke="#161616" stroke-width="4"/>
+        <!-- 上方樓層顯示 -->
+        <rect x="30" y="12" width="60" height="22" rx="11" fill="#fff" stroke="#161616" stroke-width="3"/>
+        <path d="M44 28l7-10 7 10z" fill="#F2541B"/>
+        <text x="74" y="29.5" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="900" font-size="17" fill="#213C8F">5F</text>
+        <!-- 門 -->
+        <rect x="16" y="42" width="88" height="80" rx="4" fill="#fff" stroke="#161616" stroke-width="3.5"/>
+        <path d="M60 42v80" stroke="#161616" stroke-width="3.5"/>
+        <path d="M44 82h-16M34 74l-8 8 8 8" fill="none" stroke="#FFA319" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M76 82h16M86 74l8 8-8 8" fill="none" stroke="#FFA319" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <div class="floor">
+        <span class="f" data-t="5">5</span><span class="f" data-t="F">F</span>
+        <span class="bubble">國際會議廳在這層！</span>
+      </div>
+    </div>
+
+    <div class="msg">
+      <div class="l1">請搭乘電梯</div>
+      <div class="l2">前往 <span class="five">5</span> 樓</div>
+      <div class="l3">國際會議廳</div>
+    </div>
+
+    <svg class="ecg" viewBox="0 0 400 60" aria-hidden="true"><path d="M0 30h120l14-22 18 46 16-38 10 14h80l10-18 12 30 10-12h110"/></svg>
+
+    <div class="chips">
+      <span class="chip c-navy"><svg><use href="#i-cal"/></svg>115.11.29（日）</span>
+      <span class="chip c-orange"><svg><use href="#i-clock"/></svg>13:30 – 17:00</span>
+      <span class="chip c-red"><svg><use href="#i-pin"/></svg>第五醫療大樓 5F</span>
+    </div>
+  </div>
+
+  <div class="tape">
+    <span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg>
+    <span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg>
+    <span>選擇奇美</span>
+  </div>
+</div>
+</body>
+</html>
