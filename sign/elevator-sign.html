@@ -122,7 +122,8 @@
 
   /* 主訊息 */
   .msg { margin-top: 10mm; font-weight: 900; line-height: 1.12; }
-  .msg .l1 { font-size: 62mm; color: var(--ink); letter-spacing: .04em; }
+  .msg .l1 { font-size: 56mm; color: var(--ink); letter-spacing: .03em; white-space: nowrap; }
+  .msg .l1 .this { color: var(--red); }
   .msg .l2 { font-size: 42mm; color: var(--navy); margin-top: 4mm; letter-spacing: .04em; }
   .msg .l2 .five { font-family: "Poppins", sans-serif; color: var(--red); font-size: 1.25em; margin: 0 .04em; line-height: 1; }
   .msg .l3 {
@@ -236,7 +237,7 @@
     </div>
 
     <div class="msg">
-      <div class="l1">請搭乘電梯</div>
+      <div class="l1">請搭乘<span class="this">此</span>電梯</div>
       <div class="l2">前往 <span class="five">5</span> 樓</div>
       <div class="l3">國際會議廳</div>
     </div>
