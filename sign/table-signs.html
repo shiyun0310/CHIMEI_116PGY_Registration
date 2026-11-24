@@ -41,7 +41,7 @@
   .event { margin-top: 3.5mm; font-weight: 900; font-size: 8.4mm; letter-spacing: .03em; white-space: nowrap; }
   .event b { font-family: "Poppins", sans-serif; color: #fff; background: var(--navy); padding: 0 .22em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); margin: 0 .12em; }
 
-  .badge { position: relative; margin-top: 11mm; width: 60mm; height: 60mm; flex: none; }
+  .badge { position: relative; margin-top: 14mm; width: 60mm; height: 60mm; flex: none; }
   .badge .ring { position: absolute; inset: 0; border-radius: 50%; background: var(--c); border: 1mm solid var(--ink); box-shadow: 2mm 2mm 0 var(--ink); }
   .badge .ring::after { content: ""; position: absolute; inset: 6mm; border-radius: 50%; background: #fff; border: .8mm solid var(--ink); }
   .badge .icon { position: absolute; inset: 13mm; width: 34mm; height: 34mm; color: var(--ink); }
@@ -50,11 +50,11 @@
     background: #fff; border: .6mm solid var(--ink); border-radius: 999px; padding: 1.2mm 3.4mm 1.2mm 1.8mm; box-shadow: 1mm 1mm 0 var(--ink); transform: rotate(8deg); }
   .badge .talk svg { width: 6mm; height: 6mm; color: var(--ink); }
 
-  .dept-box { margin-top: 6mm; height: 66mm; display: flex; align-items: center; justify-content: center; }
+  .dept-box { margin-top: 12mm; height: 66mm; display: flex; align-items: center; justify-content: center; }
   .dept { font-weight: 900; line-height: 1.05; letter-spacing: .04em; color: var(--tc); white-space: nowrap;
-    -webkit-text-stroke: .05em #fff; paint-order: stroke fill; text-shadow: .05em .05em 0 var(--acc); }
+     }
   .dept .en { font-family: "Poppins", sans-serif; letter-spacing: 0; margin-right: .06em; }
-  .jiao { margin-top: 0; font-weight: 900; font-size: 30mm; line-height: 1.1; letter-spacing: .12em; }
+  .jiao { margin-top: 8mm; font-weight: 900; font-size: 30mm; line-height: 1.1; letter-spacing: .12em; }
   .jiao span { display: inline-block; padding: 0 .04em 0 .16em; background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 92%, transparent 92%); }
   .en-sub { margin-top: 3mm; font-family: "Poppins", sans-serif; font-weight: 800; font-size: 4.4mm; letter-spacing: .18em; color: var(--navy); opacity: .85; }
 
@@ -97,7 +97,7 @@
     <symbol id="i-flower" viewBox="0 0 64 64"><path d="M32 30C20 4 44 4 32 30 58 18 58 46 32 34 44 60 20 60 32 34 6 46 6 18 32 30z" fill="currentColor"/></symbol>
 </defs></svg>
 
-<section class="sheet" style="--c:var(--navy);--tc:var(--navy);--acc:var(--orange)">
+<section class="sheet" style="--c:var(--orange);--tc:var(--navy);--acc:var(--red)">
   <div class="bg"></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-main" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-acc" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
@@ -118,13 +118,10 @@
 
     <div class="dept-box"><h1 class="dept" style="font-size:64mm">內科</h1></div>
     <p class="jiao"><span>交流</span></p>
-    <p class="en-sub">INTERNAL MEDICINE</p>
-
-    <span class="chip"><svg><use href="#i-clock"/></svg>分科互動交流　16:00 – 17:00</span>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
 </section>
-<section class="sheet" style="--c:var(--red);--tc:var(--red);--acc:var(--navy)">
+<section class="sheet" style="--c:var(--orange);--tc:var(--navy);--acc:var(--red)">
   <div class="bg"></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-main" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-acc" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
@@ -145,13 +142,10 @@
 
     <div class="dept-box"><h1 class="dept" style="font-size:64mm">外科</h1></div>
     <p class="jiao"><span>交流</span></p>
-    <p class="en-sub">SURGERY</p>
-
-    <span class="chip"><svg><use href="#i-clock"/></svg>分科互動交流　16:00 – 17:00</span>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
 </section>
-<section class="sheet" style="--c:var(--orange);--tc:var(--ink);--acc:var(--red)">
+<section class="sheet" style="--c:var(--orange);--tc:var(--navy);--acc:var(--red)">
   <div class="bg"></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-main" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-acc" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
@@ -172,13 +166,10 @@
 
     <div class="dept-box"><h1 class="dept" style="font-size:52mm">婦產科</h1></div>
     <p class="jiao"><span>交流</span></p>
-    <p class="en-sub">OBSTETRICS &amp; GYNECOLOGY</p>
-
-    <span class="chip"><svg><use href="#i-clock"/></svg>分科互動交流　16:00 – 17:00</span>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
 </section>
-<section class="sheet" style="--c:var(--yellow);--tc:var(--ink);--acc:var(--navy)">
+<section class="sheet" style="--c:var(--orange);--tc:var(--navy);--acc:var(--red)">
   <div class="bg"></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-main" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-acc" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
@@ -199,13 +190,10 @@
 
     <div class="dept-box"><h1 class="dept" style="font-size:64mm">兒科</h1></div>
     <p class="jiao"><span>交流</span></p>
-    <p class="en-sub">PEDIATRICS</p>
-
-    <span class="chip"><svg><use href="#i-clock"/></svg>分科互動交流　16:00 – 17:00</span>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
 </section>
-<section class="sheet" style="--c:var(--red);--tc:var(--red);--acc:var(--yellow)">
+<section class="sheet" style="--c:var(--orange);--tc:var(--navy);--acc:var(--red)">
   <div class="bg"></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-main" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-acc" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
@@ -226,13 +214,10 @@
 
     <div class="dept-box"><h1 class="dept" style="font-size:35mm">急診醫學科</h1></div>
     <p class="jiao"><span>交流</span></p>
-    <p class="en-sub">EMERGENCY MEDICINE</p>
-
-    <span class="chip"><svg><use href="#i-clock"/></svg>分科互動交流　16:00 – 17:00</span>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
 </section>
-<section class="sheet" style="--c:var(--navy);--tc:var(--navy);--acc:var(--red)">
+<section class="sheet" style="--c:var(--orange);--tc:var(--navy);--acc:var(--red)">
   <div class="bg"></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-main" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-acc" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
@@ -253,9 +238,6 @@
 
     <div class="dept-box"><h1 class="dept" style="font-size:34mm"><span class="en">PGY</span>學長姐</h1></div>
     <p class="jiao"><span>交流</span></p>
-    <p class="en-sub">PGY SENIORS</p>
-
-    <span class="chip"><svg><use href="#i-clock"/></svg>分科互動交流　16:00 – 17:00</span>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
 </section>
