@@ -44,7 +44,7 @@
   .title b { font-family: "Poppins", sans-serif; letter-spacing: .01em; }
   .title .tag { position: absolute; right: -16mm; top: -5mm; font-family: "Poppins", sans-serif; font-size: 4.2mm; letter-spacing: .06em; line-height: 1;
     color: var(--ink); background: #fff; border: .6mm solid var(--ink); border-radius: 999px; padding: 1.5mm 3.4mm; box-shadow: 1mm 1mm 0 var(--ink); transform: rotate(8deg); }
-  .lead { margin-top: 5mm; font-size: 5.4mm; white-space: nowrap; font-weight: 700; color: #3a4052; }
+  .lead { margin-top: 5mm; font-size: 6.2mm; white-space: nowrap; font-weight: 700; color: #3a4052; }
 
   /* 步驟 */
   .steps { margin-top: 7mm; width: 100%; display: flex; flex-direction: column; gap: 7mm; }
@@ -74,14 +74,17 @@
   .c2 { top: -4mm; right: -4mm; border-left: 0; border-bottom: 0; border-radius: 0 5mm 0 0; border-color: var(--sky); }
   .c3 { bottom: -4mm; left: -4mm; border-right: 0; border-top: 0; border-radius: 0 0 0 5mm; border-color: var(--sky); }
   .c4 { bottom: -4mm; right: -4mm; border-left: 0; border-top: 0; border-radius: 0 0 5mm 0; }
-  .scan { margin-top: 9mm; display: inline-flex; align-items: center; gap: 3mm; font-weight: 900; font-size: 6.6mm; letter-spacing: .04em;
-    color: #fff; background: var(--green); border: .9mm solid var(--ink); border-radius: 999px; padding: 2.4mm 7mm 2.4mm 4mm; box-shadow: 1.8mm 1.8mm 0 var(--ink); transform: rotate(-2deg); }
-  .scan svg { width: 10mm; height: 10mm; }
   .lead .hl { color: var(--navy); background: linear-gradient(transparent 60%, var(--yellow) 60%); padding: 0 .1em; }
-  .gift { margin-top: 5mm; display: inline-flex; align-items: center; gap: 2.6mm; font-weight: 900; font-size: 6.4mm; letter-spacing: .03em;
-    color: var(--ink); background: var(--yellow); border: .9mm solid var(--ink); border-radius: 999px; padding: 2mm 6mm 2mm 3mm; box-shadow: 1.8mm 1.8mm 0 var(--ink); transform: rotate(1.5deg); }
-  .gift b { color: #C8371A; }
-  .gift svg { width: 10mm; height: 10mm; background: #fff; border-radius: 50%; border: .6mm solid var(--ink); padding: 1.2mm; }
+  .flow { list-style: none; margin-top: 10mm; display: flex; align-items: center; justify-content: center; gap: 2.4mm; }
+  .flow li { display: flex; align-items: center; gap: 2mm; font-weight: 900; font-size: 5.6mm; color: var(--navy); white-space: nowrap; }
+  .flow .n { width: 8.6mm; height: 8.6mm; border-radius: 50%; display: grid; place-items: center; font-family: "Poppins", sans-serif; font-size: 4.6mm; color: #fff; border: .6mm solid var(--ink); }
+  .flow .n1 { background: var(--navy); } .flow .n2 { background: var(--sky); } .flow .n3 { background: var(--yellow); color: var(--ink); } .flow .n4 { background: var(--green); }
+  .flow .ar { width: 3mm; height: 5mm; flex: none; }
+  .gift { margin-top: 6mm; width: 100%; display: flex; align-items: center; justify-content: center; gap: 3mm;
+    font-weight: 900; font-size: 6.6mm; letter-spacing: .03em; color: #fff; background: var(--navy);
+    border: .9mm solid var(--ink); border-radius: 5mm; box-shadow: 1.8mm 1.8mm 0 var(--ink); padding: 3mm 6mm; }
+  .gift b { color: var(--yellow); }
+  .gift .gi { width: 11mm; height: 11mm; flex: none; background: #fff; border-radius: 50%; border: .6mm solid var(--ink); padding: 1.3mm; }
   .tape { position: absolute; z-index: 3; left: -8mm; right: -8mm; bottom: 12mm; background: var(--sky); border-block: .8mm solid var(--ink); box-shadow: 0 1.3mm 0 var(--ink);
     transform: rotate(-3deg); color: #fff; display: flex; align-items: center; justify-content: center; gap: 4.5mm;
     padding: 2mm 0; font-weight: 900; font-size: 6mm; letter-spacing: .06em; white-space: nowrap; overflow: hidden; }
@@ -110,15 +113,23 @@
     <p class="event">西醫<b>PGY</b>醫師招募說明會</p>
 
     <h1 class="title"><span>掃描 <b>QR Code</b></span><i class="tag">CHECK-OUT</i></h1>
-    <p class="lead">請用手機掃描，完成<b class="hl">簽退</b>及<b class="hl">滿意度調查</b>後，出示畫面領取與會禮</p>
+    <p class="lead">請用手機掃描，完成<b class="hl">簽退</b>及<b class="hl">滿意度調查</b></p>
 
     <div class="qr-card">
       <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
       <svg class="qr" aria-label="簽退及滿意度調查 QR Code" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#161616" d="M0 0.5h7m1 0h3m1 0h3m3 0h2m4 0h5m1 0h7M0 1.5h1m5 0h1m2 0h1m1 0h4m1 0h1m3 0h2m4 0h1m3 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h9m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h4m2 0h1m2 0h3m2 0h1m2 0h1m4 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h2m2 0h1m2 0h1m2 0h2m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h2m2 0h1m4 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h1m2 0h2m4 0h2m1 0h1m1 0h3m1 0h3M0 8.5h1m3 0h1m1 0h3m1 0h2m3 0h1m2 0h1m3 0h1m1 0h1m4 0h5m2 0h1M3 9.5h1m3 0h1m1 0h4m3 0h2m1 0h3m1 0h7m2 0h2m1 0h1M0 10.5h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h2m1 0h2m2 0h1m2 0h1m3 0h1m1 0h1m1 0h1m2 0h1M2 11.5h4m2 0h3m2 0h1m3 0h2m2 0h4m1 0h1m1 0h1m1 0h1m3 0h2M1 12.5h2m2 0h2m2 0h1m2 0h1m2 0h2m2 0h4m3 0h1m1 0h3m3 0h3M1 13.5h4m3 0h1m1 0h2m4 0h2m1 0h1m3 0h1m1 0h1m1 0h1m4 0h2M5 14.5h4m1 0h2m2 0h2m2 0h1m1 0h4m1 0h1m1 0h2m2 0h4M7 15.5h6m1 0h1m6 0h1m1 0h1m2 0h1m2 0h1m1 0h2m1 0h3M0 16.5h1m3 0h3m1 0h1m4 0h1m2 0h1m3 0h1m2 0h1m3 0h1m1 0h3m1 0h2m1 0h1M0 17.5h1m3 0h2m1 0h2m3 0h2m3 0h3m1 0h3m1 0h4m3 0h2m1 0h1M0 18.5h3m2 0h3m4 0h1m2 0h1m2 0h2m1 0h3m3 0h1m1 0h2m1 0h1M3 19.5h1m3 0h4m2 0h9m1 0h2m4 0h1m4 0h2M0 20.5h1m1 0h1m2 0h2m2 0h1m2 0h1m1 0h1m2 0h2m1 0h3m1 0h1m1 0h2m1 0h3m2 0h1M0 21.5h2m1 0h3m1 0h1m3 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h1m2 0h3m2 0h2m2 0h2M0 22.5h5m1 0h1m1 0h2m1 0h3m1 0h3m5 0h1m1 0h1m1 0h1m1 0h6M2 23.5h1m6 0h1m1 0h8m3 0h3m1 0h2m3 0h2m1 0h1m1 0h1M0 24.5h1m5 0h2m1 0h1m2 0h1m5 0h1m3 0h1m6 0h2m2 0h3M0 25.5h3m1 0h1m2 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h3m1 0h1m2 0h2m4 0h1m1 0h1M6 26.5h1m1 0h2m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h6m3 0h1M3 27.5h1m1 0h1m1 0h1m2 0h1m1 0h3m2 0h2m2 0h1m1 0h2m6 0h1m2 0h1m1 0h1M0 28.5h3m3 0h1m1 0h1m5 0h8m5 0h8m1 0h1M8 29.5h2m1 0h2m3 0h2m1 0h1m3 0h1m2 0h3m3 0h1m2 0h2M0 30.5h7m1 0h1m1 0h4m1 0h2m1 0h1m1 0h7m1 0h1m1 0h1m1 0h1M0 31.5h1m5 0h1m2 0h3m1 0h2m4 0h1m1 0h1m1 0h1m2 0h1m1 0h1m3 0h3M0 32.5h1m1 0h3m1 0h1m1 0h2m4 0h1m1 0h1m2 0h2m2 0h1m4 0h7M0 33.5h1m1 0h3m1 0h1m2 0h3m1 0h2m3 0h2m1 0h3m1 0h1m1 0h1m1 0h3m4 0h1M0 34.5h1m1 0h3m1 0h1m2 0h4m2 0h1m1 0h1m1 0h1m3 0h5m2 0h1M0 35.5h1m5 0h1m4 0h11m1 0h2m1 0h2m2 0h1m1 0h1m1 0h2M0 36.5h7m1 0h2m4 0h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h4"/></svg>
     </div>
 
-    <p class="scan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5" fill="#fff" stroke="#161616" stroke-width="2"/><path d="M10 5h4" stroke="#161616" stroke-width="1.6" stroke-linecap="round"/><path d="M9 12.5l2 2 4-4.5" fill="none" stroke="#1FA463" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>掃描 → 輸入姓名 → 填寫問卷 → 送出並簽退</p>
-    <p class="gift"><svg viewBox="0 0 64 64" aria-hidden="true" style="color:#161616"><rect x="9" y="28" width="46" height="30" rx="4" fill="#F2541B" stroke="currentColor" stroke-width="4"/><rect x="5" y="19" width="54" height="11" rx="3" fill="#FFB21C" stroke="currentColor" stroke-width="4"/><path d="M32 19v39" stroke="currentColor" stroke-width="4"/><path d="M32 19c-4-10-17-14-17-6s13 6 17 6zM32 19c4-10 17-14 17-6s-13 6-17 6z" fill="#fff" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/></svg><span>出示<b>簽退成功</b>畫面，至報到台領取與會禮！</span></p>
+    <ol class="flow">
+      <li><span class="n n1">1</span><span class="t">輸入姓名</span></li>
+      <svg class="ar" viewBox="0 0 12 20" aria-hidden="true"><path d="M3 3l6 7-6 7" fill="none" stroke="#5B8DEF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <li><span class="n n2">2</span><span class="t">填寫問卷</span></li>
+      <svg class="ar" viewBox="0 0 12 20" aria-hidden="true"><path d="M3 3l6 7-6 7" fill="none" stroke="#5B8DEF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <li><span class="n n3">3</span><span class="t">送出並簽退</span></li>
+      <svg class="ar" viewBox="0 0 12 20" aria-hidden="true"><path d="M3 3l6 7-6 7" fill="none" stroke="#5B8DEF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <li class="last"><span class="n n4">4</span><span class="t">領取與會禮</span></li>
+    </ol>
+    <p class="gift"><svg class="gi" viewBox="0 0 64 64" aria-hidden="true" style="color:#161616"><rect x="9" y="28" width="46" height="30" rx="4" fill="#F2541B" stroke="currentColor" stroke-width="4"/><rect x="5" y="19" width="54" height="11" rx="3" fill="#FFB21C" stroke="currentColor" stroke-width="4"/><path d="M32 19v39" stroke="currentColor" stroke-width="4"/><path d="M32 19c-4-10-17-14-17-6s13 6 17 6zM32 19c4-10 17-14 17-6s-13 6-17 6z" fill="#fff" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/></svg><span>出示<b>簽退成功</b>畫面，至<b>報到台</b>領取與會禮</span></p>
   </div>
 
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
