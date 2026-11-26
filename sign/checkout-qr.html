@@ -39,12 +39,12 @@
   .event { margin-top: 3mm; font-weight: 900; font-size: 7.6mm; letter-spacing: .03em; white-space: nowrap; }
   .event b { font-family: "Poppins", sans-serif; color: #fff; background: var(--navy); padding: 0 .22em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); margin: 0 .12em; }
 
-  .title { position: relative; margin-top: 9mm; font-weight: 900; font-size: 19mm; white-space: nowrap; line-height: 1.15; letter-spacing: .06em; color: var(--navy); }
+  .title { position: relative; margin-top: 6mm; font-weight: 900; font-size: 19mm; white-space: nowrap; line-height: 1.15; letter-spacing: .06em; color: var(--navy); }
   .title span { padding: 0 .06em; background: linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 92%, transparent 92%); }
   .title b { font-family: "Poppins", sans-serif; letter-spacing: .01em; }
-  .title .tag { position: absolute; right: -12mm; top: -9mm; font-family: "Poppins", sans-serif; font-size: 4.2mm; letter-spacing: .06em; line-height: 1;
+  .title .tag { position: absolute; right: -16mm; top: -5mm; font-family: "Poppins", sans-serif; font-size: 4.2mm; letter-spacing: .06em; line-height: 1;
     color: var(--ink); background: #fff; border: .6mm solid var(--ink); border-radius: 999px; padding: 1.5mm 3.4mm; box-shadow: 1mm 1mm 0 var(--ink); transform: rotate(8deg); }
-  .lead { margin-top: 5mm; font-size: 6.2mm; font-weight: 700; color: #3a4052; }
+  .lead { margin-top: 5mm; font-size: 5.4mm; white-space: nowrap; font-weight: 700; color: #3a4052; }
 
   /* 步驟 */
   .steps { margin-top: 7mm; width: 100%; display: flex; flex-direction: column; gap: 7mm; }
@@ -67,17 +67,21 @@
   .enter svg { width: 11mm; height: 11mm; background: #fff; border-radius: 50%; border: .6mm solid var(--ink); padding: 1.4mm; }
   .note { margin-top: 4.5mm; font-size: 4.4mm; font-weight: 700; color: #4a5266; }
 
-  .qr-card { position: relative; margin-top: 9mm; background: #fff; border: 1mm solid var(--ink); border-radius: 8mm; box-shadow: 2.4mm 2.4mm 0 var(--ink); padding: 9mm; }
-  .qr { display: block; width: 112mm; height: 112mm; }
+  .qr-card { position: relative; margin-top: 7mm; background: #fff; border: 1mm solid var(--ink); border-radius: 8mm; box-shadow: 2.4mm 2.4mm 0 var(--ink); padding: 9mm; }
+  .qr { display: block; width: 98mm; height: 98mm; }
   .corner { position: absolute; width: 14mm; height: 14mm; border: 2.2mm solid var(--navy); }
   .c1 { top: -4mm; left: -4mm; border-right: 0; border-bottom: 0; border-radius: 5mm 0 0 0; }
   .c2 { top: -4mm; right: -4mm; border-left: 0; border-bottom: 0; border-radius: 0 5mm 0 0; border-color: var(--sky); }
   .c3 { bottom: -4mm; left: -4mm; border-right: 0; border-top: 0; border-radius: 0 0 0 5mm; border-color: var(--sky); }
   .c4 { bottom: -4mm; right: -4mm; border-left: 0; border-top: 0; border-radius: 0 0 5mm 0; }
-  .scan { margin-top: 11mm; display: inline-flex; align-items: center; gap: 3mm; font-weight: 900; font-size: 6.6mm; letter-spacing: .04em;
+  .scan { margin-top: 9mm; display: inline-flex; align-items: center; gap: 3mm; font-weight: 900; font-size: 6.6mm; letter-spacing: .04em;
     color: #fff; background: var(--green); border: .9mm solid var(--ink); border-radius: 999px; padding: 2.4mm 7mm 2.4mm 4mm; box-shadow: 1.8mm 1.8mm 0 var(--ink); transform: rotate(-2deg); }
   .scan svg { width: 10mm; height: 10mm; }
   .lead .hl { color: var(--navy); background: linear-gradient(transparent 60%, var(--yellow) 60%); padding: 0 .1em; }
+  .gift { margin-top: 5mm; display: inline-flex; align-items: center; gap: 2.6mm; font-weight: 900; font-size: 6.4mm; letter-spacing: .03em;
+    color: var(--ink); background: var(--yellow); border: .9mm solid var(--ink); border-radius: 999px; padding: 2mm 6mm 2mm 3mm; box-shadow: 1.8mm 1.8mm 0 var(--ink); transform: rotate(1.5deg); }
+  .gift b { color: #C8371A; }
+  .gift svg { width: 10mm; height: 10mm; background: #fff; border-radius: 50%; border: .6mm solid var(--ink); padding: 1.2mm; }
   .tape { position: absolute; z-index: 3; left: -8mm; right: -8mm; bottom: 12mm; background: var(--sky); border-block: .8mm solid var(--ink); box-shadow: 0 1.3mm 0 var(--ink);
     transform: rotate(-3deg); color: #fff; display: flex; align-items: center; justify-content: center; gap: 4.5mm;
     padding: 2mm 0; font-weight: 900; font-size: 6mm; letter-spacing: .06em; white-space: nowrap; overflow: hidden; }
@@ -106,7 +110,7 @@
     <p class="event">西醫<b>PGY</b>醫師招募說明會</p>
 
     <h1 class="title"><span>掃描 <b>QR Code</b></span><i class="tag">CHECK-OUT</i></h1>
-    <p class="lead">請用手機掃描，完成<b class="hl">簽退</b>及<b class="hl">滿意度調查</b></p>
+    <p class="lead">請用手機掃描，完成<b class="hl">簽退</b>及<b class="hl">滿意度調查</b>後，出示畫面領取與會禮</p>
 
     <div class="qr-card">
       <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
@@ -114,6 +118,7 @@
     </div>
 
     <p class="scan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5" fill="#fff" stroke="#161616" stroke-width="2"/><path d="M10 5h4" stroke="#161616" stroke-width="1.6" stroke-linecap="round"/><path d="M9 12.5l2 2 4-4.5" fill="none" stroke="#1FA463" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>掃描 → 輸入姓名 → 填寫問卷 → 送出並簽退</p>
+    <p class="gift"><svg viewBox="0 0 64 64" aria-hidden="true" style="color:#161616"><rect x="9" y="28" width="46" height="30" rx="4" fill="#F2541B" stroke="currentColor" stroke-width="4"/><rect x="5" y="19" width="54" height="11" rx="3" fill="#FFB21C" stroke="currentColor" stroke-width="4"/><path d="M32 19v39" stroke="currentColor" stroke-width="4"/><path d="M32 19c-4-10-17-14-17-6s13 6 17 6zM32 19c4-10 17-14 17-6s-13 6-17 6z" fill="#fff" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/></svg><span>出示<b>簽退成功</b>畫面，至報到台領取與會禮！</span></p>
   </div>
 
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span></div>
