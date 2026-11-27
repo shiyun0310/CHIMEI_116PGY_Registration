@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>報到台指示直式電視</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* 直立式電視 45 × 80 cm（1080 × 1920 px）：上半沿用說明會海報，下半改為「報到台在左側，請往左走」 */
+  @page { size: 450mm 800mm; margin: 0; }
+  :root { --navy:#213C8F; --orange:#FFA319; --red:#F2541B; --yellow:#FFC83D; --ink:#161616; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e9ecf3; }
+  body { font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; justify-content: center; padding: 16px; }
+  @media print { html, body { background: none; } body { padding: 0; display: block; } .sheet { box-shadow: none !important; zoom: 1.5747; } }
+  .sheet { position: relative; overflow: hidden; width: 1080px; height: 1920px; background: #FDFDFD; color: var(--ink); box-shadow: 0 18px 40px -18px rgba(23,43,106,.45); }
+  .top { position: absolute; left: 0; top: 0; width: 1080px; height: auto; display: block; }
+  .fade { position: absolute; left: 0; right: 0; top: 880px; height: 90px; background: linear-gradient(rgba(253,253,253,0), #FDFDFD); }
+  .foot { position: absolute; left: 0; bottom: 0; width: 1080px; height: auto; display: block; }
+
+  .mid { position: absolute; left: 0; right: 0; top: 1000px; bottom: 83px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 20px; }
+  .tag { font-family: "Poppins", sans-serif; font-weight: 900; font-size: 34px; letter-spacing: .12em; color: var(--ink); background: var(--yellow); border: 5px solid var(--ink); border-radius: 999px; padding: 6px 30px; box-shadow: 6px 6px 0 var(--ink); transform: rotate(-3deg); }
+  .arrow { position: relative; margin-top: 40px; width: 980px; height: 400px; }
+  .arrow svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(14px 14px 0 var(--ink)); }
+  .arrow p { position: absolute; left: 330px; right: 40px; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 140px; letter-spacing: .1em; color: #fff; white-space: nowrap; text-shadow: 6px 6px 0 rgba(22,22,22,.85); }
+  .where { margin-top: 56px; font-weight: 900; font-size: 120px; letter-spacing: .06em; color: var(--navy); white-space: nowrap; line-height: 1.15; }
+  .where span { padding: 0 .06em; background: linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 92%, transparent 92%); }
+  .where b { color: var(--red); }
+  .note { margin-top: 24px; font-size: 38px; font-weight: 700; color: #4a5266; }
+  .ic { position: absolute; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-star" viewBox="0 0 64 64"><path d="M32 4l7 19 21 1-16 13 6 21-18-12-18 12 6-21L4 24l21-1z" fill="currentColor"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 64 64"><path d="M32 30C20 4 44 4 32 30 58 18 58 46 32 34 44 60 20 60 32 34 6 46 6 18 32 30z" fill="currentColor"/></symbol>
+</defs></svg>
+<div class="sheet">
+  <img class="top" src="img/poster-top.jpg" alt="奇美 116學年度 西醫PGY醫師招募說明會 115年11月29日 13:30-17:00 13:00開放報到 奇美醫院第五醫療大樓5樓國際會議廳">
+  <svg class="ic" style="left:60px;top:1010px;width:46px;height:46px;color:#FFC83D"><use href="#i-star"/></svg>
+  <svg class="ic" style="right:70px;top:1030px;width:40px;height:40px;color:#F2541B"><use href="#i-flower"/></svg>
+  <svg class="ic" style="right:60px;top:1700px;width:44px;height:44px;color:#FFA319"><use href="#i-star"/></svg>
+  <svg class="ic" style="left:70px;top:1720px;width:36px;height:36px;color:#213C8F"><use href="#i-flower"/></svg>
+  <div class="mid">
+    <span class="tag">CHECK-IN 報到</span>
+    <div class="arrow">
+      <svg viewBox="0 0 960 360" aria-hidden="true">
+        <path d="M14 180 300 14v96h616a30 30 0 0 1 30 30v80a30 30 0 0 1-30 30H300v96z" fill="#F2541B" stroke="#161616" stroke-width="12" stroke-linejoin="round"/>
+        <circle cx="150" cy="180" r="18" fill="#FFC83D" stroke="#161616" stroke-width="6"/>
+      </svg>
+      <p>請往左走</p>
+    </div>
+    <p class="where"><span>報到台</span>在<b>左側</b></p>
+    <p class="note">請先至報到台完成簽到再入場</p>
+  </div>
+  <img class="foot" src="img/poster-footer.jpg" alt="聯絡資訊：奇美教學部PGY訓練組">
+</div>
+</body>
+</html>
