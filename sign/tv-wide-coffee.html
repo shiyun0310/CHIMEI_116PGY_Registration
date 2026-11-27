@@ -7,16 +7,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
-<style>
-  :root { --navy:#213C8F; --orange:#FFA319; --red:#F2541B; --yellow:#FFC83D; --ink:#161616; --soft:#F6F8FC; --brown:#6B3E1F; }
+<style>  :root { --navy:#213C8F; --orange:#FFA319; --red:#F2541B; --yellow:#FFC83D; --ink:#161616; --soft:#F6F8FC; --sky:#5B8DEF; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: #e9ecf3; }
   body { font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; justify-content: center; padding: 16px; }
-  .sheet { position: relative; overflow: hidden; background: #FFF4D6; color: var(--ink); box-shadow: 0 18px 40px -18px rgba(23,43,106,.45); }
-  .bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, #fff 0, #fff 30%, transparent 70%); }
-  .deco { position: absolute; pointer-events: none; }
+  .sheet { position: relative; overflow: hidden; background: #FFF1CC; color: var(--ink); box-shadow: 0 18px 40px -18px rgba(23,43,106,.45); }
+  .bg { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,163,25,.35) 3px, transparent 3.5px); background-size: 46px 46px; }
+  .bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, #FFF8E6 0, rgba(255,248,230,.85) 35%, transparent 70%); }
+  .confetti { position: absolute; inset: 0; z-index: 1; }
+  .cf { position: absolute; width: calc(26px * var(--s)); height: calc(12px * var(--s)); border-radius: 6px; background: var(--c); border: 3px solid var(--ink); transform: rotate(var(--r)); }
+  .cf:nth-child(3n) { width: calc(20px * var(--s)); height: calc(20px * var(--s)); border-radius: 50%; }
+  .cf:nth-child(4n) { width: 0; height: 0; border: 0; border-left: calc(13px * var(--s)) solid transparent; border-right: calc(13px * var(--s)) solid transparent; border-bottom: calc(22px * var(--s)) solid var(--c); background: none; border-radius: 0; }
+  .deco { position: absolute; pointer-events: none; z-index: 1; }
   .deco .b-o { fill: var(--yellow); }
-  .deco .b-r { fill: var(--orange); }
+  .deco .b-r { fill: var(--red); }
   .deco .dots circle { fill: #fff; }
   .deco .arc, .deco .lines { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; }
   .deco .arc-y { fill: none; stroke: var(--navy); stroke-width: 12; stroke-linecap: round; }
@@ -24,54 +28,73 @@
   .kicker { font-family: "Poppins", sans-serif; font-weight: 800; letter-spacing: .2em; color: var(--navy); background: var(--soft); border-radius: 999px; border: 3px solid var(--navy); display: inline-block; }
   .event { font-weight: 900; letter-spacing: .03em; white-space: nowrap; }
   .event b { font-family: "Poppins", sans-serif; color: #fff; background: var(--navy); padding: 0 .22em; border-radius: .2em; display: inline-block; transform: rotate(-4deg); margin: 0 .12em; }
-  .cup-wrap { position: relative; }
-  .ring { position: absolute; inset: 0; border-radius: 50%; background: var(--orange); border: 6px solid var(--ink); box-shadow: 12px 12px 0 var(--ink); }
-  .ring::after { content: ""; position: absolute; inset: 8%; border-radius: 50%; background: #fff; border: 5px solid var(--ink); }
-  .cup { position: absolute; inset: 20%; width: 60%; height: 60%; color: var(--ink); }
-  .cb { font-family: "Poppins", sans-serif; font-weight: 900; line-height: .95; letter-spacing: -.01em; color: var(--navy); -webkit-text-stroke: .04em #fff; paint-order: stroke fill; text-shadow: .05em .05em 0 var(--orange); }
-  .rest { font-weight: 900; letter-spacing: .06em; }
-  .rest b { font-family: "Poppins", sans-serif; color: var(--red); font-size: 1.35em; padding: 0 .08em; background: linear-gradient(transparent 62%, var(--yellow) 62%, var(--yellow) 92%, transparent 92%); }
-  .time { display: inline-flex; align-items: center; font-family: "Poppins", sans-serif; font-weight: 800; color: #fff; background: var(--navy); border: 5px solid var(--ink); border-radius: 999px; box-shadow: 8px 8px 0 var(--ink); }
-  .time svg { background: #fff; border-radius: 50%; border: 4px solid var(--ink); }
-  .sub { font-weight: 700; color: #5a4632; }
-  .next { display: inline-flex; align-items: center; font-weight: 900; color: var(--ink); background: #fff; border: 5px solid var(--ink); border-radius: 22px; box-shadow: 8px 8px 0 var(--ink); }
-  .next span { font-family: "Poppins", sans-serif; color: #fff; background: var(--red); border-radius: 12px; }
+
+  .art { position: relative; }
+  .art > svg { position: absolute; filter: drop-shadow(6px 6px 0 rgba(22,22,22,.9)); }
+  .mug { filter: drop-shadow(10px 10px 0 rgba(22,22,22,.12)) !important; }
+  .bubble { position: absolute; font-family: "Poppins", sans-serif; font-weight: 900; color: var(--ink); background: #fff; border: 5px solid var(--ink); border-radius: 999px; box-shadow: 6px 6px 0 var(--ink); white-space: nowrap; transform: rotate(-8deg); }
+  .bubble::after { content: ""; position: absolute; left: 30%; bottom: -22px; border-width: 22px 18px 0 0; border-style: solid; border-color: var(--ink) transparent transparent transparent; }
+
+  .cb { position: relative; font-family: "Poppins", sans-serif; font-weight: 900; line-height: .98; display: flex; flex-direction: column; align-items: center; }
+  .cb .w1, .cb .w2 { display: flex; }
+  .cb i { font-style: normal; display: inline-block; transform: rotate(var(--r)); -webkit-text-stroke: .045em var(--ink); paint-order: stroke fill; text-shadow: .06em .06em 0 var(--ink); margin: 0 -.01em; }
+  .c-n { color: var(--navy); } .c-r { color: var(--red); } .c-o { color: var(--yellow); }
+  .badge { position: absolute; transform: rotate(14deg); }
+  .badge svg { width: 100%; height: 100%; display: block; }
+  .badge .b-n { position: absolute; left: 0; right: 0; text-align: center; font-family: "Poppins", sans-serif; font-weight: 900; color: var(--navy); line-height: 1; }
+  .badge .b-u { position: absolute; left: 0; right: 0; text-align: center; font-family: "Poppins", sans-serif; font-weight: 800; color: var(--ink); letter-spacing: .1em; line-height: 1; }
+
+  .rest { font-weight: 900; letter-spacing: .08em; white-space: nowrap; }
+  .rest b { font-family: "Poppins", sans-serif; color: var(--red); font-size: 1.4em; padding: 0 .1em; background: linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 90%, transparent 90%); }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-flex; align-items: center; font-weight: 900; border: 5px solid var(--ink); border-radius: 999px; box-shadow: 6px 6px 0 var(--ink); white-space: nowrap; background: #fff; }
+  .chip svg { background: #fff; border-radius: 50%; border: 4px solid var(--ink); flex: none; }
+  .k1 { background: var(--navy); color: #fff; transform: rotate(-3deg); }
+  .k2 { background: var(--yellow); color: var(--ink); transform: rotate(2deg); }
+  .k3 { background: var(--red); color: #fff; transform: rotate(-2deg); }
+
   .tape { position: absolute; z-index: 3; left: -40px; right: -40px; background: var(--navy); border-block: 5px solid var(--ink); box-shadow: 0 8px 0 var(--ink);
     color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: .06em; white-space: nowrap; overflow: hidden; }
   .tape b { font-family: "Poppins", sans-serif; color: var(--yellow); }
   .tape .s { color: var(--yellow); }
   .tape .fl { color: var(--orange); }
-
   /* 橫式電視 33.867 × 19.05 cm（1920 × 1080 px） */
   @page { size: 338.67mm 190.5mm; margin: 0; }
   @media print { html, body { background: none; } body { padding: 0; display: block; } .sheet { box-shadow: none !important; zoom: .6666; } }
   .sheet { width: 1920px; height: 1080px; }
-  .bg { background: radial-gradient(circle at 40% 45%, #fff 0, #fff 25%, transparent 65%); }
+  .bg::after { background: radial-gradient(ellipse at 50% 50%, #FFF8E6 0, rgba(255,248,230,.85) 40%, transparent 75%); }
   .d-tl { width: 260px; top: -80px; left: -70px; } .d-tr { width: 300px; top: -110px; right: -60px; } .d-bl { width: 260px; bottom: -40px; left: -50px; } .d-br { width: 260px; bottom: -50px; right: -40px; }
-  .inner { display: grid; grid-template-columns: 480px 1fr; grid-template-rows: auto auto auto; column-gap: 100px; align-items: center; align-content: start; padding: 50px 120px 0 160px; }
+  .inner { display: grid; grid-template-columns: 760px 1fr; grid-template-rows: auto auto auto; align-content: start; column-gap: 20px; padding: 50px 110px 0 150px; }
   .kicker { grid-column: 1 / -1; justify-self: start; font-size: 18px; padding: 5px 22px; }
   .event { grid-column: 1 / -1; margin-top: 12px; font-size: 40px; }
-  .cup-wrap { grid-column: 1; grid-row: 3; margin-top: 30px; width: 460px; height: 460px; }
-  .main { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; align-items: flex-start; margin-top: 30px; }
-  .cb { font-size: 150px; }
-  .rest { margin-top: 18px; font-size: 64px; }
-  .time { margin-top: 22px; gap: 16px; font-size: 46px; padding: 8px 40px 8px 12px; }
-  .time svg { width: 62px; height: 62px; padding: 4px; }
-  .sub { margin-top: 20px; font-size: 32px; }
-  .next { margin-top: 18px; gap: 14px; font-size: 28px; padding: 10px 24px 10px 10px; }
-  .next span { font-size: 28px; padding: 2px 12px; }
+  .art { grid-column: 1; grid-row: 3; margin-top: 30px; width: 760px; height: 700px; }
+  .mug { left: 150px; top: 120px; width: 470px; height: 470px; }
+  .donut { left: 0; top: 470px; width: 180px; height: 180px; transform: rotate(-14deg); }
+  .cookie { right: 20px; top: 500px; width: 140px; height: 140px; transform: rotate(10deg); }
+  .bean { left: 60px; top: 150px; width: 70px; height: 94px; transform: rotate(-30deg); }
+  .heart { right: 70px; top: 120px; width: 80px; height: 80px; transform: rotate(14deg); }
+  .bubble { left: 10px; top: 30px; font-size: 38px; padding: 10px 28px; }
+  .main { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; align-items: center; margin-top: 80px; }
+  .cb { font-size: 176px; }
+  .badge { right: -210px; top: -95px; width: 210px; height: 210px; }
+  .badge .b-n { top: 46px; font-size: 90px; }
+  .badge .b-u { top: 134px; font-size: 28px; }
+  .rest { margin-top: 40px; font-size: 80px; }
+  .chips { margin-top: 44px; gap: 16px; flex-wrap: nowrap; }
+  .chip { gap: 10px; font-size: 30px; padding: 6px 22px 6px 8px; }
+  .chip svg { width: 54px; height: 54px; padding: 4px; }
   .tape { bottom: 18px; transform: rotate(-1deg); gap: 24px; padding: 8px 0; font-size: 28px; border-block-width: 4px; box-shadow: 0 6px 0 var(--ink); }
   .tape svg { width: 24px; height: 24px; flex: none; }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <symbol id="i-coffee" viewBox="0 0 64 64"><path d="M10 28h36v12a16 16 0 0 1-16 16h-4a16 16 0 0 1-16-16z" fill="#FFB21C" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M46 32h4a7 7 0 0 1 0 14h-6" fill="none" stroke="currentColor" stroke-width="4"/><path class="steam" d="M20 20c-3-4 3-6 0-12M30 20c-3-4 3-6 0-12M40 20c-3-4 3-6 0-12" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></symbol>
   <symbol id="i-star" viewBox="0 0 64 64"><path d="M32 4l7 19 21 1-16 13 6 21-18-12-18 12 6-21L4 24l21-1z" fill="currentColor"/></symbol>
   <symbol id="i-flower" viewBox="0 0 64 64"><path d="M32 30C20 4 44 4 32 30 58 18 58 46 32 34 44 60 20 60 32 34 6 46 6 18 32 30z" fill="currentColor"/></symbol>
 </defs></svg>
 <div class="sheet">
   <div class="bg"></div>
+  <div class="confetti"><i class="cf" style="left:12%;top:24%;--c:#F2541B;--r:20deg;--s:1"></i><i class="cf" style="left:86%;top:30%;--c:#5B8DEF;--r:-30deg;--s:1.2"></i><i class="cf" style="left:8%;top:52%;--c:#FFC83D;--r:45deg;--s:1"></i><i class="cf" style="left:92%;top:58%;--c:#F2541B;--r:10deg;--s:0.9"></i><i class="cf" style="left:18%;top:78%;--c:#5B8DEF;--r:-15deg;--s:1.1"></i><i class="cf" style="left:80%;top:82%;--c:#213C8F;--r:35deg;--s:1"></i><i class="cf" style="left:50%;top:20%;--c:#FFA319;--r:-40deg;--s:0.8"></i><i class="cf" style="left:30%;top:90%;--c:#FFC83D;--r:25deg;--s:1"></i><i class="cf" style="left:70%;top:12%;--c:#213C8F;--r:60deg;--s:0.9"></i><i class="cf" style="left:94%;top:44%;--c:#FFA319;--r:-20deg;--s:0.8"></i><i class="cf" style="left:4%;top:36%;--c:#213C8F;--r:15deg;--s:0.9"></i><i class="cf" style="left:62%;top:92%;--c:#F2541B;--r:50deg;--s:0.8"></i></div>
   <svg class="deco d-tl" viewBox="0 0 300 300" aria-hidden="true"><path class="b-o" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g><path class="arc" d="M120 160a20 20 0 0 1 28 0M50 210a18 18 0 0 1 26 0"/></svg>
   <svg class="deco d-tr" viewBox="0 0 360 300" aria-hidden="true"><path class="b-r" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
   <svg class="deco d-bl" viewBox="0 0 320 300" aria-hidden="true"><path class="b-r" d="M0 120c50-30 100 10 130 60s70 50 60 100-160 30-190 20z"/><path class="arc-y" d="M150 90a50 50 0 0 1 70 70M150 120a26 26 0 0 1 40 36"/></svg>
@@ -79,13 +102,35 @@
   <div class="inner">
     <p class="kicker">CHI MEI MEDICAL CENTER</p>
     <p class="event">奇美醫院西醫<b>PGY</b>醫師招募說明會</p>
-    <div class="cup-wrap"><span class="ring"></span><svg class="cup"><use href="#i-coffee"/></svg></div>
+    <div class="art">
+      <svg class="mug" viewBox="0 0 220 220" aria-hidden="true">
+  <path class="steam1" d="M78 52c-10-12 10-18 0-34M108 50c-10-12 10-18 0-34M138 52c-10-12 10-18 0-34" fill="none" stroke="#161616" stroke-width="7" stroke-linecap="round"/>
+  <path d="M168 34l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" fill="#F2541B" stroke="#161616" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="108" cy="196" rx="92" ry="16" fill="#fff" stroke="#161616" stroke-width="6"/>
+  <path d="M160 96h14a26 26 0 0 1 0 52h-18" fill="none" stroke="#161616" stroke-width="10"/>
+  <path d="M160 96h14a26 26 0 0 1 0 52h-18" fill="none" stroke="#FFA319" stroke-width="3"/>
+  <path d="M40 72h136v74a44 44 0 0 1-44 44h-48a44 44 0 0 1-44-44z" fill="#FFA319" stroke="#161616" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M40 72h136v16H40z" fill="#6B3E1F" stroke="#161616" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M56 104v40" stroke="#FFD27A" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="88" cy="124" r="8" fill="#161616"/><circle cx="130" cy="124" r="8" fill="#161616"/>
+  <circle cx="91" cy="121" r="2.6" fill="#fff"/><circle cx="133" cy="121" r="2.6" fill="#fff"/>
+  <ellipse cx="74" cy="144" rx="10" ry="6" fill="#FF7A8A" opacity=".85"/><ellipse cx="144" cy="144" rx="10" ry="6" fill="#FF7A8A" opacity=".85"/>
+  <path d="M98 140q11 12 22 0" fill="none" stroke="#161616" stroke-width="6" stroke-linecap="round"/>
+</svg>
+      <svg class="donut" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#F4C27A" stroke="#161616" stroke-width="5"/><path d="M14 46c4-20 20-34 36-34s34 12 38 32c2 10-8 8-12 14s-10 2-14 6-12 0-16-4-12 0-18-4-16 0-14-10z" fill="#FF8FB1" stroke="#161616" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" r="13" fill="#FFF4D6" stroke="#161616" stroke-width="4"/><path d="M30 30l6 3M66 26l-3 6M74 46l6-2M40 66l-2 6M26 50l6 1M58 70l5 3" stroke="#213C8F" stroke-width="4" stroke-linecap="round"/><path d="M48 24l5 2M62 58l4 4" stroke="#FFC83D" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg class="cookie" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="#D99A4E" stroke="#161616" stroke-width="5"/><circle cx="34" cy="36" r="6" fill="#5A3317"/><circle cx="62" cy="30" r="5" fill="#5A3317"/><circle cx="66" cy="58" r="7" fill="#5A3317"/><circle cx="40" cy="64" r="5" fill="#5A3317"/><circle cx="52" cy="47" r="4" fill="#5A3317"/></svg>
+      <svg class="bean" viewBox="0 0 60 80" aria-hidden="true"><ellipse cx="30" cy="40" rx="24" ry="34" fill="#6B3E1F" stroke="#161616" stroke-width="4"/><path d="M30 8c-12 20 12 44 0 64" fill="none" stroke="#3B2010" stroke-width="5" stroke-linecap="round"/></svg>
+      <svg class="heart" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 56S6 40 6 22A13 13 0 0 1 32 16a13 13 0 0 1 26 6c0 18-26 34-26 34z" fill="#F2541B" stroke="#161616" stroke-width="4"/></svg>
+      <span class="bubble">Take a break!</span>
+    </div>
     <div class="main">
-      <h1 class="cb">Coffee<br>Break</h1>
+      <h1 class="cb"><span class="w1"><i class="c-n" style="--r:-6deg">C</i><i class="c-r" style="--r:4deg">o</i><i class="c-o" style="--r:-3deg">f</i><i class="c-n" style="--r:5deg">f</i><i class="c-r" style="--r:-5deg">e</i><i class="c-o" style="--r:3deg">e</i></span><span class="w2"><i class="c-n" style="--r:-6deg">B</i><i class="c-r" style="--r:4deg">r</i><i class="c-o" style="--r:-3deg">e</i><i class="c-n" style="--r:5deg">a</i><i class="c-r" style="--r:-5deg">k</i></span><div class="badge"><svg viewBox="0 0 200 200" aria-hidden="true"><polygon points="100.0,0.0 114.2,19.2 134.2,6.0 141.0,29.0 164.3,23.4 162.8,47.3 186.6,50.0 177.1,72.0 198.5,82.6 182.0,100.0 198.5,117.4 177.1,128.0 186.6,150.0 162.8,152.7 164.3,176.6 141.0,171.0 134.2,194.0 114.2,180.8 100.0,200.0 85.8,180.8 65.8,194.0 59.0,171.0 35.7,176.6 37.2,152.7 13.4,150.0 22.9,128.0 1.5,117.4 18.0,100.0 1.5,82.6 22.9,72.0 13.4,50.0 37.2,47.3 35.7,23.4 59.0,29.0 65.8,6.0 85.8,19.2" fill="#F2541B" stroke="#161616" stroke-width="6" stroke-linejoin="round"/><circle cx="100" cy="100" r="70" fill="#FFC83D" stroke="#161616" stroke-width="5"/></svg><span class="b-n">15</span><span class="b-u">MIN</span></div></h1>
       <p class="rest">休息 <b>15</b> 分鐘</p>
-      <p class="time"><svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="24" fill="#FFB21C" stroke="#161616" stroke-width="4"/><path d="M32 34V20M32 34h10" stroke="#161616" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="34" r="3" fill="#161616"/></svg>14:50 – 15:05</p>
-      <p class="sub">喝杯咖啡，和學長姐聊聊 ☕</p>
-      <p class="next"><span>15:05</span>下一場：兒科訓練特色分享，請準時回座</p>
+      <div class="chips">
+      <span class="chip k1"><svg viewBox="0 0 64 64"><path d="M10 26h36v12a16 16 0 0 1-16 16h-4a16 16 0 0 1-16-16z" fill="#FFA319" stroke="#161616" stroke-width="5" stroke-linejoin="round"/><path d="M46 30h4a7 7 0 0 1 0 14h-6" fill="none" stroke="#161616" stroke-width="5"/><path d="M22 18c-3-4 3-6 0-10M32 18c-3-4 3-6 0-10" fill="none" stroke="#161616" stroke-width="4" stroke-linecap="round"/></svg>喝杯咖啡</span>
+      <span class="chip k2"><svg viewBox="0 0 64 64"><path d="M6 12h40a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22l-10 9v-9H6a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z" fill="#5B8DEF" stroke="#161616" stroke-width="4.5" stroke-linejoin="round"/><circle cx="16" cy="26" r="3.5" fill="#fff"/><circle cx="26" cy="26" r="3.5" fill="#fff"/><circle cx="36" cy="26" r="3.5" fill="#fff"/><path d="M54 24h4a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4h-4v7l-8-7H32" fill="#FFC83D" stroke="#161616" stroke-width="4.5" stroke-linejoin="round"/></svg>和學長姐聊聊</span>
+      <span class="chip k3"><svg viewBox="0 0 64 64"><circle cx="32" cy="12" r="7" fill="#FFD9B8" stroke="#161616" stroke-width="4"/><path d="M32 20v20M32 40l-10 18M32 40l10 18M32 26L14 12M32 26l18-14" fill="none" stroke="#161616" stroke-width="5" stroke-linecap="round"/><path d="M8 34l4 2M56 34l-4 2" stroke="#F2541B" stroke-width="4" stroke-linecap="round"/></svg>起來伸展一下</span>
+    </div>
     </div>
   </div>
   <div class="tape"><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span><svg class="s"><use href="#i-star"/></svg><span>創造 <b>360°</b> 醫學人生</span><svg class="fl"><use href="#i-flower"/></svg><span>選擇奇美</span></div>
