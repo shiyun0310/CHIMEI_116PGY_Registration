@@ -20,16 +20,24 @@
   .fade { position: absolute; left: 0; right: 0; top: 880px; height: 90px; background: linear-gradient(rgba(253,253,253,0), #FDFDFD); }
   .foot { position: absolute; left: 0; bottom: 0; width: 1080px; height: auto; display: block; }
 
-  .mid { position: absolute; left: 0; right: 0; top: 1000px; bottom: 83px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 20px; }
-  .tag { font-family: "Poppins", sans-serif; font-weight: 900; font-size: 34px; letter-spacing: .12em; color: var(--ink); background: var(--yellow); border: 5px solid var(--ink); border-radius: 999px; padding: 6px 30px; box-shadow: 6px 6px 0 var(--ink); transform: rotate(-3deg); }
-  .arrow { position: relative; margin-top: 40px; width: 980px; height: 400px; }
-  .arrow svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(14px 14px 0 var(--ink)); }
-  .arrow p { position: absolute; left: 330px; right: 40px; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 140px; letter-spacing: .1em; color: #fff; white-space: nowrap; text-shadow: 6px 6px 0 rgba(22,22,22,.85); }
-  .where { margin-top: 56px; font-weight: 900; font-size: 120px; letter-spacing: .06em; color: var(--navy); white-space: nowrap; line-height: 1.15; }
-  .where span { padding: 0 .06em; background: linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 92%, transparent 92%); }
-  .where b { color: var(--red); }
-  .note { margin-top: 24px; font-size: 38px; font-weight: 700; color: #4a5266; }
-  .ic { position: absolute; }
+  .bgimg { position: absolute; left: 0; right: 0; top: 700px; bottom: 0; background: url("../assets/img/building-sky-1920.webp") 30% 70% / cover no-repeat; opacity: .10; filter: grayscale(1);
+    -webkit-mask-image: linear-gradient(rgba(0,0,0,0), #000 30%, #000 80%, rgba(0,0,0,0)); mask-image: linear-gradient(rgba(0,0,0,0), #000 30%, #000 80%, rgba(0,0,0,0)); }
+  .top { -webkit-mask-image: linear-gradient(#000 99%, rgba(0,0,0,0)); mask-image: linear-gradient(#000 99%, rgba(0,0,0,0)); z-index: 1; }
+  .mid { position: absolute; z-index: 2; left: 0; right: 0; top: 985px; bottom: 83px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; }
+  /* 緞帶（同海報「招募說明會」） */
+  .ribbon { position: relative; width: 900px; height: 200px; }
+  .ribbon svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ribbon p { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-bottom: 34px; font-weight: 900; font-size: 128px; letter-spacing: .06em; color: var(--ink); white-space: nowrap; line-height: 1; }
+  .ribbon p b { color: var(--red); }
+  /* 箭頭（同海報「奇美」字：深藍＋白邊＋黃色位移陰影） */
+  .arrow { position: relative; margin-top: 26px; width: 960px; height: 330px; }
+  .arrow svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .arrow p { position: absolute; left: 300px; right: 50px; top: 0; bottom: 14px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 132px; letter-spacing: .12em; color: #fff; white-space: nowrap; }
+  /* 膠囊（同海報地點標籤） */
+  .pill { margin-top: 46px; display: inline-flex; align-items: center; gap: 22px; background: var(--red); border: 6px solid #C9400F; border-radius: 999px; padding: 12px 44px 12px 14px; color: #fff; font-weight: 900; font-size: 44px; letter-spacing: .04em; white-space: nowrap; }
+  .pill i { width: 84px; height: 84px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+  .pill i svg { width: 56px; height: 56px; }
+  .ic { position: absolute; z-index: 2; }
 </style>
 </head>
 <body>
@@ -39,21 +47,27 @@
 </defs></svg>
 <div class="sheet">
   <img class="top" src="img/poster-top.jpg" alt="奇美 116學年度 西醫PGY醫師招募說明會 115年11月29日 13:30-17:00 13:00開放報到 奇美醫院第五醫療大樓5樓國際會議廳">
-  <svg class="ic" style="left:60px;top:1010px;width:46px;height:46px;color:#FFC83D"><use href="#i-star"/></svg>
-  <svg class="ic" style="right:70px;top:1030px;width:40px;height:40px;color:#F2541B"><use href="#i-flower"/></svg>
-  <svg class="ic" style="right:60px;top:1700px;width:44px;height:44px;color:#FFA319"><use href="#i-star"/></svg>
-  <svg class="ic" style="left:70px;top:1720px;width:36px;height:36px;color:#213C8F"><use href="#i-flower"/></svg>
+  <div class="bgimg"></div>
+  <svg class="ic" style="left:48px;top:1690px;width:54px;height:54px;color:#FFC83D"><use href="#i-star"/></svg>
+  <svg class="ic" style="right:56px;top:1680px;width:58px;height:50px" viewBox="0 0 64 56"><path d="M32 54S4 37 4 19A14 14 0 0 1 32 12a14 14 0 0 1 28 7c0 18-28 35-28 35z" fill="#D7263D"/></svg>
   <div class="mid">
-    <span class="tag">CHECK-IN 報到</span>
+    <div class="ribbon">
+      <svg viewBox="0 0 900 200" aria-hidden="true">
+        <path d="M30 120 120 104 112 190 70 160 6 176 40 148z" fill="#E0A21F"/>
+        <path d="M870 120 780 104 788 190 830 160 894 176 860 148z" fill="#E0A21F"/>
+        <path d="M80 90Q450 40 820 90L812 172Q450 120 88 172z" fill="#FFC83D"/>
+      </svg>
+      <p>報到台在<b>左側</b></p>
+    </div>
     <div class="arrow">
-      <svg viewBox="0 0 960 360" aria-hidden="true">
-        <path d="M14 180 300 14v96h616a30 30 0 0 1 30 30v80a30 30 0 0 1-30 30H300v96z" fill="#F2541B" stroke="#161616" stroke-width="12" stroke-linejoin="round"/>
-        <circle cx="150" cy="180" r="18" fill="#FFC83D" stroke="#161616" stroke-width="6"/>
+      <svg viewBox="0 0 960 330" aria-hidden="true">
+        <g transform="translate(18 18)"><path d="M20 156 290 16a10 10 0 0 1 15 9v77h610a24 24 0 0 1 24 24v60a24 24 0 0 1-24 24H305v77a10 10 0 0 1-15 9z" fill="#FFC83D" stroke="#FFC83D" stroke-width="22" stroke-linejoin="round"/></g>
+        <path d="M20 156 290 16a10 10 0 0 1 15 9v77h610a24 24 0 0 1 24 24v60a24 24 0 0 1-24 24H305v77a10 10 0 0 1-15 9z" fill="#213C8F" stroke="#fff" stroke-width="22" stroke-linejoin="round" paint-order="stroke"/>
+        <path d="M200 120l-36 36 36 36M150 120l-36 36 36 36" fill="none" stroke="#FFC83D" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <p>請往左走</p>
     </div>
-    <p class="where"><span>報到台</span>在<b>左側</b></p>
-    <p class="note">請先至報到台完成簽到再入場</p>
+    <p class="pill"><i><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="10" width="40" height="48" rx="6" fill="#fff" stroke="#161616" stroke-width="4"/><rect x="22" y="5" width="20" height="11" rx="4" fill="#F2541B" stroke="#161616" stroke-width="3.5"/><path d="M22 36l7 7 13-15" fill="none" stroke="#1FA463" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></i>請先至報到台完成簽到再入場</p>
   </div>
   <img class="foot" src="img/poster-footer.jpg" alt="聯絡資訊：奇美教學部PGY訓練組">
 </div>
