@@ -84,6 +84,42 @@ h1 b{font-family:Poppins;font-weight:900}
 .steps li{display:flex;align-items:center;gap:12px;font-size:28px;font-weight:700;line-height:1.3;white-space:nowrap}
 .steps li i{flex:none;width:38px;height:38px;border-radius:50%;background:var(--yellow);color:var(--ink);border:3px solid var(--ink);display:grid;place-items:center;font-style:normal;font-family:Poppins;font-weight:900;font-size:22px}
 .steps li b{color:var(--yellow)}
+
+/* ===== 放進歌詞頁照片框用：拿掉自帶背景與色塊，內容撐滿畫面 ===== */
+.slide{background:var(--band);padding:56px 64px 60px;justify-content:space-between}
+.slide::before,.slide::after,.blob{display:none}
+.s1,.s2,.s3{gap:0;padding-top:56px}
+.s1-row,.s3 .sides,.s2 .sides{flex:1;padding:0;margin-top:44px}
+.s1-row{gap:48px}
+.s1-head{gap:56px}
+.s1 h1{font-size:120px}
+.s1 .pill{font-size:60px}
+.snack h3{font-size:50px}
+.snack-ill{transform:scale(1.25);margin:30px 0 40px}
+.snack-t{font-size:92px}
+.snack-s{font-size:40px}
+.checkin h2{font-size:58px}
+.checkin h2 small{font-size:26px}
+.s1 .checkin .qrbox{width:300px}
+.s1 .checkin .steps li{font-size:38px}
+.s1 .checkin .steps li i{width:46px;height:46px;font-size:26px}
+.checkin .help{font-size:28px}
+.s2 h1{font-size:132px}
+.s2 h1 .sub{font-size:84px}
+.s2 .note,.s3 .note{margin-top:30px;font-size:52px}
+.s2 .sides{gap:48px}
+.s2 .side h3,.s3 .side h3{font-size:56px}
+.s2 .room{font-size:66px}
+.s2 .room .no{font-size:38px}
+.s3 h1{font-size:96px}
+.s3 .sides{gap:32px}
+.s3 .room{font-size:50px;white-space:nowrap}
+.s3 .room .no{font-size:32px}
+.s3 .checkout{width:560px;justify-content:space-evenly}
+.s3 .checkout h2{font-size:54px}
+.s3 .qrbox{width:270px}
+.s3 .steps li{font-size:32px}
+.s3 .steps li i{width:42px;height:42px;font-size:24px}
 </style>
 </head>
 <body>
