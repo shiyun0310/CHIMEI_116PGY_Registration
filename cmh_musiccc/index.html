@@ -67,10 +67,6 @@ svg{display:block}
 .empty b{font-family:var(--font-en);font-size:clamp(1.6rem,4vw,3.4rem);background:var(--navy);color:#fff;padding:0 .3em;border-radius:.2em;transform:rotate(-4deg)}
 .empty span{font-size:clamp(.85rem,1.4vw,1.2rem);color:var(--muted)}
 .frame.drag{outline:6px dashed var(--orange);outline-offset:-14px}
-.sec{position:absolute;z-index:2;top:clamp(-18px,-1.6vh,-12px);left:clamp(14px,2vw,30px);background:var(--yellow);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
-  border-radius:12px;padding:3px 14px;font-weight:900;font-size:clamp(.8rem,1.2vw,1.1rem);transform:rotate(-4deg);transition:transform .3s}
-.sec small{font-family:var(--font-en);font-weight:800;color:var(--red);margin-left:6px;font-size:.8em}
-.sec.pop{animation:secPop .5s cubic-bezier(.2,.9,.3,1.4)}
 .chimei-badge{position:absolute;z-index:2;right:clamp(-16px,-1vw,-10px);bottom:clamp(-18px,-1.8vh,-12px);background:var(--red);color:#fff;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);border-radius:999px;
   padding:4px 16px;font-family:var(--font-en);font-weight:900;letter-spacing:.06em;font-size:clamp(.8rem,1.3vw,1.15rem);transform:rotate(-6deg) scale(calc(1 + var(--pulse)*.12));transition:transform .12s}
 
@@ -142,7 +138,6 @@ body.idle .ctrl{opacity:0;transform:translate(-50%,20px);pointer-events:none}
 @keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}60%{transform:translateY(0)}}
 @keyframes beatpop{0%,100%{transform:scale(1)}15%{transform:scale(1.1)}30%{transform:scale(.97)}45%{transform:scale(1.05)}}
 @keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.1)}}
-@keyframes secPop{0%{transform:rotate(-4deg) scale(.4)}100%{transform:rotate(-4deg) scale(1)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -183,7 +178,6 @@ body.idle .ctrl{opacity:0;transform:translate(-50%,20px);pointer-events:none}
   </div>
 
   <div class="frame-wrap">
-    <div class="sec" id="sec">前奏<small>INTRO</small></div>
     <div class="frame" id="frame">
       <div class="empty" id="empty"><b>16 : 9</b>照片位置<span>把照片拖曳到這裡可先預覽</span></div>
     </div>
@@ -301,7 +295,7 @@ try {
 } catch(e) {}
 
 const $ = id => document.getElementById(id);
-const audio = $('audio'), lyricsEl = $('lyrics'), secEl = $('sec');
+const audio = $('audio'), lyricsEl = $('lyrics');
 
 /* ---------- 照片 ---------- */
 const frame = $('frame');
@@ -329,7 +323,6 @@ document.addEventListener('drop', e=>{
 /* ---------- 歌詞渲染 ---------- */
 const esc = s => s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function nextLine(i){ for (let k=i+1;k<LYRICS.length;k++) if (LYRICS[k].l) return LYRICS[k]; return null; }
-function sectionAt(i){ for (let k=i;k>=0;k--) if (LYRICS[k].s) return LYRICS[k].s; return LYRICS[0].s; }
 
 function buildLine(i){
   const it = LYRICS[i], wrap = document.createElement('div');
@@ -365,9 +358,6 @@ function show(i){
   curEl = buildLine(i);
   lyricsEl.appendChild(curEl);
   requestAnimationFrame(()=>requestAnimationFrame(()=>curEl && curEl.classList.remove('pre')));
-  const s = sectionAt(i);
-  const txt = `${s[0]}<small>${s[1]}</small>`;
-  if (secEl.innerHTML !== txt) { secEl.innerHTML = txt; secEl.classList.remove('pop'); void secEl.offsetWidth; secEl.classList.add('pop'); }
 }
 function indexAt(t){
   let idx = 0;
