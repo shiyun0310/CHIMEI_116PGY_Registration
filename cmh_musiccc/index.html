@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>下一站，奇美！</title>
+<meta name="description" content="奇美醫院 PGY 主題曲《下一站，奇美！》歌詞播放">
+<meta name="theme-color" content="#213C8F">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4c15 0 28 9 28 26S47 60 30 60 4 48 4 32 17 4 32 4z' fill='%23213C8F'/%3E%3Cpath d='M27 18h10v9h9v10h-9v9H27v-9h-9V27h9z' fill='%23FFB21C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Poppins:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#213C8F; --navy-d:#172B6A; --orange:#FFA319; --red:#F2541B; --yellow:#FFC83D;
+  --ink:#161616; --muted:#8A93AE; --band:#FFF6E2; --pulse:0;
+  --font:"Noto Sans TC",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-en:"Poppins",var(--font);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:var(--font);color:var(--ink);background:#fff;-webkit-tap-highlight-color:transparent;user-select:none}
+body.idle{cursor:none}
+svg{display:block}
+
+/* ---------- 背景裝飾 ---------- */
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.bg::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 1px 1px,rgba(33,60,143,.12) 1.5px,transparent 0) 0 0/26px 26px}
+.deco{position:absolute;width:min(30vw,48vh)}
+.deco .blob{transform-box:fill-box;transform-origin:center;animation:morph 8s ease-in-out infinite}
+.b-navy{fill:var(--navy)} .b-orange{fill:var(--orange)} .b-red{fill:var(--red)}
+.deco .dots circle{fill:#fff}
+.deco .lines{fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round}
+.deco .arc-y{fill:none;stroke:var(--yellow);stroke-width:12;stroke-linecap:round}
+.deco .squiggle{fill:none;stroke:var(--navy);stroke-width:6;stroke-linecap:round;animation:sway 6s ease-in-out infinite}
+.d-tl{top:-6vh;left:-6vw;transform:scale(calc(1 + var(--pulse)*.06))}
+.d-tr{top:-8vh;right:-5vw;width:min(34vw,54vh);transform:scale(calc(1 + var(--pulse)*.05))}
+.d-bl{bottom:-10vh;left:-7vw;transform:scale(calc(1 + var(--pulse)*.05))}
+.d-br{bottom:-9vh;right:-6vw;transform:scale(calc(1 + var(--pulse)*.06))}
+.d-tl,.d-tr,.d-bl,.d-br{transition:transform .12s ease-out}
+.d-br .squiggle{stroke:var(--red)}
+.fl{position:absolute;width:clamp(28px,3.4vw,52px);height:clamp(28px,3.4vw,52px);color:var(--navy);animation:bob 5s ease-in-out infinite}
+.fl.star-y{color:var(--yellow)} .fl.star-o{color:var(--orange)} .fl.flower-r{color:var(--red)}
+.f1{top:16%;left:4%;animation-delay:-1s}.f2{top:58%;left:3%;animation-delay:-2.5s}
+.f3{top:30%;right:4%;animation-delay:-.5s}.f4{top:72%;right:5%;animation-delay:-3s}
+.f5{top:8%;left:34%;animation-delay:-1.8s}.f6{bottom:22%;left:9%;animation-delay:-4s}
+.f7{top:10%;right:30%;animation-delay:-2s}.f8{bottom:26%;right:10%;animation-delay:-3.6s}
+
+/* ---------- 版面 ---------- */
+.app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,2.2vh,26px);padding:clamp(12px,2.5vh,28px) 16px}
+.top{position:absolute;top:clamp(10px,2vh,22px);left:clamp(12px,2vw,28px);right:clamp(12px,2vw,28px);display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:3}
+.brand{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:999px;padding:4px 16px 4px 6px;font-weight:900;color:var(--navy);font-size:clamp(.8rem,1.2vw,1.05rem)}
+.brand img{height:clamp(28px,4vh,40px);width:auto;margin-left:6px}
+.song-tag{display:flex;align-items:center;gap:8px;background:var(--navy);color:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:999px;padding:6px 16px;font-weight:900;font-size:clamp(.8rem,1.2vw,1.05rem);transform:rotate(2deg)}
+.song-tag .note{color:var(--yellow);font-size:1.2em;animation:hop 1.2s ease-in-out infinite}
+
+/* 16:9 照片框 */
+.frame-wrap{position:relative;width:min(84vw,calc((100vh - clamp(210px,38vh,420px)) * 16 / 9));margin-top:clamp(30px,5vh,56px)}
+.frame{position:relative;aspect-ratio:16/9;border:clamp(3px,.35vw,5px) solid var(--ink);border-radius:clamp(14px,1.6vw,26px);overflow:hidden;background:var(--band);
+  box-shadow:clamp(6px,.7vw,12px) clamp(6px,.7vw,12px) 0 var(--ink);transform:rotate(-.6deg)}
+.frame .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease;transform-origin:center}
+.frame .ph.on{opacity:1;animation:kenburns 14s ease-out forwards}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--navy);font-weight:900;text-align:center;
+  background:repeating-linear-gradient(45deg,#FFF6E2 0 22px,#FFEFCC 22px 44px)}
+.empty b{font-family:var(--font-en);font-size:clamp(1.6rem,4vw,3.4rem);background:var(--navy);color:#fff;padding:0 .3em;border-radius:.2em;transform:rotate(-4deg)}
+.empty span{font-size:clamp(.85rem,1.4vw,1.2rem);color:var(--muted)}
+.frame.drag{outline:6px dashed var(--orange);outline-offset:-14px}
+.sec{position:absolute;z-index:2;top:clamp(-18px,-1.6vh,-12px);left:clamp(14px,2vw,30px);background:var(--yellow);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
+  border-radius:12px;padding:3px 14px;font-weight:900;font-size:clamp(.8rem,1.2vw,1.1rem);transform:rotate(-4deg);transition:transform .3s}
+.sec small{font-family:var(--font-en);font-weight:800;color:var(--red);margin-left:6px;font-size:.8em}
+.sec.pop{animation:secPop .5s cubic-bezier(.2,.9,.3,1.4)}
+.chimei-badge{position:absolute;z-index:2;right:clamp(-16px,-1vw,-10px);bottom:clamp(-18px,-1.8vh,-12px);background:var(--red);color:#fff;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);border-radius:999px;
+  padding:4px 16px;font-family:var(--font-en);font-weight:900;letter-spacing:.06em;font-size:clamp(.8rem,1.3vw,1.15rem);transform:rotate(-6deg) scale(calc(1 + var(--pulse)*.12));transition:transform .12s}
+
+/* 歌詞 */
+.lyrics{position:relative;width:min(94vw,1500px);height:clamp(120px,25vh,280px);text-align:center}
+.line{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1vh,12px);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.9,.3,1.2)}
+.line.out{opacity:0;transform:translateY(-28px) scale(.96)}
+.line.pre{opacity:0;transform:translateY(30px) scale(.96);transition:none}
+.cur{font-weight:900;line-height:1.3;letter-spacing:.06em;font-size:min(4.3vw,7vh);color:#C5CCE2;max-width:100%}
+.cur .c{transition:color .18s ease,text-shadow .18s ease;display:inline-block}
+.cur .c.on{color:var(--navy);text-shadow:.05em .05em 0 var(--yellow)}
+.cur .c.hl{color:#F7B9A2}
+.cur .c.hl.on{color:var(--red);text-shadow:.05em .05em 0 var(--yellow)}
+.cur .sp{display:inline-block;width:.6em}
+.cur.big{font-size:min(6vw,10vh)}
+.nxt{font-weight:700;letter-spacing:.06em;color:var(--muted);font-size:min(2vw,3.3vh)}
+.nxt::before{content:"▸ ";color:var(--orange)}
+.nxt:empty::before{content:""}
+.title-card .cur{color:var(--navy);text-shadow:.05em .05em 0 var(--yellow)}
+.title-card .cur em{font-style:normal;color:var(--red)}
+.inst{font-family:var(--font-en);font-weight:900;color:var(--orange);font-size:min(3.4vw,5.5vh);letter-spacing:.3em}
+.inst span{display:inline-block;animation:hop 1s ease-in-out infinite}
+.inst span:nth-child(2){animation-delay:.15s}.inst span:nth-child(3){animation-delay:.3s}
+
+/* 開始畫面 */
+.start{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);cursor:pointer}
+.start-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.start h1{font-size:clamp(2rem,6vw,4.6rem);font-weight:900;color:var(--navy);text-shadow:.05em .05em 0 var(--yellow);line-height:1.15}
+.start h1 em{font-style:normal;color:var(--red)}
+.play-btn{width:clamp(88px,12vw,130px);height:clamp(88px,12vw,130px);border-radius:50%;background:var(--red);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:grid;place-items:center;animation:beatpop 1.6s ease-in-out infinite}
+.play-btn svg{width:42%;height:42%;margin-left:8%;fill:#fff}
+.start p{margin:0;font-weight:700;color:var(--muted);font-size:clamp(.9rem,1.5vw,1.15rem)}
+.start p kbd{font-family:var(--font-en);background:#fff;border:2px solid var(--ink);border-radius:6px;padding:0 6px;color:var(--ink);font-size:.85em}
+
+/* 控制列 */
+.ctrl{position:fixed;left:50%;bottom:clamp(10px,2vh,20px);transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);
+  border-radius:999px;padding:6px 10px;width:min(720px,94vw);transition:opacity .4s,transform .4s}
+body.idle .ctrl{opacity:0;transform:translate(-50%,20px);pointer-events:none}
+.ctrl button{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:var(--navy);color:#fff;display:grid;place-items:center;cursor:pointer}
+.ctrl button:hover{background:var(--red)}
+.ctrl button svg{width:18px;height:18px;fill:currentColor}
+.ctrl .time{font-family:var(--font-en);font-weight:800;font-size:.8rem;color:var(--navy);min-width:86px;text-align:center}
+.bar{flex:1;height:10px;border-radius:99px;background:#E6EAF5;cursor:pointer;position:relative;border:2px solid var(--ink)}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--orange),var(--red));border-radius:99px}
+.toast{position:fixed;top:clamp(70px,11vh,110px);left:50%;transform:translateX(-50%);z-index:30;background:var(--ink);color:#fff;font-weight:700;border-radius:999px;padding:8px 18px;font-size:.95rem;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* 對時模式 */
+.calib{position:fixed;inset:auto 16px 80px auto;z-index:25;width:min(380px,calc(100vw - 32px));background:#fff;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-radius:18px;padding:14px 16px;font-size:.9rem}
+.calib h3{margin:0 0 6px;color:var(--red);font-size:1rem}
+.calib p{margin:4px 0;line-height:1.5}
+.calib textarea{width:100%;height:110px;font-family:ui-monospace,monospace;font-size:.75rem;border:2px solid var(--ink);border-radius:8px;padding:6px}
+.calib .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.calib .row button{border:2px solid var(--ink);border-radius:999px;background:var(--yellow);font-weight:800;padding:4px 12px;cursor:pointer}
+
+@media (orientation:portrait){
+  .frame-wrap{width:92vw;margin-top:clamp(70px,12vh,120px)}
+  .lyrics{height:clamp(150px,26vh,260px)}
+  .cur{font-size:min(7vw,5vh)} .cur.big{font-size:9vw}
+  .nxt{font-size:min(3.8vw,2.6vh)}
+  .song-tag{font-size:.78rem}
+  .deco{width:46vw}.d-tr{width:52vw}
+}
+@media (max-width:560px){ .brand span{display:none} .brand{padding:4px 8px 4px 2px} }
+
+@keyframes morph{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.05) rotate(3deg)}}
+@keyframes sway{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(4deg)}}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}60%{transform:translateY(0)}}
+@keyframes beatpop{0%,100%{transform:scale(1)}15%{transform:scale(1.1)}30%{transform:scale(.97)}45%{transform:scale(1.05)}}
+@keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.1)}}
+@keyframes secPop{0%{transform:rotate(-4deg) scale(.4)}100%{transform:rotate(-4deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-steth" viewBox="0 0 64 64"><path d="M18 8v16a12 12 0 0 0 24 0V8" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M30 36v8a10 10 0 0 0 20 0v-6" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="32" r="7" fill="#FFB21C" stroke="currentColor" stroke-width="4"/><circle cx="18" cy="8" r="3.5" fill="currentColor"/><circle cx="42" cy="8" r="3.5" fill="currentColor"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 64 64"><path d="M32 56S6 40 6 22A13 13 0 0 1 32 16a13 13 0 0 1 26 6c0 18-26 34-26 34z" fill="#F2541B"/><path d="M14 30h9l4-8 6 16 4-8h12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 64 64"><g transform="rotate(-40 32 32)"><rect x="8" y="22" width="48" height="20" rx="10" fill="#fff" stroke="currentColor" stroke-width="4"/><path d="M32 22h14a10 10 0 0 1 0 20H32z" fill="#F2541B" stroke="currentColor" stroke-width="4"/></g></symbol>
+    <symbol id="i-syringe" viewBox="0 0 64 64"><g transform="rotate(45 32 32)"><rect x="24" y="14" width="16" height="30" rx="2" fill="#E9EEF8" stroke="currentColor" stroke-width="4"/><rect x="26" y="28" width="12" height="14" fill="#FFB21C"/><path d="M32 44v16M20 14h24M32 14V4M26 4h12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-cap" viewBox="0 0 64 64"><path d="M4 24 32 12l28 12-28 12z" fill="currentColor"/><path d="M16 30v12c0 6 32 6 32 0V30L32 37z" fill="#FFB21C" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M56 26v16" stroke="#F2541B" stroke-width="4" stroke-linecap="round"/><circle cx="56" cy="45" r="4" fill="#F2541B"/></symbol>
+    <symbol id="i-star" viewBox="0 0 64 64"><path d="M32 4l7 19 21 1-16 13 6 21-18-12-18 12 6-21L4 24l21-1z" fill="currentColor"/></symbol>
+    <symbol id="i-flower" viewBox="0 0 64 64"><path d="M32 30C20 4 44 4 32 30 58 18 58 46 32 34 44 60 20 60 32 34 6 46 6 18 32 30z" fill="currentColor"/></symbol>
+    <symbol id="i-note" viewBox="0 0 64 64"><path d="M24 48V14l30-6v34" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><ellipse cx="17" cy="48" rx="9" ry="7" fill="#FFA319" stroke="currentColor" stroke-width="4"/><ellipse cx="47" cy="42" rx="9" ry="7" fill="#F2541B" stroke="currentColor" stroke-width="4"/></symbol>
+  </defs>
+</svg>
+
+<div class="bg" aria-hidden="true">
+  <svg class="deco d-tl" viewBox="0 0 300 300"><path class="blob b-navy" d="M40 60c40-50 120-30 130 20s-40 70-30 120-90 70-120 20S0 110 40 60z"/><g class="dots"><circle cx="70" cy="100" r="7"/><circle cx="100" cy="80" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="110" cy="130" r="5"/><circle cx="85" cy="190" r="7"/></g></svg>
+  <svg class="deco d-tr" viewBox="0 0 360 300"><path class="blob b-orange" d="M120 0h240v200c-30 40-80 10-100 50s-90 40-90-10 40-60 10-90-90-20-80-70S90 20 120 0z"/><path class="squiggle" d="M60 150c30-40 60 40 90 0s60 40 90 0 60 40 90 0"/><path class="lines" d="M220 40c10 20 30 20 40 40M280 70c8 16 26 16 34 30M180 120c12 10 26 12 36 4"/></svg>
+  <svg class="deco d-bl" viewBox="0 0 320 300"><path class="blob b-red" d="M0 120c50-30 100 10 130 60s70 50 60 100-160 30-190 20z"/><path class="lines" d="M30 200c30-10 60 10 80 40M20 240c30-6 50 10 66 34"/><path class="arc-y" d="M150 90a50 50 0 0 1 70 70M150 120a26 26 0 0 1 40 36"/></svg>
+  <svg class="deco d-br" viewBox="0 0 320 300"><path class="blob b-navy" d="M320 80c-60 0-90 40-110 90s-80 40-80 90 50 50 190 40z"/><g class="dots"><circle cx="250" cy="170" r="7"/><circle cx="280" cy="140" r="5"/><circle cx="220" cy="230" r="6"/><circle cx="270" cy="250" r="7"/></g><path class="squiggle" d="M60 60c20-30 40 30 60 0s40 30 60 0"/></svg>
+  <svg class="fl f1"><use href="#i-steth"/></svg>
+  <svg class="fl f2"><use href="#i-heart"/></svg>
+  <svg class="fl f3"><use href="#i-pill"/></svg>
+  <svg class="fl f4 star-o"><use href="#i-star"/></svg>
+  <svg class="fl f5 flower-r"><use href="#i-flower"/></svg>
+  <svg class="fl f6"><use href="#i-note"/></svg>
+  <svg class="fl f7 star-y"><use href="#i-star"/></svg>
+  <svg class="fl f8"><use href="#i-cap"/></svg>
+</div>
+
+<main class="app">
+  <div class="top">
+    <div class="brand"><img src="../assets/img/chimei-logo.png" alt="奇美醫院 LOGO"><span>奇美醫院教學部</span></div>
+    <div class="song-tag"><span class="note">♪</span>下一站，奇美！</div>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="sec" id="sec">前奏<small>INTRO</small></div>
+    <div class="frame" id="frame">
+      <div class="empty" id="empty"><b>16 : 9</b>照片位置<span>把照片拖曳到這裡可先預覽</span></div>
+    </div>
+    <div class="chimei-badge">CHIMEI PGY</div>
+  </div>
+
+  <div class="lyrics" id="lyrics" aria-live="polite"></div>
+</main>
+
+<div class="ctrl" id="ctrl">
+  <button id="btnPlay" aria-label="播放／暫停"><svg viewBox="0 0 24 24" id="icoPlay"><path d="M7 4l13 8-13 8z"/></svg></button>
+  <span class="time" id="time">0:00 / 0:00</span>
+  <div class="bar" id="bar"><i id="barFill"></i></div>
+  <button id="btnFs" aria-label="全螢幕"><svg viewBox="0 0 24 24"><path d="M3 9V3h6v2H5v4zm12-6h6v6h-2V5h-4zM3 15h2v4h4v2H3zm16 0h2v6h-6v-2h4z"/></svg></button>
+</div>
+
+<div class="start" id="start">
+  <div class="start-card">
+    <h1>下一站，<em>奇美</em>！</h1>
+    <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg></div>
+    <p>點一下開始播放並進入全螢幕　<kbd>F</kbd> 全螢幕　<kbd>空白鍵</kbd> 暫停</p>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<audio id="audio" src="song.mp3" preload="auto" loop></audio>
+
+<script>
+/* ==========================================================
+   照片設定：把照片放進 cmh_musiccc/photos/，再把檔名加到下面陣列。
+   放多張會自動輪播（每張 PHOTO_SEC 秒）。留空陣列 = 顯示「16:9 照片位置」。
+   ========================================================== */
+const PHOTOS = [
+  '../assets/img/building-sky-1920.webp'
+  // 'photos/01.jpg',
+  // 'photos/02.jpg',
+];
+const PHOTO_SEC = 10;
+
+/* 歌詞時間軸（秒）。s = 段落名稱（只需寫在該段第一句） */
+const LYRICS = [
+  {t:0,      inst:'title', s:['前奏','INTRO']},
+  {t:8.9,    l:'還記得第一次穿上白袍的模樣', s:['主歌','VERSE 1']},
+  {t:12.55,  l:'心裡藏著期待　也有一點徬徨'},
+  {t:16.1,   l:'那些熬夜讀書的夜晚'},
+  {t:19.35,  l:'那些努力不放棄的時光'},
+  {t:23.35,  l:'從教室走向病房的走廊'},
+  {t:27.1,   l:'開始學著成為別人的依靠'},
+  {t:30.6,   l:'也許前方的路還很長'},
+  {t:33.6,   l:'但夢想已經準備好出發'},
+  {t:37.35,  l:'每一次跌倒　都是成長的記號', s:['預副歌','PRE-CHORUS']},
+  {t:41.35,  l:'每一份堅持　都值得被看見'},
+  {t:45.1,   l:'當未來的方向還不夠明朗'},
+  {t:48.6,   l:'別害怕　我們陪你一起闖'},
+  {t:53.7,   l:'下一站　就選奇美！', s:['副歌','CHORUS'], big:1},
+  {t:57.35,  l:'讓我們一起勇敢向前飛'},
+  {t:61.1,   l:'帶著最初的夢想　迎向每一天'},
+  {t:64.85,  l:'把不可能　變成新的起點'},
+  {t:68.35,  l:'下一站　一起奇美！', big:1},
+  {t:71.6,   l:'讓青春的熱血永不熄滅'},
+  {t:75.85,  l:'不管未來有多少考驗'},
+  {t:79.6,   l:'你的醫師生涯　從奇美啟航！'},
+  {t:84.2,   inst:'♪', s:['間奏','INTERLUDE']},
+  {t:90.85,  l:'第一次值班到天亮的時候', s:['主歌','VERSE 2']},
+  {t:94.6,   l:'有學長姐陪在身旁一起守候'},
+  {t:97.85,  l:'從每一次討論與每次回饋'},
+  {t:101.6,  l:'慢慢找到屬於自己的節奏'},
+  {t:104.6,  l:'我們不只學著如何治療'},
+  {t:108.1,  l:'更學會傾聽每一個需要'},
+  {t:111.6,  l:'在每個平凡卻重要的日常'},
+  {t:115.35, l:'一起寫下不平凡的篇章'},
+  {t:118.85, l:'每一次挑戰　都有夥伴在身旁', s:['預副歌','PRE-CHORUS 2']},
+  {t:122.6,  l:'每一個疑問　都有成長的方向'},
+  {t:125.85, l:'當夢想和現實終於交會'},
+  {t:129.85, l:'我們一起　成為更好的誰'},
+  {t:134.85, l:'下一站　就選奇美！', s:['副歌','CHORUS 2'], big:1},
+  {t:138.1,  l:'讓我們一起勇敢向前飛'},
+  {t:142.1,  l:'帶著最初的夢想　迎向每一天'},
+  {t:145.85, l:'把不可能　變成新的起點'},
+  {t:149.1,  l:'下一站　一起奇美！', big:1},
+  {t:152.35, l:'讓青春的熱血永不熄滅'},
+  {t:156.35, l:'不管未來有多少考驗'},
+  {t:160.35, l:'你的醫師生涯　從奇美啟航！'},
+  {t:164.6,  inst:'♪'},
+  {t:167.0,  l:'也許有一天　你會感到疲憊', s:['橋段','BRIDGE']},
+  {t:170.35, l:'也許有時候　會懷疑自己的選擇'},
+  {t:174.1,  l:'但請記得　最初穿上白袍的心願'},
+  {t:177.85, l:'還有一群人　願意陪你走向明天'},
+  {t:181.35, l:'我們不只一起工作'},
+  {t:184.4,  l:'更一起成長　一起突破'},
+  {t:187.6,  l:'讓每個努力的你'},
+  {t:190.85, l:'都能閃閃發亮！', big:1},
+  {t:196.6,  l:'下一站　就選奇美！', s:['最後大合唱','FINAL CHORUS'], big:1},
+  {t:199.85, l:'讓我們一起勇敢向前飛'},
+  {t:203.35, l:'把每一份熱情　化作改變的力量'},
+  {t:207.1,  l:'讓青春的夢想　自由翱翔'},
+  {t:210.4,  l:'下一站　我們奇美！', big:1},
+  {t:213.6,  l:'讓每個明天都值得期待'},
+  {t:217.35, l:'從這一刻　一起寫下新的篇章'},
+  {t:221.35, l:'你的醫師生涯　從奇美啟航！'},
+  {t:224.8,  l:'下一站　奇美', s:['結尾','OUTRO'], big:1},
+  {t:227.3,  l:'下一站　我們一起', big:1},
+  {t:231.3,  l:'CHIMEI！', big:1},
+  {t:233.6,  l:'你的醫師生涯，從奇美啟航。'},
+];
+const LEAD = 0.3;          // 歌詞比歌聲提早幾秒出現
+const HL = /奇美|CHIMEI/g;  // 強調色字詞
+
+/* ---------- 對時資料（對時模式存的會覆蓋預設） ---------- */
+let offset = 0;
+try { offset = parseFloat(localStorage.getItem('cmh_offset')) || 0; } catch(e) {}
+try {
+  const saved = JSON.parse(localStorage.getItem('cmh_times') || 'null');
+  const lineIdx = LYRICS.map((x,i)=>x.l ? i : -1).filter(i=>i>=0);
+  if (Array.isArray(saved) && saved.length === lineIdx.length) lineIdx.forEach((i,k)=>{ if (typeof saved[k]==='number') LYRICS[i].t = saved[k]; });
+} catch(e) {}
+
+const $ = id => document.getElementById(id);
+const audio = $('audio'), lyricsEl = $('lyrics'), secEl = $('sec');
+
+/* ---------- 照片 ---------- */
+const frame = $('frame');
+let photoEls = [], photoIdx = 0, photoTimer = null;
+function setPhotos(list){
+  photoEls.forEach(e=>e.remove()); photoEls = []; clearInterval(photoTimer);
+  $('empty').hidden = list.length > 0;
+  list.forEach(src=>{ const im = new Image(); im.className = 'ph'; im.alt = ''; im.src = src; frame.appendChild(im); photoEls.push(im); });
+  photoIdx = 0;
+  if (photoEls[0]) photoEls[0].classList.add('on');
+  if (photoEls.length > 1) photoTimer = setInterval(()=>{
+    photoEls[photoIdx].classList.remove('on');
+    photoIdx = (photoIdx + 1) % photoEls.length;
+    const el = photoEls[photoIdx]; el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; el.classList.add('on');
+  }, PHOTO_SEC * 1000);
+}
+setPhotos(PHOTOS);
+['dragenter','dragover'].forEach(ev=>document.addEventListener(ev,e=>{ e.preventDefault(); frame.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{ e.preventDefault(); frame.classList.remove('drag'); }));
+document.addEventListener('drop', e=>{
+  const files = [...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+  if (files.length) { setPhotos(files.map(f=>URL.createObjectURL(f))); toast(`預覽 ${files.length} 張照片（重新整理後會恢復）`); }
+});
+
+/* ---------- 歌詞渲染 ---------- */
+const esc = s => s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function nextLine(i){ for (let k=i+1;k<LYRICS.length;k++) if (LYRICS[k].l) return LYRICS[k]; return null; }
+function sectionAt(i){ for (let k=i;k>=0;k--) if (LYRICS[k].s) return LYRICS[k].s; return LYRICS[0].s; }
+
+function buildLine(i){
+  const it = LYRICS[i], wrap = document.createElement('div');
+  wrap.className = 'line pre';
+  if (it.inst === 'title') {
+    wrap.classList.add('title-card');
+    wrap.innerHTML = `<div class="cur big">下一站，<em>奇美</em>！</div><div class="nxt">${esc(nextLine(i)?.l || '')}</div>`;
+  } else if (it.inst) {
+    const nx = nextLine(i);
+    wrap.innerHTML = `<div class="inst"><span>♪</span><span>♫</span><span>♪</span></div><div class="nxt">${esc(nx?.l || '')}</div>`;
+  } else {
+    const hl = new Set(); let m; HL.lastIndex = 0;
+    while ((m = HL.exec(it.l))) for (let k=m.index;k<m.index+m[0].length;k++) hl.add(k);
+    const chars = [...it.l].map((ch,k)=> /[\s　]/.test(ch) ? '<span class="sp"></span>' : `<span class="c${hl.has(k)?' hl':''}">${esc(ch)}</span>`).join('');
+    const nx = nextLine(i);
+    wrap.innerHTML = `<div class="cur${it.big?' big':''}">${chars}</div><div class="nxt">${esc(nx?.l || '')}</div>`;
+    // 逐字點亮的時間
+    const n = [...it.l].filter(ch=>!/[\s　！!，。、]/.test(ch)).length;
+    const after = LYRICS[i+1] ? LYRICS[i+1].t - it.t - 0.25 : 4;
+    wrap._dur = Math.max(0.6, Math.min(after, n * 0.33));
+    wrap._chars = [...wrap.querySelectorAll('.c')];
+  }
+  wrap._i = i;
+  return wrap;
+}
+
+let curIdx = -1, curEl = null;
+function show(i){
+  if (i === curIdx) return;
+  curIdx = i;
+  const old = curEl;
+  if (old) { old.classList.add('out'); setTimeout(()=>old.remove(), 600); }
+  curEl = buildLine(i);
+  lyricsEl.appendChild(curEl);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>curEl && curEl.classList.remove('pre')));
+  const s = sectionAt(i);
+  const txt = `${s[0]}<small>${s[1]}</small>`;
+  if (secEl.innerHTML !== txt) { secEl.innerHTML = txt; secEl.classList.remove('pop'); void secEl.offsetWidth; secEl.classList.add('pop'); }
+}
+function indexAt(t){
+  let idx = 0;
+  for (let k=0;k<LYRICS.length;k++) if (t + LEAD - offset >= LYRICS[k].t) idx = k; else break;
+  return idx;
+}
+
+/* ---------- 音樂律動（僅在網站上啟用，避免本機開檔時靜音） ---------- */
+let analyser = null, freq = null;
+function setupAnalyser(){
+  if (analyser || !/^https?:/.test(location.protocol)) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ctx.createMediaElementSource(audio);
+    analyser = ctx.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = .7;
+    src.connect(analyser); analyser.connect(ctx.destination);
+    freq = new Uint8Array(analyser.frequencyBinCount);
+    audio.addEventListener('play', ()=>ctx.resume());
+  } catch(e) { analyser = null; }
+}
+
+/* ---------- 主迴圈 ---------- */
+const fmt = s => isFinite(s) ? `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}` : '0:00';
+function tick(){
+  const t = audio.currentTime;
+  show(indexAt(t));
+  if (curEl && curEl._chars) {
+    const it = LYRICS[curEl._i];
+    const p = (t + 0.05 - offset - it.t) / curEl._dur;
+    const n = curEl._chars.length;
+    curEl._chars.forEach((c,k)=>c.classList.toggle('on', p * n > k));
+  }
+  $('barFill').style.width = (audio.duration ? t / audio.duration * 100 : 0) + '%';
+  $('time').textContent = `${fmt(t)} / ${fmt(audio.duration)}`;
+  if (analyser && !audio.paused) {
+    analyser.getByteFrequencyData(freq);
+    let b = 0; for (let k=1;k<8;k++) b += freq[k]; b = b / 7 / 255;
+    document.documentElement.style.setProperty('--pulse', Math.max(0, (b - .45) * 2.2).toFixed(3));
+  }
+  requestAnimationFrame(tick);
+}
+show(0);
+requestAnimationFrame(tick);
+
+/* ---------- 控制 ---------- */
+function toast(msg){ const el = $('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('show'), 1800); }
+function setIcon(){ $('icoPlay').innerHTML = audio.paused ? '<path d="M7 4l13 8-13 8z"/>' : '<path d="M6 4h4v16H6zm8 0h4v16h-4z"/>'; }
+audio.addEventListener('play', setIcon); audio.addEventListener('pause', setIcon);
+function togglePlay(){ if (audio.paused) { setupAnalyser(); audio.play(); } else audio.pause(); }
+function toggleFs(){
+  const d = document, el = d.documentElement;
+  if (!d.fullscreenElement && !d.webkitFullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen || (()=>{})).call(el);
+  else (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+}
+$('start').addEventListener('click', ()=>{
+  $('start').remove(); setupAnalyser();
+  audio.play().catch(()=>toast('請再按一次播放鍵'));
+  try { toggleFs(); } catch(e) {}
+});
+$('btnPlay').addEventListener('click', togglePlay);
+$('btnFs').addEventListener('click', toggleFs);
+$('bar').addEventListener('click', e=>{ const r = e.currentTarget.getBoundingClientRect(); if (audio.duration) audio.currentTime = (e.clientX - r.left) / r.width * audio.duration; });
+
+let idleT;
+function wake(){ document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(()=>{ if (!audio.paused) document.body.classList.add('idle'); }, 2500); }
+['mousemove','touchstart','keydown'].forEach(ev=>document.addEventListener(ev, wake, {passive:true}));
+audio.addEventListener('pause', wake); wake();
+
+/* ---------- 對時模式（按 T）：邊聽邊在每句開始時按 Enter ---------- */
+let calib = null;
+function lineIdxs(){ return LYRICS.map((x,i)=>x.l ? i : -1).filter(i=>i>=0); }
+function startCalib(){
+  calib = { idxs: lineIdxs(), k: 0, times: [] };
+  const box = document.createElement('div'); box.className = 'calib'; box.id = 'calib';
+  box.innerHTML = `<h3>● 對時模式</h3><p>音樂從頭播放，每句歌詞<b>開口唱的瞬間</b>按 <b>Enter</b>（或點這個框）。</p><p id="calibNow"></p>
+    <div class="row"><button id="calibStop">結束並儲存</button><button id="calibCancel">取消</button></div>`;
+  document.body.appendChild(box);
+  box.addEventListener('click', e=>{ if (e.target.tagName !== 'BUTTON') mark(); });
+  $('calibStop').onclick = finishCalib; $('calibCancel').onclick = ()=>{ box.remove(); calib = null; };
+  audio.currentTime = 0; setupAnalyser(); audio.play();
+  updCalib();
+}
+function updCalib(){ const n = $('calibNow'); if (!n || !calib) return; const i = calib.idxs[calib.k]; n.innerHTML = i !== undefined ? `下一句（${calib.k+1}/${calib.idxs.length}）：<b>${esc(LYRICS[i].l)}</b>` : '全部完成！'; }
+function mark(){ if (!calib || calib.k >= calib.idxs.length) return; calib.times.push(+audio.currentTime.toFixed(2)); calib.k++; updCalib(); if (calib.k >= calib.idxs.length) finishCalib(); }
+function finishCalib(){
+  if (!calib) return;
+  const all = calib.idxs.map((i,k)=> calib.times[k] ?? LYRICS[i].t);
+  calib.idxs.forEach((i,k)=>LYRICS[i].t = all[k]);
+  try { localStorage.setItem('cmh_times', JSON.stringify(all)); } catch(e) {}
+  const box = $('calib');
+  box.innerHTML = `<h3>✔ 已儲存在這台電腦的瀏覽器</h3><p>想永久套用到網站，把下面這串傳給 Claude：</p><textarea readonly>${JSON.stringify(all)}</textarea>
+    <div class="row"><button id="calibCopy">複製</button><button id="calibClose">關閉</button></div>`;
+  $('calibCopy').onclick = ()=>{ box.querySelector('textarea').select(); navigator.clipboard?.writeText(JSON.stringify(all)); toast('已複製'); };
+  $('calibClose').onclick = ()=>box.remove();
+  calib = null; curIdx = -1;
+}
+
+document.addEventListener('keydown', e=>{
+  if (e.target.tagName === 'TEXTAREA') return;
+  const k = e.key;
+  if (calib && (k === 'Enter' || k === 'ArrowDown')) { e.preventDefault(); mark(); return; }
+  if (k === ' ' || k === 'k') { e.preventDefault(); const s = $('start'); if (s) s.click(); else togglePlay(); }
+  else if (k === 'f' || k === 'F') toggleFs();
+  else if (k === 'ArrowRight') audio.currentTime = Math.min((audio.duration||0) - .1, audio.currentTime + 5);
+  else if (k === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 5);
+  else if (k === '[' || k === ']') {
+    offset = +(offset + (k === ']' ? .1 : -.1)).toFixed(1);
+    try { localStorage.setItem('cmh_offset', offset); } catch(e) {}
+    toast(`歌詞整體${offset >= 0 ? '延後' : '提前'} ${Math.abs(offset).toFixed(1)} 秒`);
+  }
+  else if (k === 't' || k === 'T') { if (!calib) { $('start')?.remove(); startCalib(); } }
+  else if (k === 'r' || k === 'R') {
+    if (confirm('清除這台電腦上的對時紀錄，恢復預設時間？')) { try { localStorage.removeItem('cmh_times'); localStorage.removeItem('cmh_offset'); } catch(e) {} location.reload(); }
+  }
+});
+</script>
+</body>
+</html>
