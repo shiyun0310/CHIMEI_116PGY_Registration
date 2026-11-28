@@ -137,6 +137,8 @@
     .sync.ok { color: var(--green); }
     .sync.err { color: var(--red); }
     .sync .spin { display: inline-block; width: 13px; height: 13px; border-color: var(--muted); border-right-color: transparent; }
+    .staff { margin: 0 0 16px; padding: 10px 12px; border: 2px dashed var(--ink); border-radius: 12px; background: #FFF4D6; font-weight: 900; font-size: 1.05rem; line-height: 1.5; }
+    .fail .staff { display: none; }
     .done.fail .mark { background: var(--red); }
     .queue { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 10;
       background: var(--ink); color: #fff; border-radius: 999px; padding: 8px 16px; font-size: .85rem; box-shadow: 0 6px 18px rgba(0,0,0,.2); white-space: nowrap; }
@@ -227,6 +229,7 @@
         <dt>簽退時間</dt><dd id="okOut"></dd>
       </dl>
       <p class="sync" id="sync" role="status"></p>
+      <p class="staff" id="staff">簽退完成，請將此畫面出示予報到台工作人員</p>
       <button class="btn" type="button" id="home">返回簽退系統</button>
     </section>
 
