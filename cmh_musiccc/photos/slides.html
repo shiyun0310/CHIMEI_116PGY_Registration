@@ -42,8 +42,8 @@ h1 b{font-family:Poppins;font-weight:900}
 .s1-head{display:flex;align-items:center;gap:44px}
 .s1 h1{font-size:104px}
 .s1 .pill{font-size:52px;transform:rotate(-2deg)}
-.s1-row{display:flex;gap:32px;align-items:stretch;padding:0 54px;width:100%}
-.s1 .side{flex:1}
+.s1-row{display:flex;gap:44px;align-items:stretch;padding:0 200px;width:100%}
+.s1 .side{flex:1 1 0}
 .snack h3{font-size:44px}
 .snack-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:22px}
 .snack-ill{position:relative;width:300px;height:230px}
@@ -55,24 +55,11 @@ h1 b{font-family:Poppins;font-weight:900}
 .snack-t{font-size:74px;font-weight:900;color:var(--navy);text-shadow:.05em .05em 0 var(--yellow);line-height:1.1;letter-spacing:.02em}
 .snack-t span{color:var(--red);font-family:Poppins;margin:0 .05em}
 .snack-s{font-size:32px;font-weight:900;color:#fff;background:var(--navy);border:4px solid var(--ink);border-radius:999px;padding:6px 26px;transform:rotate(-2deg)}
-.checkin{width:560px;justify-content:space-evenly}
+.s1 .checkin{flex:1 1 0;width:auto;justify-content:space-evenly}
 .checkin .help{font-size:24px;font-weight:700;color:#C9D3F2;text-align:center}
-.lottery{justify-content:space-between}
 .checkin .qrbox{width:250px}
-.checkin .steps li{font-size:29px}
-.lottery{flex:1.15!important;background:var(--band)!important}
-.lottery h3{font-size:44px;background:var(--red)!important;color:#fff}
-.lottery h3 svg{width:54px;height:54px;background:#fff;border-radius:50%;padding:4px}
-.lt-main{font-size:54px;font-weight:900;line-height:1.35;text-align:center;margin:auto 0}
-.lt-main b{color:#fff;background:var(--navy);border-radius:12px;padding:0 12px}
-.lt-main em{font-style:normal;color:var(--red)}
-.id{background:#fff;border:4px solid var(--ink);border-radius:24px;padding:14px 18px;text-align:center;display:flex;flex-direction:column;gap:10px}
-.id-h{font-size:31px;font-weight:900}
-.id-h b{color:var(--red)}
-.ids{display:flex;justify-content:center;gap:12px}
-.ids span{font-size:28px;font-weight:900;background:var(--yellow);border:3px solid var(--ink);border-radius:999px;padding:2px 16px}
-.id-n{font-size:27px;font-weight:700;color:var(--muted);line-height:1.45}
-.id-n b{color:var(--ink)}
+.checkin .steps{width:auto}
+.checkin .steps li{font-size:31px}
 /* slide 2 */
 .s2{gap:40px}
 .s2 h1{font-size:120px}
@@ -138,15 +125,6 @@ h1 b{font-family:Poppins;font-weight:900}
         <li><i>3</i><span>出示<b>報到成功</b>畫面即可入場</span></li>
       </ol>
       <p class="help">找不到報名資料，請洽報到台工作人員</p>
-    </div>
-    <div class="side lottery">
-      <h3><svg viewBox="0 0 64 64"><rect x="9" y="28" width="46" height="30" rx="4" fill="#F2541B" stroke="#161616" stroke-width="4"/><rect x="5" y="19" width="54" height="11" rx="3" fill="#FFC83D" stroke="#161616" stroke-width="4"/><path d="M32 19v39" stroke="#161616" stroke-width="4"/><path d="M32 19c-4-10-17-14-17-6s13 6 17 6zM32 19c4-10 17-14 17-6s-13 6-17 6z" fill="#fff" stroke="#161616" stroke-width="3.5" stroke-linejoin="round"/></svg>現場抽獎</h3>
-      <p class="lt-main"><b>13:30 前</b>完成報到<br>即可參加<em>現場抽獎</em>！</p>
-      <div class="id">
-        <p class="id-h">請攜帶可辨識<b>本人姓名</b>的證件</p>
-        <div class="ids"><span>學生證</span><span>身分證</span><span>健保卡</span></div>
-        <p class="id-n"><b>獲獎時需出示證件</b><br>由工作人員核對姓名後才能領獎</p>
-      </div>
     </div>
   </div>
 </section>
