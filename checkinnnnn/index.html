@@ -85,6 +85,8 @@
     .sync.ok { color: var(--green); }
     .sync.err { color: var(--red); }
     .sync .spin { display: inline-block; width: 13px; height: 13px; border-color: var(--muted); border-right-color: transparent; }
+    .staff { margin: 0 0 16px; padding: 10px 12px; border: 2px dashed var(--ink); border-radius: 12px; background: #FFF4D6; font-weight: 900; font-size: 1.05rem; line-height: 1.5; }
+    .fail .staff { display: none; }
     .ok.fail .mark { background: var(--red); }
     .queue { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 10;
       background: var(--ink); color: #fff; border-radius: 999px; padding: 8px 16px; font-size: .85rem; box-shadow: 0 6px 18px rgba(0,0,0,.2); white-space: nowrap; }
@@ -133,6 +135,7 @@
         <dt id="okOutLabel">簽退時間</dt><dd id="okOut">—</dd>
       </dl>
       <p class="sync" id="sync" role="status"></p>
+      <p class="staff" id="staff">報到完成，請將此畫面出示予報到台工作人員</p>
       <button class="btn btn-primary" type="button" id="home">返回簽到系統</button>
     </section>
 
@@ -368,6 +371,7 @@
     $('okName').textContent = info.name;
     $('okStatus').textContent = out ? (info.out && !info.already ? '簽退成功，感謝您的參與！' : '您已完成簽退')
                                     : (info.already ? '您已完成報到' : '報到成功');
+    $('staff').textContent = (out ? '簽退' : '報到') + '完成，請將此畫面出示予報到台工作人員';
     $('okIn').textContent = fmt(info.time);
     $('okOut').textContent = out ? fmt(info.checkout) : '';
     $('okOut').hidden = $('okOutLabel').hidden = !out;
