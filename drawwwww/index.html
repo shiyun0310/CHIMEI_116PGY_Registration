@@ -145,7 +145,7 @@
     }
     .crank {
       position: absolute; right: 12%; top: 14%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: #fff; border: 5px solid var(--ink);
-      transition: transform 2.4s cubic-bezier(.3,.1,.2,1);
+      transition: transform 6.2s cubic-bezier(.3,.1,.2,1);
     }
     .crank::before { content: ""; position: absolute; left: -12%; right: -12%; top: 38%; height: 24%; border-radius: 99px; background: var(--orange); border: 4px solid var(--ink); }
     .crank::after { content: ""; position: absolute; left: 38%; top: 38%; width: 24%; height: 24%; border-radius: 50%; background: var(--ink); }
@@ -189,6 +189,13 @@
       position: relative; z-index: 2; width: min(34rem, 100%); background: #fff; color: var(--ink); border: 4px solid var(--ink); border-radius: 1.5rem;
       box-shadow: 12px 12px 0 var(--orange); padding: 2rem 1.6rem; text-align: center;
     }
+    .card .close {
+      position: absolute; top: .7rem; right: .7rem; width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink); background: #fff; color: var(--ink);
+      font-size: 1.6rem; font-weight: 900; line-height: 1; cursor: pointer; display: grid; place-items: center; box-shadow: 2px 2px 0 var(--ink);
+    }
+    .card .close:hover { background: var(--yellow); }
+    .card .close:active { transform: translate(2px, 2px); box-shadow: none; }
+    .card .close:focus-visible { outline: 3px dashed var(--red); outline-offset: 3px; }
     .card .kicker { font-weight: 900; letter-spacing: .3em; color: var(--red); font-size: 1.4rem; }
     .card .pzt { display: inline-block; margin-top: .5rem; background: var(--yellow); border: 3px solid var(--ink); border-radius: .6rem; padding: .1rem .8rem; font-weight: 900; font-size: 1.4rem; }
     .card .who { font-size: clamp(3rem, 5.5rem, 22vw); font-weight: 900; line-height: 1.15; margin: .8rem 0 .4rem; letter-spacing: .08em; word-break: break-word; }
@@ -200,7 +207,7 @@
     canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
 
     @keyframes shake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-10deg); } 40% { transform: rotate(9deg); } 60% { transform: rotate(-7deg); } 80% { transform: rotate(5deg); } }
-    .machine.shaking .globe { animation: shake .35s ease-in-out 5; }
+    .machine.shaking .globe { animation: shake .35s ease-in-out infinite; }
   </style>
 </head>
 <body>
@@ -290,6 +297,7 @@
   <div class="overlay" id="overlay" hidden>
     <div class="big" id="big"><div class="half t" id="bigTop"></div><div class="half b"></div></div>
     <div class="card" id="card" hidden>
+      <button class="close" id="closeCard" type="button" aria-label="關閉視窗" title="關閉（Esc）">×</button>
       <div class="kicker">恭喜獲得</div>
       <div class="pzt" id="rPrize" hidden></div>
       <div class="who" id="rName"></div>
@@ -306,6 +314,7 @@
 (function () {
   'use strict';
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzPsGT_RZx5qVH4miexVhbPE8MDkn8atbIsWqJs8sDxiihiHGeOj32VxEzeo6YRsof7/exec';
+  var SPIN_MS = 6500; // 扭蛋機轉動時間（毫秒）
   var CUTOFF = new Date('2026-11-29T13:30:00+08:00'); // 抽獎資格：此時間前報到
   var KEY_STORE = 'pgy116-dash-key';          // 與儀表板共用（sessionStorage）
   var WIN_STORE = 'pgy116-draw-winners';      // 中獎紀錄（localStorage，重新整理也不會消失）
@@ -489,7 +498,7 @@
     if (REDUCED || !balls[0] || !balls[0].el.animate) return;
     balls.forEach(function (b) {
       var frames = [{ transform: b.el.style.transform }];
-      for (var k = 0; k < 7; k++) {
+      for (var k = 0, nf = Math.max(7, Math.round(ms / 340)); k < nf; k++) {
         var dx = rand(180) - 90, dy = -(rand(360) + 40);
         frames.push({ transform: 'translate(' + dx + '%,' + dy + '%) rotate(' + rand(720) + 'deg)' });
       }
@@ -523,12 +532,13 @@
     var color = COLORS[rand(COLORS.length)];
     current = { id: pick.id, name: pick.name, school: pick.school, program: pick.program, prize: prize, color: color };
 
-    Sound.duck(true); Sound.crank(); Sound.rattle(2.4); Sound.drumroll(REDUCED ? 0.3 : 2.6);
-    crankDeg += 720;
+    var spinMs = REDUCED ? 300 : SPIN_MS;
+    Sound.duck(true); Sound.crank(0); Sound.crank(2.1); Sound.crank(4.2); Sound.rattle(spinMs / 1000 - 0.3); Sound.drumroll(spinMs / 1000);
+    crankDeg += 1800;
     $('crank').style.transform = 'rotate(' + crankDeg + 'deg)';
     $('machine').classList.add('shaking');
-    jumble(2400);
-    runTicker(p.map(function (x) { return x.name; }), REDUCED ? 200 : 2600).then(function () {
+    jumble(spinMs - 200);
+    runTicker(p.map(function (x) { return x.name; }), spinMs).then(function () {
       $('ticker').textContent = '？？？';
       $('machine').classList.remove('shaking');
       var drop = $('drop');
@@ -601,6 +611,7 @@
   }
   $('ok').addEventListener('click', function () { closeReveal(false); });
   $('absent').addEventListener('click', function () { closeReveal(true); });
+  $('closeCard').addEventListener('click', function () { closeReveal(false); });
   $('go').addEventListener('click', draw);
   document.addEventListener('keydown', function (e) {
     if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
@@ -760,9 +771,9 @@
         tone(sfxBus, t, 2300 - p * 900, 0.035, 'square', 0.07);
         noise(sfxBus, t, 0.025, 0.18, 'highpass', 3500);
       },
-      crank: function () {             // 轉把手的棘輪聲
-        if (!ready()) return;
-        for (var i = 0; i < 14; i++) noise(sfxBus, now(i * 0.085 + i * i * 0.004), 0.03, 0.35, 'bandpass', 1300, 3);
+      crank: function (delay) {        // 轉把手的棘輪聲
+        if (!ready()) return; delay = delay || 0;
+        for (var i = 0; i < 14; i++) noise(sfxBus, now(delay + i * 0.085 + i * i * 0.004), 0.03, 0.35, 'bandpass', 1300, 3);
       },
       rattle: function (sec, vol) {    // 扭蛋在球體裡碰撞
         if (!ready()) return; vol = vol || 1;
