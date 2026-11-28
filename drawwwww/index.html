@@ -80,9 +80,10 @@
     .substat { margin: 0; text-align: center; font-size: 1rem; font-weight: 700; color: var(--ink-2); }
     .substat b { color: var(--red); font-family: var(--font-en); }
 
-    .rules { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
-    .rules li { position: relative; padding-left: 1.1em; font-size: 1.25rem; font-weight: 700; line-height: 1.4; }
-    .rules li::before { content: ""; position: absolute; left: 0; top: .55em; width: .45em; height: .45em; border-radius: 50%; background: var(--red); }
+    .rules { margin: 0; padding: 0; list-style: none; display: grid; gap: .4rem; counter-reset: rule; }
+    .rules li { position: relative; padding-left: 1.8em; font-size: 1.02rem; font-weight: 500; line-height: 1.42; counter-increment: rule; }
+    .rules li::before { content: counter(rule); position: absolute; left: 0; top: .12em; width: 1.35em; height: 1.35em; border-radius: 50%; background: var(--red); color: #fff; font-size: .85em; font-weight: 700; line-height: 1.35em; text-align: center; }
+    .rules b { font-weight: 800; }
     .prizes { display: grid; gap: .55rem; }
     .pbtn {
       display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .55rem .8rem; border-radius: .8rem;
@@ -266,11 +267,13 @@
     <!-- 右：規則與獎品 -->
     <section class="col">
       <div class="panel">
-        <h2>抽籤規則</h2>
-        <ul class="rules">
-          <li>11/29(日)13:30 前報到者</li>
-          <li>已經中獎的人不會再被抽到</li>
-        </ul>
+        <h2>抽獎活動規則</h2>
+        <ol class="rules">
+          <li>須於 <b>11/29（日）13:30 前</b>完成現場報到者，始具抽獎資格。</li>
+          <li>已中獎者將自動排除於後續抽獎名單，不得重複中獎。</li>
+          <li>獲獎者須攜帶<b>個人身分證件</b>至前方核對身分，確認無誤後上台領獎，不得由他人代領。</li>
+          <li>獲獎者經現場<b>唱名 3 次</b>仍未到場者，視同放棄得獎資格，並重新抽出獲獎者。</li>
+        </ol>
       </div>
       <div class="panel">
         <h2>抽獎品</h2>
@@ -293,7 +296,7 @@
       <p class="meta" id="rMeta"></p>
       <div class="btns">
         <button class="rbtn primary" id="ok" type="button">恭喜！繼續抽獎</button>
-        <button class="rbtn" id="absent" type="button">不在現場，重抽</button>
+        <button class="rbtn" id="absent" type="button">唱名 3 次未到，重抽</button>
       </div>
     </div>
   </div>
@@ -442,7 +445,7 @@
       box.appendChild(nm);
       if (w.prize && !w.absent) { var pz = document.createElement('span'); pz.className = 'pz'; pz.textContent = w.prize; box.appendChild(pz); }
       var sub = document.createElement('span'); sub.className = 'sub';
-      sub.textContent = (w.absent ? '不在現場・' : '') + [w.school, w.program].filter(Boolean).join('・');
+      sub.textContent = (w.absent ? '唱名未到・' : '') + [w.school, w.program].filter(Boolean).join('・');
       box.appendChild(sub);
       var x = document.createElement('button'); x.className = 'x'; x.type = 'button'; x.textContent = '×';
       x.title = '移除（放回抽獎池）'; x.setAttribute('aria-label', '移除 ' + w.name);
