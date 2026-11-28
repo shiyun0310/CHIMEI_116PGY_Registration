@@ -45,11 +45,16 @@ h1 b{font-family:Poppins;font-weight:900}
 .s1-row{display:flex;gap:32px;align-items:stretch;padding:0 54px;width:100%}
 .s1 .side{flex:1}
 .snack h3{font-size:44px}
-.snack-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
-.snack .cup{width:130px;height:130px}
-.snack-body p{font-size:62px;font-weight:900;line-height:1.2}
-.snack-body p em{font-style:normal;color:var(--red)}
-.snack-body small{font-size:32px;font-weight:700;color:var(--muted);line-height:1.35}
+.snack-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:22px}
+.snack-ill{position:relative;width:300px;height:230px}
+.snack-ill::before{content:"";position:absolute;left:40px;top:20px;width:220px;height:200px;background:var(--band);border:5px solid var(--ink);border-radius:46% 54% 50% 50%/52% 46% 54% 48%;box-shadow:8px 8px 0 var(--orange)}
+.snack-ill svg{position:absolute}
+.ill-cake{width:118px;height:118px;left:64px;top:62px;transform:rotate(-8deg)}
+.ill-cup{width:118px;height:118px;left:158px;top:58px;transform:rotate(6deg)}
+.ill-star{width:58px;height:58px;left:14px;top:6px;transform:rotate(-12deg)}
+.snack-t{font-size:74px;font-weight:900;color:var(--navy);text-shadow:.05em .05em 0 var(--yellow);line-height:1.1;letter-spacing:.02em}
+.snack-t span{color:var(--red);font-family:Poppins;margin:0 .05em}
+.snack-s{font-size:32px;font-weight:900;color:#fff;background:var(--navy);border:4px solid var(--ink);border-radius:999px;padding:6px 26px;transform:rotate(-2deg)}
 .checkin{width:560px;justify-content:space-evenly}
 .checkin .help{font-size:24px;font-weight:700;color:#C9D3F2;text-align:center}
 .lottery{justify-content:space-between}
@@ -115,9 +120,13 @@ h1 b{font-family:Poppins;font-weight:900}
     <div class="side snack">
       <h3><svg><use href="#arL"/></svg>左側</h3>
       <div class="snack-body">
-        <svg class="cup" viewBox="0 0 64 64"><path d="M10 28h36v12a16 16 0 0 1-16 16h-4a16 16 0 0 1-16-16z" fill="#FFB21C" stroke="#161616" stroke-width="4" stroke-linejoin="round"/><path d="M46 32h4a7 7 0 0 1 0 14h-6" fill="none" stroke="#161616" stroke-width="4"/><path d="M20 20c-3-4 3-6 0-12M30 20c-3-4 3-6 0-12M40 20c-3-4 3-6 0-12" fill="none" stroke="#161616" stroke-width="3.5" stroke-linecap="round"/></svg>
-        <p>準備了<br><em>小點心</em><br>及<em>茶水</em></p>
-        <small>請自由取用<br>稍作休息</small>
+        <div class="snack-ill">
+          <svg class="ill-cake" viewBox="0 0 64 64"><path d="M14 34h36l-5 24H19z" fill="#FFB21C" stroke="#161616" stroke-width="4" stroke-linejoin="round"/><path d="M25 37l1.5 18M32 37v18M39 37l-1.5 18" stroke="#161616" stroke-width="2.5" stroke-linecap="round"/><path d="M10 34c0-9 7-15 14-15 3-6 13-6 16 0 7 0 14 6 14 15z" fill="#fff" stroke="#161616" stroke-width="4" stroke-linejoin="round"/><circle cx="32" cy="11" r="5" fill="#F2541B" stroke="#161616" stroke-width="3"/></svg>
+          <svg class="ill-cup" viewBox="0 0 64 64"><path d="M10 28h36v12a16 16 0 0 1-16 16h-4a16 16 0 0 1-16-16z" fill="#fff" stroke="#161616" stroke-width="4" stroke-linejoin="round"/><path d="M10 34h36" stroke="#F2541B" stroke-width="5"/><path d="M46 32h4a7 7 0 0 1 0 14h-6" fill="none" stroke="#161616" stroke-width="4"/><path d="M20 20c-3-4 3-6 0-12M30 20c-3-4 3-6 0-12M40 20c-3-4 3-6 0-12" fill="none" stroke="#161616" stroke-width="3.5" stroke-linecap="round"/></svg>
+          <svg class="ill-star" viewBox="0 0 64 64"><path d="M32 4l7 19 21 1-16 13 6 21-18-12-18 12 6-21L4 24l21-1z" fill="#FFC83D" stroke="#161616" stroke-width="3" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="snack-t">小點心<span>＆</span>茶水</p>
+        <p class="snack-s">請自由取用・稍作休息</p>
       </div>
     </div>
     <div class="checkout checkin">
