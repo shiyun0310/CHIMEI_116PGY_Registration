@@ -40,9 +40,8 @@ svg{display:block}
 /* ---------- 版面 ---------- */
 .app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:clamp(10px,2.2vh,26px);padding:clamp(12px,2.5vh,28px) 16px}
-.top{position:absolute;top:clamp(10px,2vh,22px);left:clamp(12px,2vw,28px);right:clamp(12px,2vw,28px);display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:3}
-.brand{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:999px;padding:4px 16px 4px 6px;font-weight:900;color:var(--navy);font-size:clamp(.8rem,1.2vw,1.05rem)}
-.brand img{height:clamp(28px,4vh,40px);width:auto;margin-left:6px}
+.top{position:absolute;top:clamp(10px,2vh,22px);left:clamp(12px,2vw,28px);right:clamp(12px,2vw,28px);display:flex;justify-content:space-between;align-items:flex-start;gap:12px;z-index:3}
+.poster{display:block;width:clamp(140px,14vw,280px);height:auto;background:#fff;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-radius:clamp(12px,1.2vw,20px);transform:rotate(-2deg)}
 .song-tag{display:flex;align-items:center;gap:8px;background:var(--navy);color:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:999px;padding:6px 16px;font-weight:900;font-size:clamp(.8rem,1.2vw,1.05rem);transform:rotate(2deg)}
 .song-tag .note{color:var(--yellow);font-size:1.2em;animation:hop 1.2s ease-in-out infinite}
 
@@ -117,6 +116,7 @@ body.idle .dock{opacity:0;transform:translate(30px,-50%);pointer-events:none}
   .cur{font-size:min(7vw,5vh)} .cur.big{font-size:9vw}
   .nxt{font-size:min(3.8vw,2.6vh)}
   .song-tag{font-size:.78rem}
+  .poster{width:34vw}
   .dock{top:auto;bottom:14px;right:50%;transform:translateX(50%);flex-direction:row;padding:6px 10px}
   body.idle .dock{transform:translate(50%,20px)}
   .bar{width:clamp(60px,22vw,140px);height:10px}
@@ -127,7 +127,6 @@ body.idle .dock{opacity:0;transform:translate(30px,-50%);pointer-events:none}
   .dock button{width:36px;height:36px}
   .deco{width:46vw}.d-tr{width:52vw}
 }
-@media (max-width:560px){ .brand span{display:none} .brand{padding:4px 8px 4px 2px} }
 
 @keyframes morph{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.05) rotate(3deg)}}
 @keyframes sway{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
@@ -160,7 +159,7 @@ body.idle .dock{opacity:0;transform:translate(30px,-50%);pointer-events:none}
 
 <main class="app">
   <div class="top">
-    <div class="brand"><img src="../assets/img/chimei-logo.png" alt="奇美醫院 LOGO"><span>奇美醫院教學部</span></div>
+    <img class="poster" src="title.png" alt="奇美 西醫 PGY 醫師招募說明會">
     <div class="song-tag"><span class="note">♪</span>下一站，奇美！</div>
   </div>
 
